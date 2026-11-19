@@ -2438,7 +2438,7 @@ input,select,textarea{border-radius:11px!important}
             </div>
             <div class="bg-white rounded-2xl p-6 shadow-card">
               <h3 class="font-medium text-aegean mb-2">Βιβλίο οικογενειακής ιστορίας</h3>
-              <p class="text-sm text-gray-500 mb-4">Δημιουργεί αυτόματα βιβλίο με ιστορία, γενιές, γενεαλογικό δέντρο, βιογραφίες, γεγονότα και φωτογραφίες, έτοιμο για εκτύπωση ή PDF.</p>
+              <p class="text-sm text-gray-500 mb-4">Δημιουργεί αυτόματα βιβλίο με την ιστορία της οικογένειας, γενιές, βιογραφίες, οικογενειακούς κλάδους, γεγονότα και φωτογραφίες, έτοιμο για εκτύπωση ή PDF.</p>
               <button type="button" onclick="openBook()" class="w-full px-4 py-3 rounded-xl bg-ochre text-white text-sm font-medium"> <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A3 3 0 0 1 7 3h5v17H7a3 3 0 0 0-3 1.5zM20 5.5A3 3 0 0 0 17 3h-5v17h5a3 3 0 0 1 3 1.5z"/></svg> Δημιουργία βιβλίου (PDF)</button>
             </div>
             <div class="bg-white rounded-2xl p-6 shadow-card">
@@ -4291,33 +4291,6 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       });
       return g;
     }
-    function bookTree(rootId = null) {
-      const P = state.people, W = 124, H = 46, GX = 16, GY = 54, used = new Set(), by = (a, b) => (a.by || 9999) - (b.by || 9999);
-      const build = p => {
-        const s = byId(p.spouse), m = (s && !used.has(s.id)) ? [p, s].sort((a, b) => (sexOf(a) === 'M' ? 0 : 1) - (sexOf(b) === 'M' ? 0 : 1)) : [p];
-        m.forEach(x => used.add(x.id));
-        const n = { m, k: [] };
-        P.filter(c => !used.has(c.id) && c.parents.some(i => m.some(x => x.id === i))).sort(by).forEach(c => { if (!used.has(c.id)) n.k.push(build(c)); });
-        return n;
-      };
-      const roots = P.filter(p => !p.parents.length && !used.has(p.id) && !(byId(p.spouse) && byId(p.spouse).parents.length) && (rootId == null || p.id === rootId)).sort(by).map(p => used.has(p.id) ? null : build(p)).filter(Boolean);
-      const kw = n => n.k.reduce((a, k) => a + k.w + GX, -GX);
-      const lay = (n, d) => { n.d = d; n.k.forEach(k => lay(k, d + 1)); n.uw = n.m.length * W + (n.m.length - 1) * 6; n.w = Math.max(n.uw, n.k.length ? kw(n) : 0); };
-      const pos = (n, x) => { n.cx = x + n.w / 2; let c = x + (n.w - (n.k.length ? kw(n) : 0)) / 2; n.k.forEach(k => { pos(k, c); c += k.w + GX; }); };
-      let x = 0, out = '', maxD = 0;
-      roots.forEach(r => { lay(r, 0); pos(r, x); x += r.w + GX * 3; });
-      const draw = n => {
-        maxD = Math.max(maxD, n.d); const y = n.d * (H + GY);
-        n.m.forEach((p, i) => {
-          const bx = n.cx - n.uw / 2 + i * (W + 6), nm = dispN(p), fill = sexOf(p) === 'M' ? '#DCE8EC' : sexOf(p) === 'F' ? '#F3DED2' : '#EFE5D0';
-          out += `<rect x="${bx}" y="${y}" width="${W}" height="${H}" rx="6" fill="${fill}" stroke="#7C8B58" stroke-width="1"/><text x="${bx + W / 2}" y="${y + 19}" text-anchor="middle" font-size="11" font-weight="bold" fill="#3B2F26">${esc(nm.length > 19 ? nm.slice(0, 18) + '…' : nm)}</text><text x="${bx + W / 2}" y="${y + 35}" text-anchor="middle" font-size="9.5" fill="#8a7a62">${esc(yearsOf(p))}</text>`;
-        });
-        if (n.m.length > 1) out += `<line x1="${n.cx - 3}" y1="${y + H / 2}" x2="${n.cx + 3}" y2="${y + H / 2}" stroke="#B5603E" stroke-width="2"/>`;
-        n.k.forEach(k => { const y1 = y + H, y2 = k.d * (H + GY), ym = y1 + GY / 2 - 2; out += `<path d="M${n.cx} ${y1}V${ym}H${k.cx}V${y2}" fill="none" stroke="#7C8B58" stroke-width="1.6"/>`; draw(k); });
-      };
-      roots.forEach(draw);
-      return roots.length ? `<svg viewBox="-4 -4 ${Math.max(x - GX * 3, 10) + 8} ${(maxD + 1) * (H + GY) - GY + 8}" width="100%" font-family="Manrope,Georgia,serif">${out}</svg>` : '';
-    }
     function buildBook(o) {
       const g = genMap(), P = state.people.slice().sort((a, b) => g[a.id] - g[b.id] || (a.by || 9999) - (b.by || 9999) || a.id - b.id);
       const list = a => a.map(x => esc(dispN(x))).join(', '), maxG = Math.max(1, ...Object.values(g));
@@ -4357,7 +4330,6 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         return `<article class="branch"><h3>${esc(dispN(root))}</h3><p class="by">${branch.length} καταγεγραμμένα μέλη · ${Math.max(1, ...branch.map(p => g[p.id] || 1))} γενιές</p><ul class="gen">${branch.map(p => `<li><b>${esc(dispN(p))}</b><span>${esc(yearsOf(p))}</span></li>`).join('')}</ul></article>`;
       }).join('');
       if (branchHtml) ch.push(['Οικογενειακοί κλάδοι', branchHtml]);
-      if (o.tr !== false) roots.forEach(root => { const treeSvg = bookTree(root.id); if (treeSvg) ch.push(['Γενεαλογικό δέντρο · ' + dispN(root), `<div class="branch-tree-title"><h3>${esc(dispN(root))}</h3><p class="by">Οικογενειακός κλάδος · οι καταγεγραμμένες γενιές</p></div>${treeSvg}`, 'treepg']); });
       let lastG = 0; ch.push(['Βιογραφίες', P.map(p => (g[p.id] !== lastG ? (lastG = g[p.id], `<h3 class="gh">Γενιά ${lastG}</h3>`) : '') + bio(p)).join('')]);
       const ev = sortedEvents(state.events.concat(o.bd ? state.people.flatMap(p => [p.by ? { y: p.by, m: md(p.bdate)[0], d: md(p.bdate)[1], title: 'Γέννηση: ' + dispN(p), place: p.bplace } : null, p.dy ? { y: p.dy, m: md(p.ddate)[0], d: md(p.ddate)[1], title: 'Θάνατος: ' + dispN(p), place: p.dplace } : null]).filter(Boolean) : []));
       if (ev.length && o.evt !== false) ch.push(['Σημαντικά γεγονότα', `<table class="tl">${ev.map(e => `<tr><th>${esc(fmtDate(e))}</th><td>${esc(e.title)}${e.place ? ' <i>(' + esc(e.place) + ')</i>' : ''}${(e.people || []).length ? ' — ' + list((e.people || []).map(byId).filter(Boolean)) : ''}</td></tr>`).join('')}</table>`]);
@@ -4506,7 +4478,7 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
         title: 'Βιβλίο οικογένειας (PDF)', submitText: 'Δημιουργία βιβλίου',
         fields: [
           { type: 'tip', html: '<p class="font-semibold text-aegean mb-2">Φωτογραφία εξωφύλλου (προαιρετικά)</p><div id="bk-cover-prev" class="hidden mb-2"></div><div class="flex flex-wrap gap-2"><button type="button" id="bk-cover-btn" class="px-3 py-2 rounded-xl bg-aegean text-white text-sm"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l2-2h6l2 2h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg> Ανέβασε φωτογραφία</button><button type="button" id="bk-cover-rm" class="hidden px-3 py-2 rounded-xl border border-terracotta/40 text-terracotta text-sm">Αφαίρεση</button></div><p class="text-xs text-gray-500 mt-2">Αν δεν ανεβάσεις, το εξώφυλλο θα είναι χωρίς φωτογραφία.</p><input type="file" id="bk-cover-file" accept="image/*" class="hidden">' },
-          { type: 'info', name: 'bk-info', label: 'Το βιβλίο φτιάχνεται αυτόματα: ιστορία, δέντρο, γενιές, βιογραφίες, γεγονότα, κληρονομιά και φωτογραφίες. Διάλεξε παρακάτω τι θα περιλαμβάνει.' },
+          { type: 'info', name: 'bk-info', label: 'Το βιβλίο φτιάχνεται αυτόματα: ιστορία, γενιές, βιογραφίες, οικογενειακοί κλάδοι, γεγονότα, κληρονομιά και φωτογραφίες. Διάλεξε παρακάτω τι θα περιλαμβάνει.' },
           { name: 'title', label: 'Τίτλος βιβλίου', required: true, value: b.title || S('heroTitle').replace(/\s*\n\s*/g, ' ') },
           { name: 'subtitle', label: 'Υπότιτλος', value: b.subtitle != null ? b.subtitle : 'Η ιστορία της οικογένειάς μας' },
           { name: 'author', label: 'Συγγραφέας / Επιμέλεια', value: b.author != null ? b.author : ((state.settings || {}).userName || '') },
@@ -4518,7 +4490,6 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
           { name: 'size', type: 'select', label: 'Μέγεθος σελίδας', value: b.size || 'A4', options: [{ v: 'A4', l: 'A4 (κανονικό)' }, { v: 'A5', l: 'A5 (βιβλιαράκι)' }] },
           { name: 'bd', type: 'checkbox', label: 'Γεννήσεις και θάνατοι στη λίστα γεγονότων', value: b.bd !== false },
           { name: 'ph', type: 'checkbox', label: 'Άλμπουμ φωτογραφιών στο τέλος', value: b.ph !== false },
-          { name: 'tr', type: 'checkbox', label: 'Γενεαλογικό δέντρο', value: b.tr !== false },
           { name: 'evt', type: 'checkbox', label: 'Σημαντικά γεγονότα', value: b.evt !== false },
           { name: 'her', type: 'checkbox', label: 'Κληρονομιά (συνταγές, επώνυμα, παρατσούκλια, λεξικό)', value: b.her !== false },
           { name: 'loc', type: 'checkbox', label: 'Τόποι καταγωγής, διαμονής και γεγονότων', value: b.loc !== false }
@@ -4535,7 +4506,7 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
           inp.onchange = () => { const fl = inp.files[0]; if (fl) coverImage(fl, src => { bookCover = src; upd(); }); };
         },
         onSubmit: d => {
-          const o = { title: d.title.trim(), subtitle: (d.subtitle || '').trim(), author: (d.author || '').trim(), dedication: (d.dedication || '').trim(), foreword: (d.foreword || '').trim(), intro: (d.intro || '').trim(), closing: (d.closing || '').trim(), sources: (d.sources || '').trim(), size: d.size === 'A5' ? 'A5' : 'A4', bd: !!d.bd, ph: !!d.ph, tr: !!d.tr, evt: !!d.evt, her: !!d.her, loc: !!d.loc };
+          const o = { title: d.title.trim(), subtitle: (d.subtitle || '').trim(), author: (d.author || '').trim(), dedication: (d.dedication || '').trim(), foreword: (d.foreword || '').trim(), intro: (d.intro || '').trim(), closing: (d.closing || '').trim(), sources: (d.sources || '').trim(), size: d.size === 'A5' ? 'A5' : 'A4', bd: !!d.bd, ph: !!d.ph, evt: !!d.evt, her: !!d.her, loc: !!d.loc };
           state.book = o; save();
           try { showBook(buildBook(Object.assign({}, o, { cover: bookCover }))); } catch (e) { console.error(e); showToast('Δεν ήταν δυνατή η δημιουργία του βιβλίου.'); }
         }
