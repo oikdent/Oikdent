@@ -4289,6 +4289,8 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           </article>`;
       };
       const ch = [];
+      if (o.dedication) ch.push(['Αφιέρωση', `<div class="dedication"><p>${esc(o.dedication).replace(/\n/g, '<br>')}</p></div>`]);
+      if (o.foreword) ch.push(['Πρόλογος', o.foreword.split(/\n\s*\n/).map(t => `<p class="txt">${esc(t)}</p>`).join('')]);
       const hist = [o.intro ? o.intro.split(/\n\s*\n/).map(t => `<p class="txt">${esc(t)}</p>`).join('') : '',
         `<p class="txt">Το βιβλίο αυτό καταγράφει ${state.people.length} πρόσωπα σε ${maxG} ${maxG === 1 ? 'γενιά' : 'γενιές'}${yrs.length ? ', από το ' + Math.min(...yrs) + ' έως το ' + Math.max(...yrs) : ''}.${pl.length ? ' Η οικογένεια συνδέεται με τους τόπους: ' + esc(pl.join(', ')) + '.' : ''}</p>`,
         `<p class="txt">Οι γενάρχες που καταγράφονται είναι: ${list(P.filter(p => g[p.id] === 1))}.</p>`,
@@ -4296,6 +4298,16 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       ch.push(['Η ιστορία της οικογένειας', hist]);
       const tree = o.tr === false ? '' : bookTree(); if (tree) ch.push(['Το γενεαλογικό δέντρο', tree, 'treepg']);
       ch.push(['Οι γενιές', Array.from({ length: maxG }, (_, i) => i + 1).map(n => { const m = P.filter(p => g[p.id] === n); return m.length ? `<h3>Γενιά ${n}</h3><ul class="gen">${m.map(p => `<li><b>${esc(dispN(p))}</b> <span>${esc(yearsOf(p))}</span></li>`).join('')}</ul>` : ''; }).join('')]);
+      // Separate family branches, derived only from parent relationships recorded in the tree.
+      const roots = P.filter(p => !p.parents.length);
+      const branchHtml = roots.map(root => {
+        const seen = new Set();
+        const collect = p => { if (seen.has(p.id)) return; seen.add(p.id); childrenOf(p).forEach(collect); };
+        collect(root);
+        const branch = P.filter(p => seen.has(p.id));
+        return `<article class="branch"><h3>${esc(dispN(root))}</h3><p class="by">${branch.length} καταγεγραμμένα μέλη · ${Math.max(1, ...branch.map(p => g[p.id] || 1))} γενιές</p><ul class="gen">${branch.map(p => `<li><b>${esc(dispN(p))}</b><span>${esc(yearsOf(p))}</span></li>`).join('')}</ul></article>`;
+      }).join('');
+      if (branchHtml) ch.push(['Οικογενειακοί κλάδοι', branchHtml]);
       let lastG = 0; ch.push(['Βιογραφίες', P.map(p => (g[p.id] !== lastG ? (lastG = g[p.id], `<h3 class="gh">Γενιά ${lastG}</h3>`) : '') + bio(p)).join('')]);
       const ev = sortedEvents(state.events.concat(o.bd ? state.people.flatMap(p => [p.by ? { y: p.by, m: md(p.bdate)[0], d: md(p.bdate)[1], title: 'Γέννηση: ' + dispN(p), place: p.bplace } : null, p.dy ? { y: p.dy, m: md(p.ddate)[0], d: md(p.ddate)[1], title: 'Θάνατος: ' + dispN(p), place: p.dplace } : null]).filter(Boolean) : []));
       if (ev.length && o.evt !== false) ch.push(['Σημαντικά γεγονότα', `<table class="tl">${ev.map(e => `<tr><th>${esc(fmtDate(e))}</th><td>${esc(e.title)}${e.place ? ' <i>(' + esc(e.place) + ')</i>' : ''}${(e.people || []).length ? ' — ' + list((e.people || []).map(byId).filter(Boolean)) : ''}</td></tr>`).join('')}</table>`]);
@@ -4308,8 +4320,12 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         hsec('words', 'Τοπικό λεξικό', r => `<div class="rc"><h4>${esc(r.title)}</h4>${r.meaning ? `<p class="txt">${esc(r.meaning)}</p>` : ''}${r.example ? `<p class="by">«${esc(r.example)}»</p>` : ''}</div>`)
       ].join('');
       if (o.her !== false && herHtml) ch.push(['Κληρονομιά', herHtml]);
-      if (o.ph && photos.length) ch.push(['Φωτογραφίες', `<div class="album">${photos.map(x => `<figure><img src="${x.src}" alt=""><figcaption>${esc(x.caption)}${x.year ? ', ' + x.year : ''}${x.people.length ? '<br><small>' + list(x.people.map(byId).filter(Boolean)) + '</small>' : ''}</figcaption></figure>`).join('')}</div>`]);
+      const places = [...new Set(state.people.flatMap(p => [p.origin, p.place, p.bplace, p.dplace]).concat(state.events.map(e => e.place)).filter(x => (x || '').trim()))].sort((a,b) => a.localeCompare(b, 'el'));
+      if (o.loc !== false && places.length) ch.push(['Τόποι και καταγωγή', `<p class="txt">Οι παρακάτω τόποι εμφανίζονται στα στοιχεία των μελών και στα καταγεγραμμένα γεγονότα. Η καταγραφή δεν αποτελεί από μόνη της ιστορική τεκμηρίωση.</p><ul class="gen">${places.map(place => `<li>${esc(place)}</li>`).join('')}</ul>`]);
+      if (o.ph && photos.length) ch.push(['Φωτογραφίες', `<div class="album">${photos.slice().sort((a,b) => (a.year || 9999) - (b.year || 9999)).map(x => `<figure><img src="${x.src}" alt=""><figcaption>${esc(x.caption)}${x.year ? ', ' + x.year : ''}${x.people.length ? '<br><small>' + list(x.people.map(byId).filter(Boolean)) + '</small>' : ''}</figcaption></figure>`).join('')}</div>`]);
       ch.push(['Ευρετήριο προσώπων', `<ul class="idx">${state.people.slice().sort((a, b) => dispN(a).localeCompare(dispN(b), 'el')).map(p => `<li>${esc(dispN(p))} <span>γενιά ${g[p.id]}</span></li>`).join('')}</ul>`]);
+      if (o.sources) ch.push(['Πηγές και τεκμηρίωση', `<p class="txt">${esc(o.sources).replace(/\n/g, '<br>')}</p><p class="source-note">Οι πηγές και οι σημειώσεις παρατίθενται όπως καταγράφηκαν από τον επιμελητή. Οι πληροφορίες δεν έχουν ανεξάρτητα επαληθευτεί από το πρόγραμμα.</p>`]);
+      if (o.closing) ch.push(['Ένα μήνυμα στις επόμενες γενιές', `<div class="dedication closing"><p>${esc(o.closing).replace(/\n/g, '<br>')}</p></div>`]);
       const cover = o.cover ? { src: o.cover } : null;
       const G = A5 ? { W: 148, H: 210, T: 18, B: 21, I: 20, O: 14 } : { W: 210, H: 297, T: 25, B: 28, I: 27, O: 20 };
       const css = `@page{size:${o.size};margin:0}@page tree{size:${o.size} landscape;margin:0}
@@ -4321,16 +4337,16 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         .sheet.land{width:${G.H}mm;height:${G.W - 1}mm;page:tree}.land .pc{top:14mm;bottom:14mm;left:14mm;right:14mm}.land .hd{top:5mm}.land .ft{bottom:5mm}.land svg{width:100%;height:${A5 ? 88 : 140}mm}
         @media screen{body{background:#7a7a7a;padding:6mm 0}#wrap{height:var(--h,auto);overflow:hidden}#out{width:max-content;transform:scale(var(--z,1));transform-origin:0 0}.sheet{margin:0 auto 6mm;box-shadow:0 1mm 4mm rgba(0,0,0,.5)}}
         .sheet.cov .cover{height:100%}
-        .cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,#FBF7EC 0%,#F6F0E3 55%,#EFE5D0 100%);padding:24mm;box-shadow:inset 0 0 0 9mm #F6F0E3,inset 0 0 0 9.5mm rgba(74,93,58,.45),inset 0 0 0 11mm #F6F0E3,inset 0 0 0 11.3mm rgba(181,96,62,.55)}
+        .dedication{min-height:90mm;display:flex;align-items:center;justify-content:center;text-align:center;padding:15mm;font:italic 15pt/1.8 'Noto Serif',Georgia,serif;color:#7C8B58}.dedication p{max-width:120mm}.closing{color:#B5603E}.closing:before{content:'✦';display:block;font-size:20pt;color:#7C8B58;margin-bottom:5mm}.branch{border:1px solid #D9C9A5;border-radius:3mm;padding:4mm 5mm;margin:0 0 4mm;background:linear-gradient(135deg,#FBF7EC,#F5EEDC);position:relative}.branch:before{content:'❧';position:absolute;right:4mm;top:2mm;color:#C99A5B;font-size:18pt}.branch h3{margin-top:0}.source-note{margin-top:6mm;padding:3mm;border-top:1px solid #D9C9A5;color:#8a7a62;font:italic 8pt 'Noto Serif',Georgia,serif}.cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at center,#FFFDF7 0%,#FBF7EC 48%,#EDE2CC 100%);padding:24mm;box-shadow:inset 0 0 0 8mm #FBF7EC,inset 0 0 0 8.5mm rgba(74,93,58,.45),inset 0 0 0 10mm #FBF7EC,inset 0 0 0 10.3mm rgba(181,96,62,.55),inset 0 0 0 12mm #FBF7EC,inset 0 0 0 12.3mm rgba(201,154,91,.65)}
         .cover h1{font-size:${A5 ? 24 : 30}pt;margin:0 0 5mm;line-height:1.2}.cover h1::after{content:"";display:block;width:46mm;height:5mm;margin:6mm auto 0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='12' viewBox='0 0 44 12'%3E%3Cpath d='M0 6Q5.5-1 11 6T22 6T33 6T44 6' fill='none' stroke='%23B5603E' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center/auto 100%}.cover .sub{font:italic 13pt 'Noto Serif',Georgia,serif;color:#B5603E;margin-bottom:12mm}.cover img{width:${A5 ? 50 : 80}mm;height:${A5 ? 50 : 80}mm;object-fit:cover;border-radius:50%;border:2mm solid #FBF7EC;outline:.4mm solid #7C8B58;outline-offset:1.5mm;margin-bottom:12mm}.cover .au{font-size:10pt;letter-spacing:.18em;text-transform:uppercase;color:#7C8B58}
         .tocl{list-style:none;padding:0;margin:0;font:11pt/2 'Noto Serif',Georgia,serif;color:#B5603E}.tocl li{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(124,139,88,.6)}.tocl a{color:#3B2F26;text-decoration:none}
-        h2.ch{font-size:${A5 ? 12 : 14}pt;border-bottom:1px solid rgba(124,139,88,.55);padding-bottom:3mm;margin:0 0 6mm;position:relative}h2.ch::after{content:"";position:absolute;left:0;bottom:-1.5px;width:26mm;height:3px;background:#B5603E}
+        h2.ch{font-size:${A5 ? 12 : 14}pt;border-bottom:1px solid rgba(124,139,88,.55);padding-bottom:3mm;margin:0 0 6mm;position:relative;letter-spacing:.025em}h2.ch::after{content:"";position:absolute;left:0;bottom:-1.5px;width:26mm;height:3px;background:#B5603E}h2.ch:before{content:'❧';float:right;color:#C99A5B;font-size:17pt;line-height:.8}
         .txt{white-space:pre-line;text-align:justify;hyphens:auto;margin:0 0 3mm}h3{font-size:10.5pt;margin:4mm 0 2mm}h4{font-size:8.5pt;margin:3mm 0 1mm;color:#B5603E}
         .gen,.idx{list-style:none;padding:0;margin:0}.gen li,.idx li{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(124,139,88,.6);padding:1.1mm 0}.gen span,.idx span{color:#8a7a62}
         .bio{border-bottom:1px solid #E4D9C0;padding:3mm 0 4mm}.bh{display:flex;gap:5mm;align-items:center;justify-content:space-between}.bh h3{margin:0}.bh small{font-weight:normal;color:#8a7a62}.yrs{margin:1mm 0 0;color:#B5603E;font-weight:600;font-family:'Noto Serif',Georgia,serif}.face{width:${A5 ? 18 : 22}mm;height:${A5 ? 18 : 22}mm;object-fit:cover;border-radius:50%;border:1mm solid #FBF7EC;outline:.35mm solid #C99A5B}
         table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:.95em}th{text-align:left;color:#8a7a62;font-weight:normal;width:26%;vertical-align:top;padding:.8mm 0}td{padding:.8mm 0}.tl{margin:0}.tl th{color:#4A5D3A;font-weight:600;width:32%;border-bottom:1px dotted rgba(124,139,88,.5)}.tl td{border-bottom:1px dotted rgba(124,139,88,.5)}
         .ev{margin:2mm 0;padding-left:5mm;font-size:.95em}.strip{display:flex;gap:3mm;margin-top:3mm}.strip figure{flex:1;margin:0}.strip img{border-radius:3px;width:100%;height:${A5 ? 24 : 32}mm;object-fit:cover}
-        .album{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:6mm}.album figure{margin:0;background:#fff;padding:3mm 3mm 2mm;box-shadow:0 .6mm 2.5mm rgba(59,47,38,.25)}.album img{width:100%;max-height:${A5 ? 45 : 62}mm;object-fit:cover}.album figcaption{text-align:center;margin-top:2mm}figcaption{font:italic 7.5pt 'Noto Serif',Georgia,serif;color:#8a7a62;margin-top:1mm}
+        .album{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:6mm}.album figure{margin:0;background:#FFFDF8;padding:3mm 3mm 2mm;border:1px solid #E7DCC5;box-shadow:0 .6mm 2.5mm rgba(59,47,38,.18);transform:rotate(-.25deg)}.album figure:nth-child(even){transform:rotate(.3deg)}.album img{width:100%;max-height:${A5 ? 45 : 62}mm;object-fit:cover}.album figcaption{text-align:center;margin-top:2mm}figcaption{font:italic 7.5pt 'Noto Serif',Georgia,serif;color:#8a7a62;margin-top:1mm}
         .gh{font-size:12pt;text-align:center;color:#B5603E;margin:0 0 3mm;padding:4mm 0 2mm;border-top:1px solid rgba(124,139,88,.5)}.rc{border-left:1.2mm solid #B5603E;background:#FBF7EC;padding:2mm 4mm;margin:0 0 3mm}.rc h4{margin:0 0 1mm;color:#4A5D3A;font-size:9pt}.rc .by{margin:0 0 2mm;color:#B5603E;font:italic 7.5pt 'Noto Serif',Georgia,serif}.rc .txt{margin:0 0 2mm}ul.sp,table.sp{margin:0}.nk{margin:.5mm 0 0;color:#7C8B58;font:italic 9pt 'Noto Serif',Georgia,serif}.quote{border-left:1mm solid #B5603E;padding:1mm 0 1mm 4mm;margin:3mm 0;font-style:italic;font-family:'Noto Serif',Georgia,serif;background:#FBF7EC}`;
       const PAG = `(function(){
 function go(){
@@ -4444,13 +4460,18 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
           { name: 'title', label: 'Τίτλος βιβλίου', required: true, value: b.title || S('heroTitle').replace(/\s*\n\s*/g, ' ') },
           { name: 'subtitle', label: 'Υπότιτλος', value: b.subtitle != null ? b.subtitle : 'Η ιστορία της οικογένειάς μας' },
           { name: 'author', label: 'Συγγραφέας / Επιμέλεια', value: b.author != null ? b.author : ((state.settings || {}).userName || '') },
-          { name: 'intro', type: 'textarea', label: 'Δική σου εισαγωγή για την ιστορία της οικογένειας (προαιρετικά)', value: b.intro || '', hint: 'Άφησε κενή γραμμή ανάμεσα στις παραγράφους.' },
+          { name: 'dedication', type: 'textarea', label: 'Αφιέρωση (προαιρετικά)', value: b.dedication || '', hint: 'Μια αφιέρωση στα μέλη της οικογένειας ή στις επόμενες γενιές.' },
+          { name: 'foreword', type: 'textarea', label: 'Πρόλογος (προαιρετικά)', value: b.foreword || '', hint: 'Γιατί δημιουργείται αυτό το βιβλίο και τι θέλεις να διαφυλάξει.' },
+          { name: 'intro', type: 'textarea', label: 'Ιστορική εισαγωγή οικογένειας (προαιρετικά)', value: b.intro || '', hint: 'Άφησε κενή γραμμή ανάμεσα στις παραγράφους.' },
+          { name: 'closing', type: 'textarea', label: 'Επίλογος / μήνυμα στις επόμενες γενιές (προαιρετικά)', value: b.closing || '', hint: 'Ένα προσωπικό μήνυμα για όσα θέλεις να θυμούνται οι απόγονοι.' },
+          { name: 'sources', type: 'textarea', label: 'Πηγές και σημειώσεις τεκμηρίωσης (προαιρετικά)', value: b.sources || '', hint: 'Αρχεία, πιστοποιητικά, προφορικές μαρτυρίες, βιβλία ή άνθρωποι που βοήθησαν στην έρευνα.' },
           { name: 'size', type: 'select', label: 'Μέγεθος σελίδας', value: b.size || 'A4', options: [{ v: 'A4', l: 'A4 (κανονικό)' }, { v: 'A5', l: 'A5 (βιβλιαράκι)' }] },
           { name: 'bd', type: 'checkbox', label: 'Γεννήσεις και θάνατοι στη λίστα γεγονότων', value: b.bd !== false },
           { name: 'ph', type: 'checkbox', label: 'Άλμπουμ φωτογραφιών στο τέλος', value: b.ph !== false },
           { name: 'tr', type: 'checkbox', label: 'Γενεαλογικό δέντρο', value: b.tr !== false },
           { name: 'evt', type: 'checkbox', label: 'Σημαντικά γεγονότα', value: b.evt !== false },
-          { name: 'her', type: 'checkbox', label: 'Κληρονομιά (συνταγές, επώνυμα, παρατσούκλια, λεξικό)', value: b.her !== false }
+          { name: 'her', type: 'checkbox', label: 'Κληρονομιά (συνταγές, επώνυμα, παρατσούκλια, λεξικό)', value: b.her !== false },
+          { name: 'loc', type: 'checkbox', label: 'Τόποι καταγωγής, διαμονής και γεγονότων', value: b.loc !== false }
         ],
         onMount: () => {
           const prev = $('bk-cover-prev'), rm = $('bk-cover-rm'), inp = $('bk-cover-file');
@@ -4464,7 +4485,7 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
           inp.onchange = () => { const fl = inp.files[0]; if (fl) coverImage(fl, src => { bookCover = src; upd(); }); };
         },
         onSubmit: d => {
-          const o = { title: d.title.trim(), subtitle: (d.subtitle || '').trim(), author: (d.author || '').trim(), intro: (d.intro || '').trim(), size: d.size === 'A5' ? 'A5' : 'A4', bd: !!d.bd, ph: !!d.ph, tr: !!d.tr, evt: !!d.evt, her: !!d.her };
+          const o = { title: d.title.trim(), subtitle: (d.subtitle || '').trim(), author: (d.author || '').trim(), dedication: (d.dedication || '').trim(), foreword: (d.foreword || '').trim(), intro: (d.intro || '').trim(), closing: (d.closing || '').trim(), sources: (d.sources || '').trim(), size: d.size === 'A5' ? 'A5' : 'A4', bd: !!d.bd, ph: !!d.ph, tr: !!d.tr, evt: !!d.evt, her: !!d.her, loc: !!d.loc };
           state.book = o; save();
           try { showBook(buildBook(Object.assign({}, o, { cover: bookCover }))); } catch (e) { console.error(e); showToast('Δεν ήταν δυνατή η δημιουργία του βιβλίου.'); }
         }
