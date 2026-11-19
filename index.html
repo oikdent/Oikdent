@@ -2720,7 +2720,8 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
     let hiddenIds = new Set(), hiddenCnt = {}, focusId = null, dragMode = false;
     const COLW = CARD_W + 76, TOPH = 30;
 
-    const homePerson = () => state.noHome ? null : byId(state.homeId) || state.people.filter(p => p.parents.length && !childrenOf(p).length).sort((a, b) => (b.by || 0) - (a.by || 0) || b.id - a.id)[0] || state.people[0];
+    const autoHome = () => state.people.filter(p => p.parents.length && !childrenOf(p).length).sort((a, b) => (b.by || 0) - (a.by || 0) || b.id - a.id)[0] || state.people[0];
+    const homePerson = () => state.noHome ? null : (byId(state.homeId) || autoHome());
     const SIDE_COL = { P: '#3F6F8F', M: '#8A4B7A' };
     function sideSets() {
       const h = homePerson(); if (!h) return null;
@@ -2737,7 +2738,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       const isMale = p => sexOf(p) === 'M';
       /* Σε ποιους γονείς "κρεμιέται" ένα ζευγάρι: πάντα στους γονείς του άνδρα (πατρική γραμμή). */
       /* Κύρια οικογένεια: ο γενάρχης (ο πιο ψηλά πατέρας του «εγώ») και όλοι οι απόγονοί του. Όσοι μπήκαν με γάμο πάνε δεξιά. */
-      const main = new Set(), h0 = homePerson();
+      const main = new Set(), h0 = byId(state.homeId) || autoHome(); /* η σειρά των οικογενειών δεν αλλάζει όταν αφαιρείς το «εγώ» */
       if (h0) {
         let f = h0; const guard = new Set();
         while (f && !guard.has(f.id)) { guard.add(f.id); const fa = f.parents.map(get).find(x => x && sexOf(x) === 'M'); if (!fa) break; f = fa; }
@@ -2761,10 +2762,12 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
         if (b && main.has(b.id) && !main.has(a.id)) m.reverse();
         return { members: m, kids: [] };
       }
+      /* αδέλφια: πρώτα όσοι δεν έχουν δικούς τους απογόνους (μικρότεροι κλάδοι, αριστερά), μετά οι μεγαλύτεροι κλάδοι· ο γάμος δεν αλλάζει τη θέση */
+      const kidsFlag = c => P.some(x => x.parents.includes(c.id)) ? 1 : 0;
       function build(u) {
         const ids = u.members.map(m => m.id);
         P.filter(c => c.parents.some(i => ids.includes(i)) && hang(c).parents.some(i => ids.includes(i)))
-          .sort((a, b) => (a.by || 9999) - (b.by || 9999) || a.id - b.id)
+          .sort((a, b) => (a.ord != null ? a.ord : 1e6) - (b.ord != null ? b.ord : 1e6) || kidsFlag(a) - kidsFlag(b) || (a.by || 9999) - (b.by || 9999) || a.id - b.id)
           .forEach(c => { const k = mk(c); if (k) { placedUnder[c.id] = ids; u.kids.push(k); build(k); } });
         u.uw = u.members.length * CARD_W + (u.members.length - 1) * SP_GAP;
         u.kw = u.kids.reduce((s, k) => s + k.w, 0) + GAP * Math.max(0, u.kids.length - 1);
@@ -2777,31 +2780,76 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       });
       P.forEach(p => { if (!seen.has(p.id)) { const u = mk(p); if (u) { build(u); roots.push(u); } } });
 
+      /* Κύριος κορμός: οι πρόγονοι του «εγώ». Σε κάθε ζευγάρι, το παιδί που συνεχίζει τον κορμό μπαίνει ΤΕΛΕΥΤΑΙΟ (δεξιά)·
+         τα αδέλφια του (και οι οικογένειές τους) πάνε αριστερά του, ό,τι αλλαγές κι αν γίνουν. Ο γονέας μένει ακριβώς πάνω από το παιδί του κορμού (ευθεία γραμμή). */
+      {
+        const hid = (byId(state.homeId) || autoHome() || {}).id;
+        const hasH = u => u.members.some(m => m.id === hid) || u.kids.some(hasH);
+        const isAnc = u => !u.members.some(m => m.id === hid) && u.kids.some(hasH);
+        const fix = u => {
+          u.kids.forEach(fix);
+          const t = u.kids.find(isAnc);
+          if (t) u.kids = u.kids.filter(k => k !== t).concat([t]);
+          u.kw = u.kids.reduce((s, k) => s + k.w, 0) + GAP * Math.max(0, u.kids.length - 1);
+          u.ax = 0;
+          if (t) { u.ax = u.kids.slice(0, -1).reduce((s, k) => s + k.w + GAP, 0) + (t.ax || 0); }
+          u.w = Math.max(u.ax + u.uw, u.kw);
+        };
+        roots.forEach(fix);
+      }
+
       /* Η γραμμή του "εγώ" (πατρική πλευρά) μένει αριστερά και ανεβαίνει ευθεία· οι άλλες πλευρές (π.χ. της μητέρας) πάνε δεξιά. */
       const home = homePerson();
       const has = (u, id) => u.members.some(m => m.id === id) || u.kids.some(k => has(k, id));
       /* το σόι του επωνύμου (κύρια οικογένεια) αριστερά, οι οικογένειες όσων παντρεύτηκαν μέσα δεξιά */
       if (main.size) { const inMain = u => u.members.some(m => main.has(m.id)) || u.kids.some(inMain); roots.sort((a, b) => (inMain(a) ? 0 : 1) - (inMain(b) ? 0 : 1)); }
 
-      /* Γενιές: παιδί = κάτω από τον γονέα· σύζυγοι στην ίδια γενιά· πρόγονοι κολλητά πάνω από τα παιδιά τους. */
+      /* Γενιές (διορθωμένο): σύζυγοι και αδέλφια ανήκουν πάντα στην ίδια γενιά (ομάδες)· κάθε παιδί είναι τουλάχιστον μία γενιά κάτω από τον γονέα·
+         οι πρόγονοι χωρίς γονείς κατεβαίνουν κολλητά πάνω από τα παιδιά τους, και μαζί τους μετακινούνται αδέλφια και απόγονοι. */
       const g = {}; P.forEach(p => { g[p.id] = 0; });
-      for (let it = 0; it < P.length + 5; it++) {
-        let ch = false;
-        P.forEach(c => c.parents.forEach(pid => { if (g[pid] != null && g[c.id] < g[pid] + 1) { g[c.id] = g[pid] + 1; ch = true; } }));
-        P.forEach(p => { const s = get(p.spouse); if (s && g[s.id] !== g[p.id]) { const m = Math.max(g[s.id], g[p.id]); g[s.id] = g[p.id] = m; ch = true; } });
-        if (!ch) break;
+      {
+        const uf = {}; P.forEach(p => { uf[p.id] = p.id; });
+        const find = x => { while (uf[x] !== x) { uf[x] = uf[uf[x]]; x = uf[x]; } return x; };
+        const uni = (a, b) => { if (uf[a] == null || uf[b] == null) return; a = find(a); b = find(b); if (a !== b) uf[b] = a; };
+        P.forEach(p => { const s = get(p.spouse); if (s) uni(p.id, s.id); });
+        const firstKid = {};
+        P.forEach(c => c.parents.forEach(pid => { if (!get(pid)) return; if (firstKid[pid] != null) uni(firstKid[pid], c.id); else firstKid[pid] = c.id; }));
+        const gg = {}, hasPar = {}; P.forEach(p => { const r = find(p.id); gg[r] = 0; if (p.parents.length) hasPar[r] = true; });
+        const edges = []; /* [γονεϊκή ομάδα, ομάδα παιδιού] */
+        P.forEach(c => c.parents.forEach(pid => { if (!get(pid)) return; const a = find(pid), b = find(c.id); if (a !== b) edges.push([a, b]); }));
+        const kidGroups = {}; edges.forEach(([a, b]) => { (kidGroups[a] = kidGroups[a] || new Set()).add(b); });
+        const lim = Object.keys(gg).length * 2 + 10;
+        for (let it = 0; it < lim; it++) {
+          let ch = false;
+          edges.forEach(([a, b]) => { if (gg[b] < gg[a] + 1) { gg[b] = gg[a] + 1; ch = true; } });
+          Object.keys(kidGroups).forEach(a => {
+            if (hasPar[a]) return;
+            const want = Math.min(...[...kidGroups[a]].map(b => gg[b])) - 1;
+            if (gg[a] < want) { gg[a] = want; ch = true; }
+          });
+          if (!ch) break;
+        }
+        P.forEach(p => { g[p.id] = gg[find(p.id)]; });
       }
-      for (let it = 0; it < P.length + 5; it++) {
-        let ch = false;
-        P.forEach(p => {
-          const s = get(p.spouse), mem = s ? [p, s] : [p];
-          if (mem.some(m => m.parents.length)) return;
-          const ids = mem.map(m => m.id), kids = P.filter(c => c.parents.some(i => ids.includes(i)));
-          if (!kids.length) return;
-          const want = Math.min(...kids.map(k => g[k.id])) - 1;
-          mem.forEach(m => { if (g[m.id] < want) { g[m.id] = want; ch = true; } });
-        });
-        if (!ch) break;
+      /* Άτομα χωρίς καμία σύνδεση (χωρίς γονείς/παιδιά) δεν έχουν από πού να βγάλουν γενιά: τη βρίσκουμε από το έτος γέννησης, σε σχέση με τα συνδεδεμένα άτομα */
+      {
+        const kidsOf = p => P.some(x => x.parents.includes(p.id));
+        const lone = p => { if (p.parents.length || kidsOf(p)) return false; const s = get(p.spouse); return !s || (!s.parents.length && !kidsOf(s)); };
+        const byGen = {}; P.filter(p => !lone(p) && p.by).forEach(p => { (byGen[g[p.id]] = byGen[g[p.id]] || []).push(+p.by); });
+        const gens = Object.keys(byGen).map(Number);
+        if (gens.length) {
+          const mean = k => byGen[k].reduce((a, b) => a + b, 0) / byGen[k].length;
+          const done = new Set();
+          P.filter(lone).forEach(p => {
+            if (done.has(p.id)) return;
+            const s = get(p.spouse), grp = s ? [p, s] : [p]; grp.forEach(x => done.add(x.id));
+            const yrs = grp.map(x => +x.by).filter(Boolean); if (!yrs.length) return;
+            const y = Math.min(...yrs);
+            let best = gens[0]; gens.forEach(k => { if (Math.abs(mean(k) - y) < Math.abs(mean(best) - y)) best = k; });
+            const diff = y - mean(best), est = best + (Math.abs(diff) > 14 ? Math.round(diff / 25) : 0);
+            grp.forEach(x => { g[x.id] = est; });
+          });
+        }
       }
       const minG = P.length ? Math.min(...P.map(p => g[p.id])) : 0;
       const setDepth = u => { u.depth = g[u.members[0].id] - minG; u.members.forEach(m => { m.gen = u.depth + 1; }); u.kids.forEach(setDepth); };
@@ -2809,7 +2857,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
 
       const nodes = [], links = []; let maxDepth = 0;
       function place(u, left) {
-        const sx = left, cx = left + u.uw / 2, y = TOP + u.depth * ROW_H, sz = avSize(u.depth); /* αριστερή στοίχιση: ο γονέας πάνω από το πρώτο παιδί, τα υπόλοιπα απλώνονται δεξιά */
+        const sx = left + (u.ax || 0), cx = sx + u.uw / 2, y = TOP + u.depth * ROW_H, sz = avSize(u.depth); /* αριστερή στοίχιση: ο γονέας πάνω από το πρώτο παιδί, τα υπόλοιπα απλώνονται δεξιά */
         maxDepth = Math.max(maxDepth, u.depth);
         u.members.forEach((m, i) => nodes.push({ p: m, x: sx + i * (CARD_W + SP_GAP), y, sz, depth: u.depth }));
         if (u.members.length > 1) links.push({ type: 'marriage', x1: sx + CARD_W / 2, x2: sx + CARD_W + SP_GAP + CARD_W / 2, y: y + sz / 2 });
@@ -2927,6 +2975,23 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       }, { passive: false });
       a.addEventListener('touchend', e => { if (e.touches.length < 2) pinch = null; });
     })();
+    function treeSibs(id) {
+      const pl = layout.placed && layout.placed[id]; if (!pl) return [];
+      const key = pl.join(','), pos = {}; layout.nodes.forEach(n => { pos[n.p.id] = n; });
+      return state.people.filter(c => layout.placed[c.id] && layout.placed[c.id].join(',') === key && pos[c.id]).sort((a, b) => pos[a.id].x - pos[b.id].x);
+    }
+    function moveBtns(id) {
+      const sb = treeSibs(id); if (sb.length < 2) return '';
+      const i = sb.findIndex(x => x.id === id), cls = 'flex-1 py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm';
+      return `<p class="mt-3 text-xs text-gray-500">Θέση στο δέντρο ανάμεσα στα αδέλφια</p><div class="mt-1 flex gap-2"><button type="button" data-act="mvl" class="${cls}" ${i === 0 ? 'disabled style="opacity:.4"' : ''}>◀ Αριστερά</button><button type="button" data-act="mvr" class="${cls}" ${i === sb.length - 1 ? 'disabled style="opacity:.4"' : ''}>Δεξιά ▶</button></div>`;
+    }
+    function moveSib(id, dir) {
+      computeLayout();
+      const sb = treeSibs(id), i = sb.findIndex(x => x.id === id), j = i + dir;
+      if (i < 0 || j < 0 || j >= sb.length) return;
+      [sb[i], sb[j]] = [sb[j], sb[i]]; sb.forEach((x, k) => { x.ord = k; });
+      save(); refresh(); showToast('Η θέση άλλαξε στο δέντρο.');
+    }
     function clearHome() { state.noHome = true; delete state.homeId; save(); refresh(); showToast('Αφαιρέθηκε το «εγώ». Το δέντρο δεν έχει πια κεντρικό πρόσωπο.'); }
     window.clearHome = clearHome;
     let _sides = null;
@@ -3742,6 +3807,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
             <button data-act="rel" class="flex-1 py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">Προσθήκη συγγενή</button>
           </div>
           <button type="button" onclick="focusPerson(${p.id})" class="mt-3 w-full py-2.5 rounded-xl border border-ochre text-ochre text-sm">🎯 Εστίαση στο δέντρο</button>
+          ${moveBtns(p.id)}
           <button data-act="me" class="mt-3 w-full py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">${(homePerson() && homePerson().id === p.id) ? '✖️ Αφαίρεση του «εγώ» (αυτό είναι το «εγώ» του δέντρου)' : 'Ορισμός ως «εγώ» (χρώματα πατρικής/μητρικής γραμμής)'}</button>`;
       } else if (personTab === 'relations') {
         const chip = q => `<button type="button" data-open="${q.id}" class="px-3 py-1.5 rounded-full bg-white shadow-card text-sm text-aegean hover:bg-aegean/10">${esc(q.emoji)} ${esc(q.name)}${((p.adoptive || []).includes(q.id) || (q.adoptive || []).includes(p.id)) ? ' · θετός' : ''}</button>`;
@@ -3813,6 +3879,8 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         if (cur && cur.id === personId) { clearHome(); }
         else { state.noHome = false; state.homeId = personId; save(); refresh(); showToast('Ορίστηκε ως «εγώ». Τα χρώματα στο δέντρο ενημερώθηκαν.'); }
       }
+      else if (a.dataset.act === 'mvl') moveSib(personId, -1);
+      else if (a.dataset.act === 'mvr') moveSib(personId, 1);
       else if (a.dataset.act === 'photo') uploadPhoto(personId);
       else if (a.dataset.act === 'event') addEvent(personId);
       else if (a.dataset.act === 'story') {
