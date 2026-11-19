@@ -2842,13 +2842,23 @@ input,select,textarea{border-radius:11px!important}
     function refresh() { applySettings(); save(); renderView(currentView); if (!$('view-person').classList.contains('hidden')) renderPerson(); }
 
     /* ---------- Διάταξη δέντρου ---------- */
-    const CARD_W = 124, GAP = 28, SP_GAP = 28, ROW_H = 176, TOP = 24, LEFT = 76;
+    const CARD_W = 124, GAP = 44, SP_GAP = 40, ROW_H = 200, TOP = 24, LEFT = 76;
     const avSize = d => Math.min(84, 44 + d * 10);
     let layout = { nodes: [], links: [], width: 300, height: 200, maxDepth: 0 };
     let hiddenIds = new Set(), hiddenCnt = {}, focusId = null, dragMode = false;
     const COLW = CARD_W + 76, TOPH = 30;
 
     const autoHome = () => state.people.filter(p => p.parents.length && !childrenOf(p).length).sort((a, b) => (b.by || 0) - (a.by || 0) || b.id - a.id)[0] || state.people[0];
+    /* Όταν δεν υπάρχει «εγώ»: κύρια γραμμή = η πατρική γραμμή με τους περισσότερους απογόνους (σταθερό, δεν εξαρτάται από το ποιος είναι ο νεότερος) */
+    const biggestLine = () => {
+      const P = state.people, kidsOf = id => P.filter(x => x.parents.includes(id));
+      const root = p => { let f = p; const g = new Set(); while (f && !g.has(f.id)) { g.add(f.id); const fa = f.parents.map(byId).find(x => x && sexOf(x) === 'M'); if (!fa) break; f = fa; } return f; };
+      const size = r => { const seen = new Set([r.id]), st = [r.id]; while (st.length) { const i = st.pop(); kidsOf(i).forEach(c => { if (!seen.has(c.id)) { seen.add(c.id); st.push(c.id); } }); } return seen.size; };
+      const leaves = P.filter(p => p.parents.length && !kidsOf(p.id).length);
+      let best = null, bs = -1;
+      leaves.forEach(l => { const r = root(l), n = size(r); if (n > bs || (n === bs && l.id < best.id)) { best = l; bs = n; } });
+      return best || P[0];
+    };
     const homePerson = () => state.noHome ? null : (byId(state.homeId) || autoHome());
     const SIDE_COL = { P: '#3F6F8F', M: '#8A4B7A' };
     function sideSets() {
@@ -2866,7 +2876,7 @@ input,select,textarea{border-radius:11px!important}
       const isMale = p => sexOf(p) === 'M';
       /* Σε ποιους γονείς "κρεμιέται" ένα ζευγάρι: πάντα στους γονείς του άνδρα (πατρική γραμμή). */
       /* Κύρια οικογένεια: ο γενάρχης (ο πιο ψηλά πατέρας του «εγώ») και όλοι οι απόγονοί του. Όσοι μπήκαν με γάμο πάνε δεξιά. */
-      const main = new Set(), h0 = byId(state.homeId) || autoHome(); /* η σειρά των οικογενειών δεν αλλάζει όταν αφαιρείς το «εγώ» */
+      const main = new Set(), h0 = byId(state.homeId) || (state.noHome ? biggestLine() : autoHome()); /* η σειρά των οικογενειών δεν αλλάζει όταν αφαιρείς το «εγώ» */
       if (h0) {
         let f = h0; const guard = new Set();
         while (f && !guard.has(f.id)) { guard.add(f.id); const fa = f.parents.map(get).find(x => x && sexOf(x) === 'M'); if (!fa) break; f = fa; }
@@ -2911,7 +2921,7 @@ input,select,textarea{border-radius:11px!important}
       /* Κύριος κορμός: οι πρόγονοι του «εγώ». Σε κάθε ζευγάρι, το παιδί που συνεχίζει τον κορμό μπαίνει ΤΕΛΕΥΤΑΙΟ (δεξιά)·
          τα αδέλφια του (και οι οικογένειές τους) πάνε αριστερά του, ό,τι αλλαγές κι αν γίνουν. Ο γονέας μένει ακριβώς πάνω από το παιδί του κορμού (ευθεία γραμμή). */
       {
-        const hid = (byId(state.homeId) || autoHome() || {}).id;
+        const hid = state.noHome ? null : (byId(state.homeId) || autoHome() || {}).id;
         const hasH = u => u.members.some(m => m.id === hid) || u.kids.some(hasH);
         const isAnc = u => !u.members.some(m => m.id === hid) && u.kids.some(hasH);
         const fix = u => {
@@ -2983,33 +2993,54 @@ input,select,textarea{border-radius:11px!important}
       const setDepth = u => { u.depth = g[u.members[0].id] - minG; u.members.forEach(m => { m.gen = u.depth + 1; }); u.kids.forEach(setDepth); };
       roots.forEach(setDepth);
 
-      const nodes = [], links = []; let maxDepth = 0;
-      function place(u, left) {
-        const sx = left + (u.ax || 0), cx = sx + u.uw / 2, y = TOP + u.depth * ROW_H, sz = avSize(u.depth); /* αριστερή στοίχιση: ο γονέας πάνω από το πρώτο παιδί, τα υπόλοιπα απλώνονται δεξιά */
-        maxDepth = Math.max(maxDepth, u.depth);
-        u.members.forEach((m, i) => nodes.push({ p: m, x: sx + i * (CARD_W + SP_GAP), y, sz, depth: u.depth }));
-        if (u.members.length > 1) links.push({ type: 'marriage', x1: sx + CARD_W / 2, x2: sx + CARD_W + SP_GAP + CARD_W / 2, y: y + sz / 2 });
-        let kl = left; const kidCx = [], tops = [];
-        u.kids.forEach(k => { kidCx.push(place(k, kl)); tops.push(TOP + k.depth * ROW_H); kl += k.w + GAP; });
-        if (u.kids.length) links.push({ type: 'kids', cx, y0: u.members.length > 1 ? y + sz / 2 : y + sz + 46, bus: y + ROW_H - 26, tops, kids: kidCx });
-        return cx;
-      }
-      let left = 0;
-      roots.forEach(r => { place(r, left); left += r.w + 60; });
-      const pos = {}; nodes.forEach(n => { pos[n.p.id] = n; });
-      P.forEach(c => {
-        const cn = pos[c.id]; if (!cn || !c.parents.length) return;
-        const placed = placedUnder[c.id] || [], miss = c.parents.filter(id => !placed.includes(id) && pos[id]), done = new Set();
-        miss.forEach(id => {
-          if (done.has(id)) return; done.add(id);
-          const pn = pos[id], mate = get(pn.p.spouse); let ax, ay;
-          if (mate && miss.includes(mate.id) && pos[mate.id]) { done.add(mate.id); const mn = pos[mate.id]; ax = (Math.min(pn.x, mn.x) + Math.max(pn.x, mn.x) + CARD_W) / 2; ay = pn.y + pn.sz / 2; }
-          else { ax = pn.x + CARD_W / 2; ay = pn.y + pn.sz + 46; }
-          const bus = pn.y + ROW_H - 8;
-          if (cn.y > bus) links.push({ type: 'cross', ax, ay, bus, cx: cn.x + CARD_W / 2, top: cn.y });
-        });
+      /* ---- Νέα διάταξη: ζευγάρια (μονάδες) ανά γενιά, κάθε ζευγάρι κεντραρισμένο πάνω από τα παιδιά του ---- */
+      const unitOf = {}, units = [];
+      P.slice().sort((x, y) => x.id - y.id).forEach(p => {
+        if (unitOf[p.id]) return;
+        const sp = get(p.spouse); let m = [p];
+        if (sp && !unitOf[sp.id]) m = (isMale(sp) && !isMale(p)) ? [sp, p] : [p, sp];
+        const u = { members: m, depth: g[m[0].id] - minG, kids: [], pars: [], uw: m.length * CARD_W + (m.length - 1) * SP_GAP };
+        m.forEach(x => { unitOf[x.id] = u; x.gen = u.depth + 1; }); units.push(u);
       });
-      layout = { placed: placedUnder, nodes, links, width: Math.max(300, left - 60) + LEFT, height: TOP + (maxDepth + 1) * ROW_H + 20, maxDepth };
+      P.forEach(c => c.parents.forEach(pid => { const pu = unitOf[pid], cu = unitOf[c.id]; if (!pu || !cu || pu === cu) return; if (!pu.kids.includes(cu)) pu.kids.push(cu); if (!cu.pars.includes(pu)) cu.pars.push(pu); }));
+      const kk = u => u.members.map(m => [m.ord != null ? m.ord : 1e6, m.by || 9999, m.id]).sort((x, y) => x[0] - y[0] || x[1] - y[1] || x[2] - y[2])[0];
+      const cmp = (x, y) => { const a1 = kk(x), b1 = kk(y); return a1[0] - b1[0] || a1[1] - b1[1] || a1[2] - b1[2]; };
+      let cnt = 0; const vis = u => { if (u.o != null) return; u.o = cnt++; u.kids.slice().sort(cmp).forEach(vis); };
+      const inMain = u => u.members.some(m => main.has(m.id));
+      units.filter(u => !u.pars.length).sort((x, y) => (inMain(x) ? 0 : 1) - (inMain(y) ? 0 : 1) || x.members[0].id - y.members[0].id).forEach(vis);
+      units.forEach(vis);
+      const maxD = Math.max(0, ...units.map(u => u.depth)), rows = [], GP = GAP + 24;
+      for (let d = 0; d <= maxD; d++) rows.push(units.filter(u => u.depth === d).sort((x, y) => x.o - y.o));
+      rows.forEach(r => { let x = 0; r.forEach(u => { u.cx = x + u.uw / 2; x += u.uw + GP; }); });
+      const pack = row => {
+        let c = 0; const y = row.map(u => { const v = (u.cx - u.uw / 2) - c; c += u.uw + GP; return v; }), bl = [];
+        y.forEach((v, i) => { bl.push({ s: v, n: 1, i }); while (bl.length > 1 && bl[bl.length - 2].s / bl[bl.length - 2].n > bl[bl.length - 1].s / bl[bl.length - 1].n) { const b = bl.pop(), a2 = bl.pop(); bl.push({ s: a2.s + b.s, n: a2.n + b.n, i: a2.i }); } });
+        let c2 = 0, bi = 0;
+        row.forEach((u, i) => { while (bi < bl.length - 1 && i >= bl[bi + 1].i) bi++; u.cx = bl[bi].s / bl[bi].n + c2 + u.uw / 2; c2 += u.uw + GP; });
+      };
+      const memOff = (u, m) => u.members.indexOf(m) * (CARD_W + SP_GAP) + CARD_W / 2 - u.uw / 2;
+      const pull = u => {
+        const v = [];
+        u.members.forEach(m => m.parents.forEach(pid => { const pu = unitOf[pid]; if (pu && pu !== u) v.push(pu.cx - memOff(u, m)); }));
+        u.kids.forEach(k => k.members.forEach(m => { if (m.parents.some(pid => unitOf[pid] === u)) v.push(k.cx + memOff(k, m)); }));
+        return v.length ? v.reduce((x, y) => x + y, 0) / v.length : null;
+      };
+      for (let it = 0; it < 12; it++) {
+        const step = d => { const t = rows[d].map(pull); rows[d].forEach((u, i) => { if (t[i] != null) u.cx = t[i]; }); if (it < 6) rows[d].sort((x, y) => x.cx - y.cx || x.o - y.o); pack(rows[d]); };
+        for (let d = 1; d <= maxD; d++) step(d);
+        for (let d = maxD - 1; d >= 0; d--) step(d);
+      }
+      const minL = units.length ? Math.min(...units.map(u => u.cx - u.uw / 2)) : 0;
+      const nodes = [], lane = {}, placed = {}; let maxDepth = 0, maxR = 0;
+      units.forEach(u => {
+        const sx = u.cx - u.uw / 2 - minL, y = TOP + u.depth * ROW_H, sz = avSize(u.depth);
+        maxDepth = Math.max(maxDepth, u.depth); maxR = Math.max(maxR, sx + u.uw);
+        u.members.forEach((m, i) => nodes.push({ p: m, x: sx + i * (CARD_W + SP_GAP), y, sz, depth: u.depth }));
+      });
+      rows.forEach(r => r.filter(u => u.kids.length).sort((x, y) => x.cx - y.cx).forEach((u, k) => u.members.forEach(m => { lane[m.id] = k % 4; })));
+      P.forEach(c => { placed[c.id] = c.parents.filter(i => get(i)); });
+      const colI = {}; let ci = 0; units.filter(u => u.kids.length).sort((x, y) => x.depth - y.depth || x.cx - y.cx).forEach(u => { u.members.forEach(m => { colI[m.id] = ci; }); ci++; });
+      layout = { placed, nodes, links: [], lane, colI, width: Math.max(300, maxR) + LEFT + 30, height: TOP + (maxDepth + 1) * ROW_H + 20, maxDepth };
     }
 
     /* ---------- Διάταξη δέντρου: εστίαση, προσανατολισμός, κλάδοι, drag ---------- */
@@ -3163,13 +3194,38 @@ input,select,textarea{border-radius:11px!important}
       const pt = (a, b) => V ? b + ' ' + a : a + ' ' + b, DIM = ' style="opacity:.15"';
       let svg = '', mw = 0, mh = 0;
       Object.values(pos).forEach(q => { mw = Math.max(mw, q.L + CARD_W + 30); mh = Math.max(mh, q.T + q.n.sz + 70); });
-      state.people.forEach(p => { const s = byId(p.spouse), a = pos[p.id], b = s && pos[s.id]; if (a && b && p.id < s.id) svg += `<path class="tree-line-marriage" d="M${pt(a.cA, a.cB)} L${pt(b.cA, b.cB)}"${R && !(R.has(p.id) && R.has(s.id)) ? DIM : ''}/>`; });
+      /* Γραμμές: στρογγυλεμένες γωνίες, χρώμα ανά οικογένεια (ζευγάρι γονέων), λευκό περίγραμμα ώστε να ξεχωρίζουν όταν διασταυρώνονται */
+      const COLS = ['#1B4F72', '#B5532F', '#5E7F1E', '#8A4B7A', '#B8860B', '#1F8A8A', '#A23B5A', '#4B5FA8'];
+      const xy = (a, b) => V ? [b, a] : [a, b];
+      const rnd = (pts, r) => {
+        const P = pts.map(q => xy(q[0], q[1])); let d = 'M' + P[0][0] + ' ' + P[0][1];
+        for (let i = 1; i < P.length - 1; i++) {
+          const p0 = P[i - 1], p1 = P[i], p2 = P[i + 1], l1 = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]), l2 = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]), k = Math.min(r, l1 / 2, l2 / 2);
+          if (k < 1) { d += ' L' + p1[0] + ' ' + p1[1]; continue; }
+          const ax = p1[0] - (p1[0] - p0[0]) / l1 * k, ay = p1[1] - (p1[1] - p0[1]) / l1 * k, bx = p1[0] + (p2[0] - p1[0]) / l2 * k, by = p1[1] + (p2[1] - p1[1]) / l2 * k;
+          d += ' L' + ax + ' ' + ay + ' Q' + p1[0] + ' ' + p1[1] + ' ' + bx + ' ' + by;
+        }
+        const e = P[P.length - 1]; return d + ' L' + e[0] + ' ' + e[1];
+      };
+      let under = '', over = '', dots = '';
+      state.people.forEach(p => {
+        const s = byId(p.spouse), a = pos[p.id], b = s && pos[s.id];
+        if (a && b && p.id < s.id) {
+          const dm = R && !(R.has(p.id) && R.has(s.id)) ? DIM : '', mx = (a.cA + b.cA) / 2, my = (a.cB + b.cB) / 2, m = xy(mx, my);
+          over += `<path d=\"M${pt(a.cA, a.cB)} L${pt(b.cA, b.cB)}\" stroke=\"#fff\" stroke-width=\"8\" stroke-linecap=\"round\" fill=\"none\"${dm}/><path d=\"M${pt(a.cA, a.cB)} L${pt(b.cA, b.cB)}\" stroke=\"#B5532F\" stroke-width=\"3.5\" stroke-linecap=\"round\" fill=\"none\"${dm}/>`;
+          dots += `<circle cx=\"${m[0]}\" cy=\"${m[1]}\" r=\"5\" fill=\"#fff\" stroke=\"#B5532F\" stroke-width=\"2.5\"${dm}/>`;
+        }
+      });
       state.people.forEach(c => {
         const cn = pos[c.id]; if (!cn || !c.parents.length) return;
         const placed = (layout.placed || {})[c.id] || [], ps = c.parents.filter(i => pos[i]), done = new Set();
         const draw = (aS, bS, A0, ids) => {
-          const bus = Math.max(aS + 6, Math.min(A0 + STEP - 26, cn.tgt - 12));
-          svg += `<path class="${ids.some(i => placed.includes(i)) ? 'tree-line' : 'tree-line-cross'}" d="M${pt(aS, bS)} L${pt(bus, bS)} L${pt(bus, cn.cB)} L${pt(cn.tgt, cn.cB)}"${R && !(R.has(c.id) && ids.every(i => R.has(i))) ? DIM : ''}/>`;
+          const bus = Math.max(aS + 6, Math.min(A0 + STEP - 52 + ((layout.lane || {})[ids[0]] || 0) * 10, cn.tgt - 12)), cross = !ids.some(i => placed.includes(i)), col = COLS[((layout.colI || {})[ids[0]] || 0) % COLS.length];
+          const d = rnd([[aS, bS], [bus, bS], [bus, cn.cB], [cn.tgt, cn.cB]], 12), dm = R && !(R.has(c.id) && ids.every(i => R.has(i))) ? DIM : '', e = xy(cn.tgt, cn.cB);
+          const dash = cross ? ' stroke-dasharray=\"7 6\"' : '';
+          (cross ? under : over); const t = `<path d=\"${d}\" stroke=\"#fff\" stroke-width=\"7\" stroke-linecap=\"round\" fill=\"none\"${dm}/><path d=\"${d}\" stroke=\"${col}\" stroke-width=\"2.6\" stroke-linecap=\"round\" fill=\"none\"${dash}${dm}/>`;
+          if (cross) under += t; else over += t;
+          dots += `<circle cx=\"${e[0]}\" cy=\"${e[1]}\" r=\"3.5\" fill=\"${col}\"${dm}/>`;
         };
         ps.forEach(id => {
           if (done.has(id)) return; done.add(id); const a = pos[id], s = byId(byId(id).spouse);
@@ -3177,6 +3233,7 @@ input,select,textarea{border-radius:11px!important}
           else draw(a.src, a.cB, a.A0, [id]);
         });
       });
+      svg = under + over + dots;
       let html = '';
       for (let d = 0; d <= layout.maxDepth; d++) {
         if (hid(d)) continue;
