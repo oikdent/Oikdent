@@ -2046,6 +2046,37 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
 .pl-dd{position:absolute;left:0;right:0;top:100%;z-index:90;margin-top:4px;background:var(--lg-fill-strong,#fff);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 28px -12px rgba(59,47,38,.4);overflow:hidden}
 .pl-it{padding:11px 14px;font-size:14px;cursor:pointer;border-bottom:1px solid var(--line)}.pl-it:last-child{border:0}.pl-it:hover,.pl-it:active{background:rgba(74,93,58,.1)}.pl-it small{margin-left:8px;color:var(--color-terracotta);font-size:12px}
   </style>
+
+<style id="mediterranean-controls">
+/* Unified minimal Mediterranean controls */
+:root{--btn-ink:#4A5D3A;--btn-line:rgba(74,93,58,.22);--btn-bg:#FBF7EC;--btn-hover:#EDE5D0;--btn-warm:#B5603E}
+html.dark{--btn-ink:#B9C99A;--btn-line:rgba(214,200,170,.2);--btn-bg:#2A3024;--btn-hover:#394332;--btn-warm:#D98B66}
+button:not(.person-node):not(.map-pin):not(#login-remember){font-family:var(--font-sans,Manrope,system-ui)!important;font-weight:500;letter-spacing:.01em;border-radius:12px!important;box-shadow:none!important;transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease!important}
+button:not(.person-node):not(.map-pin):not(#login-remember):not([type=submit]){border-color:var(--btn-line)}
+button:not(.person-node):not(.map-pin):not(#login-remember):not([type=submit]):not(.bg-aegean):not(.bg-terracotta):not(.bg-ochre):not(.bg-olive):not(.bg-white){background:var(--btn-bg);color:var(--btn-ink)}
+button:not(.person-node):not(.map-pin):not(#login-remember):hover{filter:none!important;box-shadow:0 3px 9px rgba(59,47,38,.08)!important}
+button:not(.person-node):not(.map-pin):not(#login-remember):active{transform:translateY(1px)!important}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.bg-aegean,#modal-actions button[type=submit]{border-radius:12px!important;background:var(--color-aegean)!important;color:#FBF7EC!important;box-shadow:none!important}
+button.bg-terracotta{border-radius:12px!important;background:var(--color-terracotta)!important;box-shadow:none!important}
+button.bg-ochre{border-radius:12px!important;background:var(--color-ochre)!important;color:#3B2F26!important;box-shadow:none!important}
+button.bg-white{border:1px solid var(--btn-line)!important;box-shadow:none!important}
+.ui-icon{width:18px;height:18px;display:inline-block;flex:0 0 18px;vertical-align:-3px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+button .ui-icon{margin-inline:1px}
+.nav-item .ui-icon,.bn-item .ui-icon{width:20px;height:20px;stroke-width:1.6}
+#bottom-nav button{background:transparent!important;border:0!important;border-radius:10px!important;box-shadow:none!important}
+#bottom-nav button.bn-on{background:rgba(74,93,58,.1)!important}
+#modal-actions{gap:8px}
+#modal-actions button{min-height:44px;padding-inline:16px}
+#login-box{background:var(--lg-fill)!important;border:1px solid var(--lg-edge);box-shadow:0 12px 32px rgba(59,47,38,.12)!important}
+#login-box h1{color:var(--color-aegean)!important}
+#login-box button{border-radius:12px!important;background:var(--color-aegean)!important}
+#login-box button#login-remember{background:var(--btn-bg)!important;color:var(--btn-ink)!important;border-color:var(--btn-line)!important}
+input,select,textarea{border-radius:11px!important}
+#tree-area .person-node{border:0!important;background:transparent!important;box-shadow:none!important}
+#tree-area .person-node p{font-family:var(--font-sans)!important}
+@media(max-width:640px){button:not(.person-node):not(.map-pin){min-height:40px}#tree-view-controls button{padding-inline:10px}}
+</style>
 </head>
 <body class="font-sans text-gray-800 antialiased">
   <!-- Οθόνη σύνδεσης -->
@@ -2068,7 +2099,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       <p class="sub">Συνδέσου για να συνεχίσεις</p>
       <label>Όνομα χρήστη<input id="login-user" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required></label>
       <label>Κωδικός<input id="login-pass" type="password" inputmode="numeric" autocomplete="current-password" required></label>
-      <button type="button" id="login-remember" aria-pressed="true"><span id="login-remember-ico" aria-hidden="true">✅</span> Να με θυμάσαι για 30 ημέρες</button>
+      <button type="button" id="login-remember" aria-pressed="true"><span id="login-remember-ico" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span> Να με θυμάσαι για 30 ημέρες</button>
       <div id="login-err" role="alert"></div>
       <button type="submit">Σύνδεση</button>
     </form>
@@ -2107,14 +2138,20 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
   })();
   </script>
   <div id="app" class="min-h-screen">
-    <!-- Mobile top bar -->
+    <style id="unified-ui-icons">
+    .ui-icon{width:20px;height:20px;display:inline-block;flex:0 0 20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .nav-item .ui-icon,.bn-item .ui-icon{color:inherit}
+    .bn-item .ui-icon{width:22px;height:22px;flex-basis:22px}
+    .nav-item{min-height:42px}.ui-icon-lg .ui-icon{width:30px;height:30px;flex-basis:30px;stroke-width:1.65}
+  </style>
+  <!-- Mobile top bar -->
     <header id="mobile-header" class="md:hidden fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-aegean/10 px-4 h-14 flex items-center gap-3 shadow-sm">
       <button id="menu-btn" onclick="toggleSidebar()" class="w-10 h-10 rounded-xl bg-aegean/10 text-aegean flex items-center justify-center" aria-label="Μενού">
-        <span class="" aria-hidden="true">☰</span>
+        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-full bg-aegean flex items-center justify-center text-white text-sm">
-          <span class="" aria-hidden="true">🌳</span>
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M6 8h12M6 8v5m12-5v5M12 8v5M4 13h4m-4 0v5m4-5v5m6-5h4m-4 0v5m4-5v5"/><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="2" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="5" height="4" rx="1"/><rect x="9.5" y="17" width="5" height="4" rx="1"/></svg>
         </div>
         <span class="font-serif font-bold text-aegean" id="app-title-m">Οικογενειακό Δέντρο</span>
       </div>
@@ -2128,7 +2165,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       <div class="p-5 border-b border-aegean/10 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-aegean flex items-center justify-center text-white text-lg">
-            <span class="" aria-hidden="true">🌳</span>
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M6 8h12M6 8v5m12-5v5M12 8v5M4 13h4m-4 0v5m4-5v5m6-5h4m-4 0v5m4-5v5"/><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="2" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="5" height="4" rx="1"/><rect x="9.5" y="17" width="5" height="4" rx="1"/></svg>
           </div>
           <div>
             <h1 class="font-serif text-aegean font-bold text-lg leading-tight">Το Δέντρο</h1>
@@ -2136,17 +2173,17 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
           </div>
         </div>
         <button onclick="closeSidebar()" class="md:hidden w-11 h-11 rounded-lg text-gray-500 hover:bg-gray-100 flex items-center justify-center" aria-label="Κλείσιμο μενού">
-          <span class="" aria-hidden="true">✕</span>
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
         </button>
       </div>
       <nav class="flex-1 p-3 overflow-y-auto">
         <p class="nav-label">Κύρια</p>
-        <div class="space-y-1"><button data-view="home" class="nav-item active w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><span class="w-5 text-center" aria-hidden="true">🏠</span> Αρχική</button><button data-view="tree" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><span class="w-5 text-center" aria-hidden="true">🗂️</span> Δέντρο</button><button data-view="people" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><span class="w-5 text-center" aria-hidden="true">👥</span> Μέλη οικογένειας</button></div>
+        <div class="space-y-1"><button data-view="home" class="nav-item active w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg> Αρχική</button><button data-view="tree" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M6 8h12M6 8v5m12-5v5M12 8v5M4 13h4m-4 0v5m4-5v5m6-5h4m-4 0v5m4-5v5"/><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="2" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="5" height="4" rx="1"/><rect x="9.5" y="17" width="5" height="4" rx="1"/></svg> Δέντρο</button><button data-view="people" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1M16 5.5a3 3 0 0 1 0 5.5m2 3a4 4 0 0 1 3 4v2"/></svg> Μέλη οικογένειας</button></div>
         <p class="nav-label">Αρχείο</p>
-        <div class="space-y-1"><button data-view="photos" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><span class="w-5 text-center" aria-hidden="true">🖼️</span> Φωτογραφίες</button><button data-view="timeline" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><span class="w-5 text-center" aria-hidden="true">🕰️</span> Χρονολόγιο</button><button data-view="map" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><span class="w-5 text-center" aria-hidden="true">📍</span> Τοποθεσίες</button></div>
+        <div class="space-y-1"><button data-view="photos" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 18"/></svg> Φωτογραφίες</button><button data-view="timeline" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Χρονολόγιο</button><button data-view="map" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> Τοποθεσίες</button></div>
         <details id="nav-more" class="mt-4">
           <summary class="nav-label cursor-pointer select-none">Περισσότερα</summary>
-          <div class="space-y-1 mt-1"><button data-view="heritage" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><span class="w-5 text-center" aria-hidden="true">🏺</span> Κληρονομιά</button><button data-view="stats" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><span class="w-5 text-center" aria-hidden="true">📊</span> Στατιστικά</button><button type="button" onclick="openBook()" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition text-ochre font-semibold"><span class="w-5 text-center" aria-hidden="true">📖</span> Βιβλίο οικογένειας</button><button data-view="settings" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><span class="w-5 text-center" aria-hidden="true">⚙️</span> Ρυθμίσεις</button></div>
+          <div class="space-y-1 mt-1"><button data-view="heritage" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v10l8 4 8-4V7z"/><path d="M8 10c1.5-2 6.5-2 8 0-1.5 2-6.5 2-8 0Zm0 4c1.5-2 6.5-2 8 0-1.5 2-6.5 2-8 0Z"/></svg> Κληρονομιά</button><button data-view="stats" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5m0 14h17"/><rect x="7" y="12" width="3" height="5" rx=".5"/><rect x="12" y="8" width="3" height="9" rx=".5"/><rect x="17" y="4" width="3" height="13" rx=".5"/></svg> Στατιστικά</button><button type="button" onclick="openBook()" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition text-ochre font-semibold"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A3 3 0 0 1 7 3h5v17H7a3 3 0 0 0-3 1.5zM20 5.5A3 3 0 0 0 17 3h-5v17h5a3 3 0 0 1 3 1.5z"/></svg> Βιβλίο οικογένειας</button><button data-view="settings" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .6 1-1.7 1.7-1-.6a6 6 0 0 1-1.5.6l-.3 1.2h-2.4l-.3-1.2a6 6 0 0 1-1.5-.6l-1 .6L8.6 16.1l.6-1a6 6 0 0 1-.6-1.5l-1.2-.3v-2.4l1.2-.3a6 6 0 0 1 .6-1.5l-.6-1L8.3 4.4l1.7-1.7 1 .6a6 6 0 0 1 1.5-.6l.3-1.2h2.4l.3 1.2a6 6 0 0 1 1.5.6l1-.6 1.7 1.7-.6 1a6 6 0 0 1 .6 1.5l1.2.3v2.4l-1.2.3a6 6 0 0 1-.6 1.5Z"/></svg> Ρυθμίσεις</button></div>
         </details>
       </nav>
       <div class="p-4 border-t border-aegean/10 text-xs text-gray-500">
@@ -2172,7 +2209,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
             <p class="text-xl text-white/90 mb-8 max-w-lg" id="hero-text">Καταγράψτε τις ρίζες και την ιστορία της οικογένειάς σας.</p>
             <div class="flex flex-wrap gap-4">
               <button onclick="switchView('tree')" class="bg-white text-aegean px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition flex items-center gap-2">
-                <span class="" aria-hidden="true">🗂️</span> Άνοιγμα Δέντρου
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h7l2 2h9v11H3z"/></svg> Άνοιγμα Δέντρου
               </button>
               <button onclick="addMember()" class="bg-white/20 backdrop-blur border border-white/40 text-white px-6 py-3 rounded-xl font-medium hover:bg-white/30 transition flex items-center gap-2">
                 <span class="" aria-hidden="true">➕</span> Νέο Μέλος
@@ -2185,22 +2222,22 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
         <section class="max-w-5xl mx-auto px-6 -mt-8 relative z-10">
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-white rounded-2xl p-5 shadow-card text-center">
-              <div class="text-3xl mb-1">👥</div>
+              <div class="mb-1 ui-icon-lg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1M16 5.5a3 3 0 0 1 0 5.5m2 3a4 4 0 0 1 3 4v2"/></svg></div>
               <div class="text-2xl font-bold text-aegean" id="stat-members">0</div>
               <div class="text-sm text-gray-500">Μέλη</div>
             </div>
             <div class="bg-white rounded-2xl p-5 shadow-card text-center">
-              <div class="text-3xl mb-1">🌳</div>
+              <div class="mb-1 ui-icon-lg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M6 8h12M6 8v5m12-5v5M12 8v5M4 13h4m-4 0v5m4-5v5m6-5h4m-4 0v5m4-5v5"/><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="2" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="5" height="4" rx="1"/><rect x="9.5" y="17" width="5" height="4" rx="1"/></svg></div>
               <div class="text-2xl font-bold text-aegean" id="stat-gens">0</div>
               <div class="text-sm text-gray-500">Γενιές</div>
             </div>
             <div class="bg-white rounded-2xl p-5 shadow-card text-center">
-              <div class="text-3xl mb-1">📸</div>
+              <div class="mb-1 ui-icon-lg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 18"/></svg></div>
               <div class="text-2xl font-bold text-aegean" id="stat-photos">0</div>
               <div class="text-sm text-gray-500">Φωτογραφίες</div>
             </div>
             <div class="bg-white rounded-2xl p-5 shadow-card text-center">
-              <div class="text-3xl mb-1">📍</div>
+              <div class="mb-1 ui-icon-lg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
               <div class="text-2xl font-bold text-aegean" id="stat-places">0</div>
               <div class="text-sm text-gray-500">Τοποθεσίες</div>
             </div>
@@ -2209,7 +2246,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
 
         <!-- Updates -->
         <section class="max-w-5xl mx-auto px-6 py-10">
-          <h2 class="font-serif text-2xl text-aegean mb-1 flex items-center gap-2"><span class="text-olive" aria-hidden="true">🔔</span> Ενημερώσεις</h2>
+          <h2 class="font-serif text-2xl text-aegean mb-1 flex items-center gap-2"><span class="text-olive"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span> Ενημερώσεις</h2>
           <p class="text-sm text-gray-500 mb-5 capitalize" id="updates-date"></p>
           <div id="updates-list"></div>
         </section>
@@ -2222,7 +2259,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
 
         <section class="max-w-5xl mx-auto px-6 pb-8" id="soc-section">
           <div class="flex items-center justify-between gap-3 mb-4">
-            <h2 class="font-serif text-2xl text-aegean">📱 Τα social της οικογένειας</h2>
+            <h2 class="font-serif text-2xl text-aegean flex items-center gap-2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg> Τα social της οικογένειας</h2>
             <button type="button" onclick="switchView('settings')" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5">⚙️ Ρύθμιση</button>
           </div>
           <div class="grid gap-3 md:grid-cols-2" id="soc-list"></div>
@@ -2239,29 +2276,30 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       <div id="view-tree" class="view hidden fade-in min-h-[calc(100vh-3.5rem)] md:min-h-screen flex flex-col">
         <div class="bg-white border-b border-aegean/10 px-4 md:px-6 py-3 flex flex-wrap gap-2 items-center justify-between sticky top-14 md:top-0 z-20">
           <h2 class="font-serif text-xl text-aegean flex items-center gap-2">
-            <span class="text-olive" aria-hidden="true">🗂️</span> Οικογενειακό Δέντρο
+            <span class="text-olive"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h7l2 2h9v11H3z"/></svg></span> Οικογενειακό Δέντρο
           </h2>
           <div class="flex flex-wrap gap-2 relative">
             <button onclick="addMember()" class="px-3 py-1.5 rounded-lg bg-aegean text-white text-sm flex items-center gap-1.5 hover:bg-aegean/90">
-              <span class="" aria-hidden="true">＋</span> Μέλος
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Μέλος
             </button>
-            <button type="button" data-undo onclick="undoChange()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Αναίρεση (Ctrl+Z)" aria-label="Αναίρεση">↶ <span class="hidden sm:inline">Αναίρεση</span></button>
-            <button type="button" data-redo onclick="redoChange()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Επανάληψη (Ctrl+Y)" aria-label="Επανάληψη">↷</button>
+            <button type="button" data-undo onclick="undoChange()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Αναίρεση (Ctrl+Z)" aria-label="Αναίρεση"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7 4 12l5 5M4 12h9a6 6 0 0 1 6 6"/></svg> <span class="hidden sm:inline">Αναίρεση</span></button>
+            <button type="button" data-redo onclick="redoChange()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Επανάληψη (Ctrl+Y)" aria-label="Επανάληψη"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 7 5 5-5 5M20 12h-9a6 6 0 0 0-6 6"/></svg></button>
             <button onclick="tidyTree()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Τακτοποίηση">
-              <span class="" aria-hidden="true">✨</span> <span class="hidden sm:inline">Τακτοποίηση</span>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 1.4 5.6L19 10l-5.6 1.4L12 17l-1.4-5.6L5 10l5.6-1.4zM19 16l.7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7z"/></svg> <span class="hidden sm:inline">Τακτοποίηση</span>
             </button>
-            <button type="button" onclick="toggleOrient()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Κάθετο / οριζόντιο">🔀 <span class="hidden sm:inline">Προσανατολισμός</span></button>
-            <button type="button" id="btn-drag" onclick="toggleDrag()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Μετακίνηση καρτών">✋ <span class="hidden sm:inline">Μετακίνηση</span></button>
+            <button type="button" onclick="printFamilyBranch()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Εκτύπωση επιλεγμένου κλάδου"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 17H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6zM17 12h1"/></svg><span class="hidden sm:inline">Εκτύπωση κλάδου</span></button>
+            <button type="button" onclick="toggleOrient()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Κάθετο / οριζόντιο"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v7m0 0H6v7m6-7h6v7"/><circle cx="12" cy="4" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> <span class="hidden sm:inline">Προσανατολισμός</span></button>
+            <button type="button" id="btn-drag" onclick="toggleDrag()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Μετακίνηση καρτών"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11V5a1.5 1.5 0 0 1 3 0v5-7a1.5 1.5 0 0 1 3 0v7-5a1.5 1.5 0 0 1 3 0v5-3a1.5 1.5 0 0 1 3 0v6c0 4-2.5 7-6.5 7H12c-2 0-3.2-.8-4.3-2L4 14a1.5 1.5 0 0 1 2.3-1.8L8 14"/></svg> <span class="hidden sm:inline">Μετακίνηση</span></button>
             <div class="flex items-center rounded-lg border border-aegean/30 overflow-hidden">
-              <button type="button" onclick="zoomTree(-0.15)" class="px-3 py-1.5 text-aegean text-sm hover:bg-aegean/5" aria-label="Σμίκρυνση">−</button>
+              <button type="button" onclick="zoomTree(-0.15)" class="px-3 py-1.5 text-aegean text-sm hover:bg-aegean/5" aria-label="Σμίκρυνση"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
               <button type="button" id="zoom-label" onclick="zoomTree(0)" class="px-2 py-1.5 text-aegean text-xs border-x border-aegean/30 hover:bg-aegean/5" aria-label="Επαναφορά ζουμ">100%</button>
-              <button type="button" onclick="zoomTree(0.15)" class="px-3 py-1.5 text-aegean text-sm hover:bg-aegean/5" aria-label="Μεγέθυνση">＋</button>
+              <button type="button" onclick="zoomTree(0.15)" class="px-3 py-1.5 text-aegean text-sm hover:bg-aegean/5" aria-label="Μεγέθυνση"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>
             </div>
             <button onclick="toggleFilter()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Φίλτρα">
-              <span class="" aria-hidden="true">⏷</span> <span class="hidden sm:inline">Φίλτρα</span>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16l-6.5 7.5V19l-3-1.5v-5z"/></svg> <span class="hidden sm:inline">Φίλτρα</span>
             </button>
             <button onclick="openExport()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Export">
-              <span class="" aria-hidden="true">⬇️</span> <span class="hidden sm:inline">Export</span>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 19h16"/></svg> <span class="hidden sm:inline">Export</span>
             </button>
             <div id="filter-panel" class="hidden absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-lg border border-aegean/10 p-4 z-30"></div>
           </div>
@@ -2282,7 +2320,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
             <h2 class="font-serif text-2xl text-aegean">Μέλη οικογένειας</h2>
             <div class="flex gap-2 flex-wrap w-full md:w-auto">
               <div class="relative flex-1 min-w-[10rem] md:flex-none">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" aria-hidden="true">🔍</span>
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></span>
                 <input type="text" placeholder="Αναζήτηση..." class="pl-9 pr-4 py-2 rounded-xl border border-aegean/20 bg-white text-sm w-full md:w-56 focus:outline-none focus:ring-2 focus:ring-aegean/30" id="people-search" oninput="renderPeople()">
               </div>
               <select class="px-3 py-2 rounded-xl border border-aegean/20 bg-white text-sm focus:outline-none" id="people-show" onchange="renderPeople()" aria-label="Κατάσταση"><option value="">Όλοι</option><option value="live">Εν ζωή</option><option value="dead">Αποβιώσαντες</option><option value="fav">★ Αγαπημένα</option></select>
@@ -2333,7 +2371,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
         <div class="max-w-3xl mx-auto px-6 py-8">
           <div class="flex items-center justify-between mb-8">
             <h2 class="font-serif text-2xl text-aegean">Χρονολόγιο</h2>
-            <button onclick="addEvent()" class="px-4 py-2 rounded-xl bg-aegean text-white text-sm flex items-center gap-2"><span class="" aria-hidden="true">📅</span> Νέο γεγονός</button>
+            <button onclick="addEvent()" class="px-4 py-2 rounded-xl bg-aegean text-white text-sm flex items-center gap-2"> <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg> Νέο γεγονός</button>
           </div>
           <div class="relative pl-8 border-l-2 border-olive/40 space-y-8" id="timeline-list"></div>
           <h3 class="font-serif text-xl text-aegean mt-12 mb-4">Ημερολόγιο ανά μήνα</h3>
@@ -2401,7 +2439,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
             <div class="bg-white rounded-2xl p-6 shadow-card">
               <h3 class="font-medium text-aegean mb-2">Βιβλίο οικογενειακής ιστορίας</h3>
               <p class="text-sm text-gray-500 mb-4">Δημιουργεί αυτόματα βιβλίο με ιστορία, γενιές, γενεαλογικό δέντρο, βιογραφίες, γεγονότα και φωτογραφίες, έτοιμο για εκτύπωση ή PDF.</p>
-              <button type="button" onclick="openBook()" class="w-full px-4 py-3 rounded-xl bg-ochre text-white text-sm font-medium">📖 Δημιουργία βιβλίου (PDF)</button>
+              <button type="button" onclick="openBook()" class="w-full px-4 py-3 rounded-xl bg-ochre text-white text-sm font-medium"> <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A3 3 0 0 1 7 3h5v17H7a3 3 0 0 0-3 1.5zM20 5.5A3 3 0 0 0 17 3h-5v17h5a3 3 0 0 1 3 1.5z"/></svg> Δημιουργία βιβλίου (PDF)</button>
             </div>
             <div class="bg-white rounded-2xl p-6 shadow-card">
               <h3 class="font-medium text-aegean mb-4">Δεδομένα</h3>
@@ -2410,17 +2448,17 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
                   <span class="text-aegean" aria-hidden="true">⬇️</span> Backup / Restore
                 </button>
                 <button onclick="exportGedcom()" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3">
-                  <span class="text-olive" aria-hidden="true">📤</span> Export GEDCOM
+                  <span class="text-olive"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/></svg></span> Export GEDCOM
                 </button>
                 <div class="grid grid-cols-2 gap-2">
                   <button type="button" data-undo onclick="undoChange()" class="px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-2"><span class="text-aegean" aria-hidden="true">↶</span> Αναίρεση</button>
                   <button type="button" data-redo onclick="redoChange()" class="px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-2"><span class="text-aegean" aria-hidden="true">↷</span> Επανάληψη</button>
                 </div>
                 <button onclick="logoutApp()" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3">
-                  <span class="text-aegean" aria-hidden="true">🔒</span> Αποσύνδεση
+                  <span class="text-aegean"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3"/></svg></span> Αποσύνδεση
                 </button>
                 <button onclick="resetData()" class="w-full text-left px-4 py-3 rounded-xl border border-terracotta/30 hover:bg-terracotta/5 text-sm flex items-center gap-3 text-terracotta">
-                  <span class="" aria-hidden="true">🗑️</span> Διαγραφή όλων των δεδομένων
+                  <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg></span> Διαγραφή όλων των δεδομένων
                 </button>
               </div>
             </div>
@@ -2433,7 +2471,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
         <div class="bg-limewash rounded-2xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden">
           <div class="bg-gradient-to-r from-aegean to-olive h-32 relative">
             <button onclick="closePerson()" class="fixed top-3 right-3 z-10 w-11 h-11 rounded-full bg-black/50 text-white flex items-center justify-center" aria-label="Κλείσιμο">
-              <span class="" aria-hidden="true">✕</span>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
             </button>
           </div>
           <div class="px-6 md:px-8 -mt-12 relative">
@@ -2460,7 +2498,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       <form id="modal-form" class="bg-limewash rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-md p-5 flex flex-col" style="max-height:92vh;max-height:92dvh">
         <div class="flex justify-between items-center mb-3 shrink-0">
           <h3 id="modal-title" class="font-serif text-xl text-aegean"></h3>
-          <button type="button" onclick="closeModal()" class="w-11 h-11 rounded-lg text-gray-500 hover:bg-black/5" aria-label="Κλείσιμο"><span class="" aria-hidden="true">✕</span></button>
+          <button type="button" onclick="closeModal()" class="w-11 h-11 rounded-lg text-gray-500 hover:bg-black/5" aria-label="Κλείσιμο"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
         </div>
         <div id="modal-body" class="space-y-3 overflow-y-auto min-h-0 flex-1 pr-1"></div>
         <div id="modal-actions" class="mt-3 pt-3 border-t border-aegean/10 flex gap-3 flex-wrap shrink-0"></div>
@@ -2468,10 +2506,10 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
     </div>
 
     <nav id="bottom-nav" class="md:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur border-t border-aegean/10 grid grid-cols-5" style="padding-bottom:env(safe-area-inset-bottom,0px)">
-      <button type="button" data-view="home" class="bn-item"><span>🏠</span><small>Αρχική</small></button>
-      <button type="button" data-view="tree" class="bn-item"><span>🗂️</span><small>Δέντρο</small></button>
-      <button type="button" data-view="people" class="bn-item"><span>👥</span><small>Μέλη</small></button>
-      <button type="button" data-view="stats" class="bn-item"><span>📊</span><small>Στατιστικά</small></button>
+      <button type="button" data-view="home" class="bn-item"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg><small>Αρχική</small></button>
+      <button type="button" data-view="tree" class="bn-item"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M6 8h12M6 8v5m12-5v5M12 8v5M4 13h4m-4 0v5m4-5v5m6-5h4m-4 0v5m4-5v5"/><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="2" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="5" height="4" rx="1"/><rect x="9.5" y="17" width="5" height="4" rx="1"/></svg><small>Δέντρο</small></button>
+      <button type="button" data-view="people" class="bn-item"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1M16 5.5a3 3 0 0 1 0 5.5m2 3a4 4 0 0 1 3 4v2"/></svg><small>Μέλη</small></button>
+      <button type="button" data-view="stats" class="bn-item"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5m0 14h17"/><rect x="7" y="12" width="3" height="5" rx=".5"/><rect x="12" y="8" width="3" height="9" rx=".5"/><rect x="17" y="4" width="3" height="13" rx=".5"/></svg><small>Στατιστικά</small></button>
       <button type="button" onclick="toggleSidebar()" class="bn-item"><span>☰</span><small>Περισσότερα</small></button>
     </nav>
     <!-- Toast -->
@@ -3053,7 +3091,19 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       a.scrollLeft = px * z - ax; a.scrollTop = py * z - ay;
     }
     window.zoomTree = d => setZoom(d === 0 ? 1 : treeZoom + d);
-    (function () {
+    window.printFamilyBranch = function(){
+      if(!state.people.length){showToast('Δεν υπάρχουν μέλη για εκτύπωση.');return;}
+      const anchor=byId(selectedId)||byId(focusId)||state.people[0];
+      const ids=relatives(anchor.id), src=$('tree-container'), clone=src.cloneNode(true);
+      clone.querySelectorAll('.person-node').forEach(n=>{if(!ids.has(+n.dataset.id))n.remove();else{n.style.opacity='1';n.style.transform='none';}});
+      clone.querySelectorAll('svg path').forEach(p=>{if(p.getAttribute('opacity')==='.15'||p.style.opacity==='.15')p.remove();});
+      const title='Οικογενειακός κλάδος — '+anchor.name;
+      const w=window.open('','_blank');if(!w){showToast('Επίτρεψε τα αναδυόμενα παράθυρα για εκτύπωση.');return;}
+      w.document.open();w.document.write('<!doctype html><html lang="el"><head><meta charset="utf-8"><title>'+title.replace(/</g,'&lt;')+'</title><style>@page{size:A3 landscape;margin:12mm}*{box-sizing:border-box}body{margin:0;background:#f7f1e5;color:#3b2f26;font-family:Georgia,serif}.head{text-align:center;padding:0 0 10mm}.head h1{font-size:25pt;margin:0;color:#4a5d3a}.head p{font-size:11pt;color:#8a7256;margin:5mm 0 0}.canvas{position:relative;overflow:visible;margin:auto;transform-origin:top center}.person-node{border:0!important;box-shadow:none!important;background:transparent!important;cursor:default!important}.person-node p{font-family:Arial,sans-serif!important;font-size:9pt!important;color:#3b2f26!important}.person-node div{border-color:#f7f1e5!important;box-shadow:0 2px 8px #88765a40!important}.tree-line,.tree-line-cross,.tree-line-marriage{stroke:#7c8b58!important;stroke-width:2!important}.tree-line-cross{stroke-dasharray:5 4!important}.legend{margin-top:8mm;text-align:center;font:10pt Arial;color:#7c8b58}</style></head><body><header class="head"><h1>'+title.replace(/</g,'&lt;')+'</h1><p>Οικογενειακό γενεαλογικό δέντρο</p></header><div id="canvas"></div><div class="legend">Εκτύπωση οικογενειακού κλάδου · '+new Date().getFullYear()+'</div></body></html>');w.document.close();
+      const c=w.document.getElementById('canvas');c.appendChild(clone);c.style.width=src.style.width;c.style.height=src.style.height;clone.style.margin='0 auto';clone.style.position='relative';
+      const maxW=w.innerWidth-40,maxH=w.innerHeight-160,scale=Math.min(maxW/Math.max(clone.scrollWidth,1),maxH/Math.max(clone.scrollHeight,1),1);clone.style.transform='scale('+scale+')';clone.style.transformOrigin='top center';c.style.height=(clone.scrollHeight*scale)+'px';
+      w.focus();setTimeout(()=>w.print(),500);
+    };    (function () {
       const a = $('tree-area'); let pinch = null;
       const dist = e => Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
       a.addEventListener('wheel', e => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const r = a.getBoundingClientRect(); setZoom(treeZoom * (e.deltaY < 0 ? 1.1 : 0.9), e.clientX - r.left, e.clientY - r.top); }, { passive: false });
@@ -3098,7 +3148,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       _sides = sideSets(); renderLegend();
       if (!state.people.length) {
         c.style.width = '100%'; c.style.height = 'auto';
-        c.innerHTML = '<div class="text-center py-20"><div class="text-5xl mb-4">🌱</div><h3 class="font-serif text-xl text-aegean mb-2">Το δέντρο σου είναι άδειο</h3><p class="text-gray-500 mb-6">Ξεκίνα προσθέτοντας το πρώτο μέλος της οικογένειας.</p><button type="button" onclick="addMember()" class="px-5 py-2.5 rounded-xl bg-aegean text-white text-sm font-medium"><span class="mr-2" aria-hidden="true">➕</span>Προσθήκη πρώτου μέλους</button></div>';
+        c.innerHTML = '<div class="text-center py-20"><div class="text-5xl mb-4">🌱</div><h3 class="font-serif text-xl text-aegean mb-2">Το δέντρο σου είναι άδειο</h3><p class="text-gray-500 mb-6">Ξεκίνα προσθέτοντας το πρώτο μέλος της οικογένειας.</p><button type="button" onclick="addMember()" class="px-5 py-2.5 rounded-xl bg-aegean text-white text-sm font-medium"> <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Προσθήκη πρώτου μέλους</button></div>';
         return;
       }
       if (!byId(selectedId)) selectedId = state.people[0].id;
@@ -3172,8 +3222,8 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
           ${row('Σύζυγος', sp ? `<span class="text-aegean cursor-pointer hover:underline" data-open="${sp.id}">${esc(shortName(sp))}</span>` : '—')}
           ${row('Παιδιά', kids.length)}
         </div>
-        <button type="button" onclick="${focusId === p.id ? 'clearFocus()' : 'focusPerson(' + p.id + ')'}" class="mt-6 w-full py-2.5 rounded-xl border border-ochre text-ochre text-sm font-medium">${focusId === p.id ? '✖ Καθαρισμός εστίασης' : '🎯 Εστίαση σε αυτό το άτομο'}</button>
-        ${(kids.length || (sp && childrenOf(sp).length)) ? `<button type="button" onclick="toggleBranch(${p.id})" class="mt-2 w-full py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">${TR().collapsed.includes(p.id) ? '🌿 Εμφάνιση κλάδου' : '🌿 Απόκρυψη κλάδου'}</button>` : ''}
+        <button type="button" onclick="${focusId === p.id ? 'clearFocus()' : 'focusPerson(' + p.id + ')'}" class="mt-6 w-full py-2.5 rounded-xl border border-ochre text-ochre text-sm font-medium">${focusId === p.id ? '✖ Καθαρισμός εστίασης' : ' <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"/></svg> Εστίαση σε αυτό το άτομο'}</button>
+        ${(kids.length || (sp && childrenOf(sp).length)) ? `<button type="button" onclick="toggleBranch(${p.id})" class="mt-2 w-full py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">${TR().collapsed.includes(p.id) ? ' <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v7m0 0H6v7m6-7h6v7"/><circle cx="12" cy="4" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Εμφάνιση κλάδου' : ' <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v7m0 0H6v7m6-7h6v7"/><circle cx="12" cy="4" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Απόκρυψη κλάδου'}</button>` : ''}
         <button data-open="${p.id}" class="mt-2 w-full py-2.5 rounded-xl bg-aegean text-white text-sm font-medium hover:bg-aegean/90">Πλήρες προφίλ</button>`;
     }
     $('tree-sidepanel').addEventListener('click', e => { const o = e.target.closest('[data-open]'); if (o) openPerson(+o.dataset.open); });
@@ -3916,7 +3966,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
             <button data-act="edit" class="flex-1 py-2.5 rounded-xl bg-aegean text-white text-sm font-medium">Επεξεργασία</button>
             <button data-act="rel" class="flex-1 py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">Προσθήκη συγγενή</button>
           </div>
-          <button type="button" onclick="focusPerson(${p.id})" class="mt-3 w-full py-2.5 rounded-xl border border-ochre text-ochre text-sm">🎯 Εστίαση στο δέντρο</button>
+          <button type="button" onclick="focusPerson(${p.id})" class="mt-3 w-full py-2.5 rounded-xl border border-ochre text-ochre text-sm"> <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"/></svg> Εστίαση στο δέντρο</button>
           ${moveBtns(p.id)}
           <button data-act="me" class="mt-3 w-full py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">${(homePerson() && homePerson().id === p.id) ? '✖️ Αφαίρεση του «εγώ» (αυτό είναι το «εγώ» του δέντρου)' : 'Ορισμός ως «εγώ» (χρώματα πατρικής/μητρικής γραμμής)'}</button>`;
       } else if (personTab === 'relations') {
@@ -4078,10 +4128,10 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
     function openExport() {
       openModal({
         title: 'Export', hideSubmit: true,
-        body: `<button type="button" id="ex-json" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3"><span class="text-aegean" aria-hidden="true">📄</span> JSON (πλήρη δεδομένα)</button>
-               <button type="button" id="ex-ged" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3"><span class="text-olive" aria-hidden="true">📤</span> GEDCOM (για άλλα προγράμματα γενεαλογίας, αρχείο κειμένου)</button>
-               <button type="button" id="ex-book" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3"><span class="text-ochre" aria-hidden="true">📖</span> Βιβλίο οικογένειας (PDF για εκτύπωση)</button>
-               <button type="button" id="ex-print" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3"><span class="text-ochre" aria-hidden="true">🖨️</span> Εκτυπώσιμη λίστα (HTML)</button>`,
+        body: `<button type="button" id="ex-json" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3"><span class="text-aegean"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 13h6M9 17h6"/></svg></span> JSON (πλήρη δεδομένα)</button>
+               <button type="button" id="ex-ged" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3"><span class="text-olive"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/></svg></span> GEDCOM (για άλλα προγράμματα γενεαλογίας, αρχείο κειμένου)</button>
+               <button type="button" id="ex-book" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3"><span class="text-ochre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A3 3 0 0 1 7 3h5v17H7a3 3 0 0 0-3 1.5zM20 5.5A3 3 0 0 0 17 3h-5v17h5a3 3 0 0 1 3 1.5z"/></svg></span> Βιβλίο οικογένειας (PDF για εκτύπωση)</button>
+               <button type="button" id="ex-print" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3"><span class="text-ochre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 13h6M9 17h6"/></svg></span> Εκτυπώσιμη λίστα (HTML)</button>`,
         noFocus: true,
         onMount: () => {
           $('ex-json').onclick = () => { exportJson(); closeModal(); };
@@ -4241,7 +4291,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       });
       return g;
     }
-    function bookTree() {
+    function bookTree(rootId = null) {
       const P = state.people, W = 124, H = 46, GX = 16, GY = 54, used = new Set(), by = (a, b) => (a.by || 9999) - (b.by || 9999);
       const build = p => {
         const s = byId(p.spouse), m = (s && !used.has(s.id)) ? [p, s].sort((a, b) => (sexOf(a) === 'M' ? 0 : 1) - (sexOf(b) === 'M' ? 0 : 1)) : [p];
@@ -4250,7 +4300,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         P.filter(c => !used.has(c.id) && c.parents.some(i => m.some(x => x.id === i))).sort(by).forEach(c => { if (!used.has(c.id)) n.k.push(build(c)); });
         return n;
       };
-      const roots = P.filter(p => !p.parents.length && !used.has(p.id) && !(byId(p.spouse) && byId(p.spouse).parents.length)).sort(by).map(p => used.has(p.id) ? null : build(p)).filter(Boolean);
+      const roots = P.filter(p => !p.parents.length && !used.has(p.id) && !(byId(p.spouse) && byId(p.spouse).parents.length) && (rootId == null || p.id === rootId)).sort(by).map(p => used.has(p.id) ? null : build(p)).filter(Boolean);
       const kw = n => n.k.reduce((a, k) => a + k.w + GX, -GX);
       const lay = (n, d) => { n.d = d; n.k.forEach(k => lay(k, d + 1)); n.uw = n.m.length * W + (n.m.length - 1) * 6; n.w = Math.max(n.uw, n.k.length ? kw(n) : 0); };
       const pos = (n, x) => { n.cx = x + n.w / 2; let c = x + (n.w - (n.k.length ? kw(n) : 0)) / 2; n.k.forEach(k => { pos(k, c); c += k.w + GX; }); };
@@ -4296,7 +4346,6 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         `<p class="txt">Οι γενάρχες που καταγράφονται είναι: ${list(P.filter(p => g[p.id] === 1))}.</p>`,
         `<p class="txt">Περιλαμβάνονται ${state.events.length} καταγεγραμμένα γεγονότα και ${photos.length} φωτογραφίες.</p>`].join('');
       ch.push(['Η ιστορία της οικογένειας', hist]);
-      const tree = o.tr === false ? '' : bookTree(); if (tree) ch.push(['Το γενεαλογικό δέντρο', tree, 'treepg']);
       ch.push(['Οι γενιές', Array.from({ length: maxG }, (_, i) => i + 1).map(n => { const m = P.filter(p => g[p.id] === n); return m.length ? `<h3>Γενιά ${n}</h3><ul class="gen">${m.map(p => `<li><b>${esc(dispN(p))}</b> <span>${esc(yearsOf(p))}</span></li>`).join('')}</ul>` : ''; }).join('')]);
       // Separate family branches, derived only from parent relationships recorded in the tree.
       const roots = P.filter(p => !p.parents.length);
@@ -4308,6 +4357,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         return `<article class="branch"><h3>${esc(dispN(root))}</h3><p class="by">${branch.length} καταγεγραμμένα μέλη · ${Math.max(1, ...branch.map(p => g[p.id] || 1))} γενιές</p><ul class="gen">${branch.map(p => `<li><b>${esc(dispN(p))}</b><span>${esc(yearsOf(p))}</span></li>`).join('')}</ul></article>`;
       }).join('');
       if (branchHtml) ch.push(['Οικογενειακοί κλάδοι', branchHtml]);
+      if (o.tr !== false) roots.forEach(root => { const treeSvg = bookTree(root.id); if (treeSvg) ch.push(['Γενεαλογικό δέντρο · ' + dispN(root), `<div class="branch-tree-title"><h3>${esc(dispN(root))}</h3><p class="by">Οικογενειακός κλάδος · οι καταγεγραμμένες γενιές</p></div>${treeSvg}`, 'treepg']); });
       let lastG = 0; ch.push(['Βιογραφίες', P.map(p => (g[p.id] !== lastG ? (lastG = g[p.id], `<h3 class="gh">Γενιά ${lastG}</h3>`) : '') + bio(p)).join('')]);
       const ev = sortedEvents(state.events.concat(o.bd ? state.people.flatMap(p => [p.by ? { y: p.by, m: md(p.bdate)[0], d: md(p.bdate)[1], title: 'Γέννηση: ' + dispN(p), place: p.bplace } : null, p.dy ? { y: p.dy, m: md(p.ddate)[0], d: md(p.ddate)[1], title: 'Θάνατος: ' + dispN(p), place: p.dplace } : null]).filter(Boolean) : []));
       if (ev.length && o.evt !== false) ch.push(['Σημαντικά γεγονότα', `<table class="tl">${ev.map(e => `<tr><th>${esc(fmtDate(e))}</th><td>${esc(e.title)}${e.place ? ' <i>(' + esc(e.place) + ')</i>' : ''}${(e.people || []).length ? ' — ' + list((e.people || []).map(byId).filter(Boolean)) : ''}</td></tr>`).join('')}</table>`]);
@@ -4337,7 +4387,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         .sheet.land{width:${G.H}mm;height:${G.W - 1}mm;page:tree}.land .pc{top:14mm;bottom:14mm;left:14mm;right:14mm}.land .hd{top:5mm}.land .ft{bottom:5mm}.land svg{width:100%;height:${A5 ? 88 : 140}mm}
         @media screen{body{background:#7a7a7a;padding:6mm 0}#wrap{height:var(--h,auto);overflow:hidden}#out{width:max-content;transform:scale(var(--z,1));transform-origin:0 0}.sheet{margin:0 auto 6mm;box-shadow:0 1mm 4mm rgba(0,0,0,.5)}}
         .sheet.cov .cover{height:100%}
-        .dedication{min-height:90mm;display:flex;align-items:center;justify-content:center;text-align:center;padding:15mm;font:italic 15pt/1.8 'Noto Serif',Georgia,serif;color:#7C8B58}.dedication p{max-width:120mm}.closing{color:#B5603E}.closing:before{content:'✦';display:block;font-size:20pt;color:#7C8B58;margin-bottom:5mm}.branch{border:1px solid #D9C9A5;border-radius:3mm;padding:4mm 5mm;margin:0 0 4mm;background:linear-gradient(135deg,#FBF7EC,#F5EEDC);position:relative}.branch:before{content:'❧';position:absolute;right:4mm;top:2mm;color:#C99A5B;font-size:18pt}.branch h3{margin-top:0}.source-note{margin-top:6mm;padding:3mm;border-top:1px solid #D9C9A5;color:#8a7a62;font:italic 8pt 'Noto Serif',Georgia,serif}.cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at center,#FFFDF7 0%,#FBF7EC 48%,#EDE2CC 100%);padding:24mm;box-shadow:inset 0 0 0 8mm #FBF7EC,inset 0 0 0 8.5mm rgba(74,93,58,.45),inset 0 0 0 10mm #FBF7EC,inset 0 0 0 10.3mm rgba(181,96,62,.55),inset 0 0 0 12mm #FBF7EC,inset 0 0 0 12.3mm rgba(201,154,91,.65)}
+        .dedication{min-height:90mm;display:flex;align-items:center;justify-content:center;text-align:center;padding:15mm;font:italic 15pt/1.8 'Noto Serif',Georgia,serif;color:#7C8B58}.dedication p{max-width:120mm}.closing{color:#B5603E}.closing:before{content:'✦';display:block;font-size:20pt;color:#7C8B58;margin-bottom:5mm}.branch{border:1px solid #D9C9A5;border-radius:3mm;padding:4mm 5mm;margin:0 0 4mm;background:linear-gradient(135deg,#FBF7EC,#F5EEDC);position:relative}.branch:before{content:'❧';position:absolute;right:4mm;top:2mm;color:#C99A5B;font-size:18pt}.branch h3{margin-top:0}.branch-tree-title{text-align:center;margin-bottom:4mm}.branch-tree-title h3{font:600 16pt 'Noto Serif',Georgia,serif;color:#4A5D3A;margin:0}.branch-tree-title .by{font:italic 9pt 'Noto Serif',Georgia,serif;color:#8a7a62;margin:2mm 0 0}.source-note{margin-top:6mm;padding:3mm;border-top:1px solid #D9C9A5;color:#8a7a62;font:italic 8pt 'Noto Serif',Georgia,serif}.cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at center,#FFFDF7 0%,#FBF7EC 48%,#EDE2CC 100%);padding:24mm;box-shadow:inset 0 0 0 8mm #FBF7EC,inset 0 0 0 8.5mm rgba(74,93,58,.45),inset 0 0 0 10mm #FBF7EC,inset 0 0 0 10.3mm rgba(181,96,62,.55),inset 0 0 0 12mm #FBF7EC,inset 0 0 0 12.3mm rgba(201,154,91,.65)}
         .cover h1{font-size:${A5 ? 24 : 30}pt;margin:0 0 5mm;line-height:1.2}.cover h1::after{content:"";display:block;width:46mm;height:5mm;margin:6mm auto 0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='12' viewBox='0 0 44 12'%3E%3Cpath d='M0 6Q5.5-1 11 6T22 6T33 6T44 6' fill='none' stroke='%23B5603E' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center/auto 100%}.cover .sub{font:italic 13pt 'Noto Serif',Georgia,serif;color:#B5603E;margin-bottom:12mm}.cover img{width:${A5 ? 50 : 80}mm;height:${A5 ? 50 : 80}mm;object-fit:cover;border-radius:50%;border:2mm solid #FBF7EC;outline:.4mm solid #7C8B58;outline-offset:1.5mm;margin-bottom:12mm}.cover .au{font-size:10pt;letter-spacing:.18em;text-transform:uppercase;color:#7C8B58}
         .tocl{list-style:none;padding:0;margin:0;font:11pt/2 'Noto Serif',Georgia,serif;color:#B5603E}.tocl li{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(124,139,88,.6)}.tocl a{color:#3B2F26;text-decoration:none}
         h2.ch{font-size:${A5 ? 12 : 14}pt;border-bottom:1px solid rgba(124,139,88,.55);padding-bottom:3mm;margin:0 0 6mm;position:relative;letter-spacing:.025em}h2.ch::after{content:"";position:absolute;left:0;bottom:-1.5px;width:26mm;height:3px;background:#B5603E}h2.ch:before{content:'❧';float:right;color:#C99A5B;font-size:17pt;line-height:.8}
@@ -4425,7 +4475,7 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
       const ov = document.createElement('div'); ov.id = 'book-ov';
       ov.style.cssText = 'position:fixed;inset:0;z-index:90;background:#2b2b2b;display:flex;flex-direction:column';
       const bs = 'padding:8px 14px;border-radius:10px;border:0;font-size:14px;cursor:pointer;';
-      ov.innerHTML = `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:8px 12px;background:#1B4F72;color:#fff"><b style="flex:1;min-width:130px">📖 Βιβλίο οικογένειας</b><button type="button" id="bk-print" style="${bs}background:#E67E22;color:#fff;font-weight:600">🖨️ Εκτύπωση / PDF</button><button type="button" id="bk-dl" style="${bs}background:#fff;color:#1B4F72">⬇️ Λήψη HTML</button><button type="button" id="bk-x" aria-label="Κλείσιμο" style="${bs}background:rgba(255,255,255,.2);color:#fff">✕</button></div><iframe id="bk-frame" title="Βιβλίο" style="flex:1;border:0;background:#fff;width:100%"></iframe>`;
+      ov.innerHTML = `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:8px 12px;background:#1B4F72;color:#fff"><b style="flex:1;min-width:130px"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A3 3 0 0 1 7 3h5v17H7a3 3 0 0 0-3 1.5zM20 5.5A3 3 0 0 0 17 3h-5v17h5a3 3 0 0 1 3 1.5z"/></svg> Βιβλίο οικογένειας</b><button type="button" id="bk-print" style="${bs}background:#E67E22;color:#fff;font-weight:600"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 18"/></svg> Εκτύπωση / PDF</button><button type="button" id="bk-dl" style="${bs}background:#fff;color:#1B4F72">↓ Λήψη HTML</button><button type="button" id="bk-x" aria-label="Κλείσιμο" style="${bs}background:rgba(255,255,255,.2);color:#fff">✕</button></div><iframe id="bk-frame" title="Βιβλίο" style="flex:1;border:0;background:#fff;width:100%"></iframe>`;
       document.body.appendChild(ov); $('bk-frame').srcdoc = html;
       $('bk-x').onclick = () => ov.remove();
       $('bk-dl').onclick = () => download('vivlio-oikogeneias.html', html, 'text/html');
@@ -4455,7 +4505,7 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
       openModal({
         title: 'Βιβλίο οικογένειας (PDF)', submitText: 'Δημιουργία βιβλίου',
         fields: [
-          { type: 'tip', html: '<p class="font-semibold text-aegean mb-2">Φωτογραφία εξωφύλλου (προαιρετικά)</p><div id="bk-cover-prev" class="hidden mb-2"></div><div class="flex flex-wrap gap-2"><button type="button" id="bk-cover-btn" class="px-3 py-2 rounded-xl bg-aegean text-white text-sm">📷 Ανέβασε φωτογραφία</button><button type="button" id="bk-cover-rm" class="hidden px-3 py-2 rounded-xl border border-terracotta/40 text-terracotta text-sm">Αφαίρεση</button></div><p class="text-xs text-gray-500 mt-2">Αν δεν ανεβάσεις, το εξώφυλλο θα είναι χωρίς φωτογραφία.</p><input type="file" id="bk-cover-file" accept="image/*" class="hidden">' },
+          { type: 'tip', html: '<p class="font-semibold text-aegean mb-2">Φωτογραφία εξωφύλλου (προαιρετικά)</p><div id="bk-cover-prev" class="hidden mb-2"></div><div class="flex flex-wrap gap-2"><button type="button" id="bk-cover-btn" class="px-3 py-2 rounded-xl bg-aegean text-white text-sm"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l2-2h6l2 2h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg> Ανέβασε φωτογραφία</button><button type="button" id="bk-cover-rm" class="hidden px-3 py-2 rounded-xl border border-terracotta/40 text-terracotta text-sm">Αφαίρεση</button></div><p class="text-xs text-gray-500 mt-2">Αν δεν ανεβάσεις, το εξώφυλλο θα είναι χωρίς φωτογραφία.</p><input type="file" id="bk-cover-file" accept="image/*" class="hidden">' },
           { type: 'info', name: 'bk-info', label: 'Το βιβλίο φτιάχνεται αυτόματα: ιστορία, δέντρο, γενιές, βιογραφίες, γεγονότα, κληρονομιά και φωτογραφίες. Διάλεξε παρακάτω τι θα περιλαμβάνει.' },
           { name: 'title', label: 'Τίτλος βιβλίου', required: true, value: b.title || S('heroTitle').replace(/\s*\n\s*/g, ' ') },
           { name: 'subtitle', label: 'Υπότιτλος', value: b.subtitle != null ? b.subtitle : 'Η ιστορία της οικογένειάς μας' },
