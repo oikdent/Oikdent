@@ -2058,6 +2058,8 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
     #login-box label{display:block;font-size:.85rem;color:#6b7280;margin-bottom:12px}
     #login-box input{display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:12px;border:1px solid rgba(27,79,114,.3);border-radius:12px;font-size:16px;min-height:44px;background:#fff;color:#111}
     #login-box button{width:100%;min-height:46px;border:0;border-radius:12px;background:#1B4F72;color:#fff;font-size:1rem;font-weight:600;margin-top:6px}
+    #login-box button#login-remember{background:#f3f4f6;color:#1B4F72;border:1px solid rgba(27,79,114,.3);min-height:44px;font-weight:500;font-size:.9rem;display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 10px}
+    #login-box button#login-remember[aria-pressed="true"]{background:#DCE8EC;border-color:#1B4F72}
     #login-err{color:#B5482B;font-size:.85rem;min-height:1.2em;text-align:center;margin:4px 0}
   </style>
   <div id="login-screen" role="dialog" aria-modal="true" aria-label="Σύνδεση">
@@ -2066,16 +2068,23 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       <p class="sub">Συνδέσου για να συνεχίσεις</p>
       <label>Όνομα χρήστη<input id="login-user" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required></label>
       <label>Κωδικός<input id="login-pass" type="password" inputmode="numeric" autocomplete="current-password" required></label>
+      <button type="button" id="login-remember" aria-pressed="true"><span id="login-remember-ico" aria-hidden="true">✅</span> Να με θυμάσαι για 30 ημέρες</button>
       <div id="login-err" role="alert"></div>
       <button type="submit">Σύνδεση</button>
     </form>
   </div>
   <script>
   (function () {
-    var USER = 'stavros', PASS = '1313', KEY = 'ft_login_ok';
+    var USER = 'stavros', PASS = '1313', KEY = 'ft_login_ok', RKEY = 'ft_login_until', DAYS = 30, remember = true;
     var scr = document.getElementById('login-screen'), form = document.getElementById('login-box'), err = document.getElementById('login-err');
     var fails = 0, lockUntil = 0;
-    function ok() { try { return sessionStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
+    function ok() {
+      try { if (sessionStorage.getItem(KEY) === '1') return true; } catch (e) {}
+      try { var t = +localStorage.getItem(RKEY); if (t && t > Date.now()) return true; if (t) localStorage.removeItem(RKEY); } catch (e) {}
+      return false;
+    }
+    var rb = document.getElementById('login-remember');
+    rb.addEventListener('click', function () { remember = !remember; rb.setAttribute('aria-pressed', remember ? 'true' : 'false'); document.getElementById('login-remember-ico').textContent = remember ? '✅' : '⬜'; });
     function show() { scr.classList.remove('hidden-login'); document.documentElement.style.overflow = 'hidden'; setTimeout(function () { var u = document.getElementById('login-user'); if (u) u.focus(); }, 50); }
     function hide() { scr.classList.add('hidden-login'); document.documentElement.style.overflow = ''; }
     if (ok()) hide(); else show();
@@ -2086,6 +2095,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       var u = document.getElementById('login-user').value.trim().toLowerCase(), p = document.getElementById('login-pass').value;
       if (u === USER && p === PASS) {
         try { sessionStorage.setItem(KEY, '1'); } catch (x) {}
+        try { if (remember) localStorage.setItem(RKEY, String(Date.now() + DAYS * 864e5)); else localStorage.removeItem(RKEY); } catch (x) {}
         fails = 0; err.textContent = ''; document.getElementById('login-pass').value = ''; hide();
       } else {
         fails++; document.getElementById('login-pass').value = '';
@@ -2093,7 +2103,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
         else err.textContent = 'Λάθος όνομα χρήστη ή κωδικός.';
       }
     });
-    window.logoutApp = function () { try { sessionStorage.removeItem(KEY); } catch (e) {} document.getElementById('login-user').value = ''; err.textContent = ''; show(); };
+    window.logoutApp = function () { try { sessionStorage.removeItem(KEY); } catch (e) {} try { localStorage.removeItem(RKEY); } catch (e) {} document.getElementById('login-user').value = ''; err.textContent = ''; show(); };
   })();
   </script>
   <div id="app" class="min-h-screen">
@@ -2235,6 +2245,8 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
             <button onclick="addMember()" class="px-3 py-1.5 rounded-lg bg-aegean text-white text-sm flex items-center gap-1.5 hover:bg-aegean/90">
               <span class="" aria-hidden="true">＋</span> Μέλος
             </button>
+            <button type="button" data-undo onclick="undoChange()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Αναίρεση (Ctrl+Z)" aria-label="Αναίρεση">↶ <span class="hidden sm:inline">Αναίρεση</span></button>
+            <button type="button" data-redo onclick="redoChange()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Επανάληψη (Ctrl+Y)" aria-label="Επανάληψη">↷</button>
             <button onclick="tidyTree()" class="px-3 py-1.5 rounded-lg border border-aegean/30 text-aegean text-sm hover:bg-aegean/5" title="Τακτοποίηση">
               <span class="" aria-hidden="true">✨</span> <span class="hidden sm:inline">Τακτοποίηση</span>
             </button>
@@ -2400,6 +2412,10 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
                 <button onclick="exportGedcom()" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3">
                   <span class="text-olive" aria-hidden="true">📤</span> Export GEDCOM
                 </button>
+                <div class="grid grid-cols-2 gap-2">
+                  <button type="button" data-undo onclick="undoChange()" class="px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-2"><span class="text-aegean" aria-hidden="true">↶</span> Αναίρεση</button>
+                  <button type="button" data-redo onclick="redoChange()" class="px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-2"><span class="text-aegean" aria-hidden="true">↷</span> Επανάληψη</button>
+                </div>
                 <button onclick="logoutApp()" class="w-full text-left px-4 py-3 rounded-xl border border-aegean/20 hover:bg-aegean/5 text-sm flex items-center gap-3">
                   <span class="text-aegean" aria-hidden="true">🔒</span> Αποσύνδεση
                 </button>
@@ -2500,13 +2516,43 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
         const s = JSON.parse(raw);
         if (s && Array.isArray(s.people) && Array.isArray(s.events) && Array.isArray(s.photos)) {
           s.stories = s.stories || {}; fixCounters(s);
+          s.people.forEach(q => { if (q.nick != null) { if (q.first) q.name = (q.first + ' ' + (q.last || '')).trim(); delete q.nick; } });
           return s;
         }
       } catch (e) {}
       return null;
     }
     let state = load() || defaults();
-    function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* ο χώρος αποθήκευσης δεν είναι διαθέσιμος */ } }
+    /* Ιστορικό / Αναίρεση: σε κάθε save() που αλλάζει δεδομένα, η ΠΡΟΗΓΟΥΜΕΝΗ κατάσταση μπαίνει στη στοίβα. Έτσι κάθε αλλαγή (μέλος, γάμος, διαγραφή, επεξεργασία, ιστορία…) αναιρείται ολόκληρη.
+       Οι ρυθμίσεις προβολής (ζουμ, θέσεις καρτών) δεν μετράνε ως βήματα. */
+    /* Τα στιγμιότυπα είναι «ρηχά» αντίγραφα της δομής: τα μεγάλα κείμενα (π.χ. φωτογραφίες base64) μοιράζονται την ίδια μνήμη, δεν διπλασιάζονται. */
+    const HIST = [], REDO = [], HIST_MAX = 30;
+    let lastSnap = null, restoring = false;
+    const cl = v => Array.isArray(v) ? v.map(cl) : (v && typeof v === 'object') ? Object.keys(v).reduce((o, k) => { o[k] = cl(v[k]); return o; }, {}) : v;
+    const same = (a, b) => {
+      if (a === b) return true;
+      if (!a || !b || typeof a !== 'object' || typeof b !== 'object' || Array.isArray(a) !== Array.isArray(b)) return false;
+      const ka = Object.keys(a), kb = Object.keys(b); if (ka.length !== kb.length) return false;
+      return ka.every(k => Object.prototype.hasOwnProperty.call(b, k) && same(a[k], b[k]));
+    };
+    const snapOf = st => { const o = Object.assign({}, st); delete o.tree; return cl(o); };
+    try { lastSnap = snapOf(state); } catch (e) { lastSnap = null; }
+    function updateUndoUi() {
+      document.querySelectorAll('[data-undo]').forEach(b => { b.disabled = !HIST.length; b.style.opacity = HIST.length ? '' : '.4'; });
+      document.querySelectorAll('[data-redo]').forEach(b => { b.disabled = !REDO.length; b.style.opacity = REDO.length ? '' : '.4'; });
+    }
+    function save() {
+      try {
+        const cur = snapOf(state);
+        if (!restoring && lastSnap && !same(cur, lastSnap)) {
+          HIST.push(lastSnap); REDO.length = 0;
+          while (HIST.length > HIST_MAX) HIST.shift();
+        }
+        lastSnap = cur;
+      } catch (e) {}
+      try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* ο χώρος αποθήκευσης δεν είναι διαθέσιμος */ }
+      try { updateUndoUi(); } catch (e) {}
+    }
 
     const byId = id => state.people.find(p => p.id === id);
     const yearsOf = p => (p.by || p.dy || p.deceased) ? (p.by ? p.by : '?') + '–' + (p.dy ? p.dy : (p.deceased ? '†' : '')) : '';
@@ -2600,12 +2646,39 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
     };
     let herTab = 'recipes';
     function herList(k) { state.heritage = state.heritage || {}; return (state.heritage[k] = state.heritage[k] || []); }
+    /* Μέλη του δέντρου που συνδέονται με μια καρτέλα Επωνύμου ή Παρατσουκλιού */
+    function linkedMembers(it) {
+      if (herTab === 'surnames') { const k = famKey(it.title); return k ? state.people.filter(x => famKey(x.last) === k || famKey(x.maiden) === k) : []; }
+      if (herTab === 'nicks') { const k = nkey(it.title); return k ? state.people.filter(x => nkey(x.paratsouk) === k) : []; }
+      return [];
+    }
+    function linkedHtml(it) {
+      if (herTab !== 'surnames' && herTab !== 'nicks') return '';
+      const l = linkedMembers(it);
+      return `<p class="text-xs text-gray-400 mt-2">Στο δέντρο (${l.length}):</p><div class="flex flex-wrap gap-1.5 mt-1">${l.length ? l.slice(0, 30).map(x => `<button type="button" data-her-person="${x.id}" class="px-2.5 py-1 rounded-full bg-aegean/10 text-aegean text-xs">${esc(x.full || x.name)}</button>`).join('') : '<span class="text-xs text-gray-400">κανένα μέλος ακόμη</span>'}</div>`;
+    }
+    /* Όλα τα επώνυμα του δέντρου (και τα πατρικά) έχουν δική τους καρτέλα στα Επώνυμα, όπου γράφεις ό,τι θέλεις. Παρόμοιες μορφές (Γιαννάκης / Γιαννάκη) = μία καρτέλα. */
+    function syncSurnames() {
+      const sl = herList('surnames'), groups = {}; let ch = false;
+      state.people.forEach(x => [x.last, x.maiden].forEach(n => {
+        n = (n || '').trim(); if (!n || /^γονέας$/i.test(n)) return;
+        const k = famKey(n); if (!k) return; const g = (groups[k] = groups[k] || {}); g[n] = (g[n] || 0) + 1;
+      }));
+      Object.keys(groups).forEach(k => {
+        if (sl.some(h => famKey(h.title) === k)) return;
+        const g = groups[k], forms = Object.keys(g).sort((a, b) => (g[b] - g[a]) || ((/ς$/.test(b) ? 1 : 0) - (/ς$/.test(a) ? 1 : 0)));
+        sl.push({ title: forms[0], origin: '', story: '', auto: true }); ch = true;
+      });
+      if (ch) { sl.sort((a, b) => String(a.title).localeCompare(String(b.title), 'el')); restoring = true; try { save(); } finally { restoring = false; } }
+    }
     function renderHeritage() {
+      try { syncSurnames(); } catch (e) { console.error(e); }
       $('her-tabs').innerHTML = Object.keys(HER).map(k => `<button data-her-tab="${k}" class="px-4 py-2 rounded-xl text-sm whitespace-nowrap ${k === herTab ? 'bg-aegean text-white' : 'border border-aegean/20 text-aegean'}">${HER[k].icon} ${HER[k].label}</button>`).join('');
       const c = HER[herTab], list = herList(herTab);
       const cards = list.map((it, i) => `<div class="bg-white rounded-2xl p-4 shadow-card mb-3">
         <div class="flex items-start justify-between gap-3"><div class="min-w-0">
           <p class="font-serif text-lg text-aegean ${it.done ? 'line-through opacity-60' : ''}">${esc(it.title || '')}</p>
+          ${linkedHtml(it)}
           ${c.f.slice(1).map(x => it[x[0]] ? `<p class="text-sm mt-2 whitespace-pre-line"><span class="text-gray-400">${x[1]}:</span> ${esc(it[x[0]])}</p>` : '').join('')}
         </div><div class="flex gap-3 text-sm shrink-0">
           ${herTab === 'research' ? `<button data-her-done="${i}" class="text-aegean">${it.done ? '↩' : '✓'}</button>` : ''}
@@ -2631,6 +2704,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       if (t.dataset.herTab) { herTab = t.dataset.herTab; renderHeritage(); }
       else if ('herAdd' in t.dataset) herEdit(null);
       else if (t.dataset.herEdit) herEdit(+t.dataset.herEdit);
+      else if (t.dataset.herPerson) openPerson(+t.dataset.herPerson);
       else if (t.dataset.herDone) { const it = herList('research')[+t.dataset.herDone]; it.done = !it.done; save(); renderHeritage(); }
     });
 
@@ -2711,6 +2785,22 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       });
     }
     window.editAppInfo = editAppInfo;
+    function stepHistory(dir) {
+      const from = dir < 0 ? HIST : REDO, to = dir < 0 ? REDO : HIST;
+      if (!from.length) { showToast(dir < 0 ? 'Δεν υπάρχει τίποτα για αναίρεση.' : 'Δεν υπάρχει τίποτα για επανάληψη.'); return; }
+      const cur = snapOf(state), s = from.pop();
+      to.push(cur);
+      const tree = state.tree;
+      state = Object.assign(cl(s), { tree: tree });
+      state.stories = state.stories || {}; fixCounters(state);
+      if (!state.people.some(x => x.id === selectedId)) selectedId = state.people[0] ? state.people[0].id : null;
+      if (!state.people.some(x => x.id === personId)) { $('view-person').classList.add('hidden'); lockScroll(); }
+      closeModal();
+      restoring = true; try { refresh(); } finally { restoring = false; }
+      lastSnap = snapOf(state); updateUndoUi();
+      showToast(dir < 0 ? '↶ Η τελευταία αλλαγή αναιρέθηκε.' : '↷ Η αλλαγή επαναλήφθηκε.');
+    }
+    window.undoChange = () => stepHistory(-1); window.redoChange = () => stepHistory(1);
     function refresh() { applySettings(); save(); renderView(currentView); if (!$('view-person').classList.contains('hidden')) renderPerson(); }
 
     /* ---------- Διάταξη δέντρου ---------- */
@@ -3229,7 +3319,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
         (g === 'all' || p.gen === +g) &&
         (!fx || sexOf(p) === fx) &&
         (fw !== 'live' || !gone(p)) && (fw !== 'dead' || gone(p)) && (fw !== 'fav' || p.fav) &&
-        (!q || (p.name + ' ' + p.full + ' ' + p.place + ' ' + (p.pat || '') + ' ' + (p.nick || '') + ' ' + (p.job || '') + ' ' + (p.bplace || '') + ' ' + (p.maiden || '')).toLowerCase().includes(q)))
+        (!q || (p.name + ' ' + p.full + ' ' + p.place + ' ' + (p.pat || '') + ' ' + (p.paratsouk || '') + ' ' + (p.job || '') + ' ' + (p.bplace || '') + ' ' + (p.maiden || '')).toLowerCase().includes(q)))
         .sort(fs === 'a' ? (a, b) => a.name.localeCompare(b.name, 'el') : fs === 'b' ? (a, b) => (a.by || 9999) - (b.by || 9999) : () => 0);
       $('people-grid').innerHTML = list.length ? list.map(p => `
         <div class="person-card bg-white rounded-2xl p-4 shadow-card cursor-pointer flex items-center gap-4" data-open="${p.id}" tabindex="0" role="button">
@@ -3411,15 +3501,14 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       return { date: '', place: s };
     }
     function fmtIso(iso) { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? (+m[3]) + ' ' + MONTHS[+m[2] - 1] + ' ' + m[1] : ''; }
-    const surnameList = () => [...new Set(state.people.flatMap(x => [x.last != null ? x.last : (x.full || x.name || '').trim().split(/\s+/).pop(), x.maiden]).filter(Boolean))];
+    const surnameList = () => [...new Set(state.people.flatMap(x => [x.last != null ? x.last : (x.full || x.name || '').trim().split(/\s+/).pop(), x.maiden]).concat(herList('surnames').map(h => h.title)).filter(Boolean))];
+    const nickList = () => [...new Set(herList('nicks').map(h => (h.title || '').trim()).concat(state.people.map(x => x.paratsouk)).filter(Boolean))];
     const cityList = () => [...new Set(PLACE_HINTS.concat(state.people.map(x => x.place).filter(Boolean)))];
     function personFields(p, compact) {
       p = p || {};
       const fw = (p.full || p.name || '').trim().split(/\s+/), nw = (p.name || '').trim().split(/\s+/);
       const last = p.last != null ? p.last : (fw.length > 1 ? fw[fw.length - 1] : '');
       const first = p.first != null ? p.first : (fw.length > 1 ? fw.slice(0, -1).join(' ') : (p.name || ''));
-      const dispFirst = nw.length > 1 ? nw.slice(0, -1).join(' ') : (p.name || '');
-      const nick = p.nick != null ? p.nick : (p.name && dispFirst !== first ? dispFirst : '');
       const b = parseBorn(p.born), d = parseBorn(p.died);
       const bdate = p.bdate != null ? p.bdate : b.date, bplace = p.bplace != null ? p.bplace : b.place;
       const ddate = p.ddate != null ? p.ddate : d.date, dplace = p.dplace != null ? p.dplace : d.place;
@@ -3429,7 +3518,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
         { name: 'first', label: 'Όνομα', required: true, value: first, placeholder: 'π.χ. Κωνσταντίνος' },
         { name: 'last', label: 'Επώνυμο', required: true, value: last, placeholder: 'π.χ. Παπαδόπουλος', suggest: true },
         { name: 'pat', label: 'Πατρώνυμο (γενική)', value: p.pat, placeholder: 'π.χ. Νικολάου', hint: 'Αν ο πατέρας υπάρχει ήδη στο δέντρο θα συνδεθεί αυτόματα, αλλιώς θα δημιουργηθεί ένας νέος από πάνω.' },
-        { name: 'nick', label: 'Χαϊδευτικό (αν το λένε αλλιώς)', value: nick, placeholder: 'π.χ. Κώστας', hint: 'Θα εμφανίζεται στο δέντρο αντί για το όνομα' },
+        { name: 'paratsouk', label: 'Παρατσούκλι (της οικογένειας / δικό του)', value: p.paratsouk, list: nickList(), placeholder: 'π.χ. Μπάρμπα-Γιώργος', hint: 'Συνδέεται με την Κληρονομιά → Παρατσούκλια. Αν δεν υπάρχει εκεί, προστίθεται αυτόματα.' },
         { name: 'sex', label: 'Φύλο', type: 'select', value: sexOf(p), options: [{ v: 'M', l: 'Άνδρας' }, { v: 'F', l: 'Γυναίκα' }, { v: '', l: 'Δεν ορίζεται' }] },
         { type: 'heading', label: 'Γέννηση' },
         { name: 'bdate', label: 'Ημερομηνία γέννησης', type: 'date', value: bdate },
@@ -3468,10 +3557,29 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
       if (by && dy && dy < by) { showToast('Η χρονιά θανάτου δεν μπορεί να είναι πριν από τη γέννηση.'); return false; }
       return true;
     }
+    /* Σύνδεση με την Κληρονομιά: το επώνυμο (και το πατρικό) και το παρατσούκλι ενός μέλους βρίσκονται στις αντίστοιχες καρτέλες ή προστίθενται εκεί.
+       Παρόμοια επώνυμα (Γιαννάκης / Γιαννάκη) θεωρούνται το ίδιο. Επιστρέφει μήνυμα όταν δημιουργήθηκε κάτι νέο. */
+    const nkey = x => (x || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ς/g, 'σ');
+    function linkHeritage(p) {
+      const out = [];
+      if (!p || /^(Άγνωστος)$/i.test(p.first || '')) return '';
+      const sl = herList('surnames');
+      [p.last, p.maiden].forEach(sn => {
+        sn = (sn || '').trim(); if (!sn || /^γονέας$/i.test(sn)) return;
+        if (!sl.some(h => famKey(h.title) === famKey(sn))) { sl.push({ title: sn, origin: '', story: '', auto: true }); out.push('το επώνυμο «' + sn + '»'); }
+      });
+      const nk = (p.paratsouk || '').trim();
+      if (nk) {
+        const nl = herList('nicks'), who = p.full || p.name || '', ex = nl.find(h => nkey(h.title) === nkey(nk));
+        if (!ex) { nl.push({ title: nk, who: who, story: '', auto: true }); out.push('το παρατσούκλι «' + nk + '»'); }
+        else if (who && !nkey(ex.who).includes(nkey(who))) ex.who = ex.who ? ex.who + ', ' + who : who;
+      }
+      return out.length ? 'Προστέθηκε στην Κληρονομιά: ' + out.join(' και ') + '.' : '';
+    }
     function applyPersonData(p, d) {
-      const first = d.first.trim(), last = d.last.trim(), nick = (d.nick || '').trim();
-      p.first = first; p.last = last; p.nick = nick; p.maiden = (d.maiden || '').trim();
-      p.name = (nick || first) + ' ' + last; p.full = first + ' ' + last;
+      const first = d.first.trim(), last = d.last.trim();
+      p.first = first; p.last = last; delete p.nick; p.maiden = (d.maiden || '').trim(); p.paratsouk = (d.paratsouk || '').trim();
+      p.name = first + ' ' + last; p.full = first + ' ' + last;
       p.pat = (d.pat || '').trim(); p.todo = (d.todo || '').trim(); p.unc = !!d.unc; p.fav = !!d.fav;
       p.sex = d.sex || '';
       p.bdate = d.bdate || ''; p.bplace = (d.bplace || '').trim();
@@ -3490,7 +3598,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
     const REL_WORD = { mother: 'μητέρα', father: 'πατέρας', spouse: 'σύζυγος', child: 'παιδί', sibling: 'αδελφός/ή', halfsib_m: 'ετεροθαλής αδελφός/ή (κοινός πατέρας)', halfsib_f: 'ετεροθαλής αδελφός/ή (κοινή μητέρα)', adopt_parent: 'θετός γονέας', adopted: 'θετό παιδί', ex_div: 'πρώην σύζυγος', ex_wid: 'σύζυγος (χηρεία)' };
     function bindRel() {
       const f = $('modal-form'), rt = f.elements['relTo'], rl = f.elements['relation']; if (!rt || !rl) return;
-      const prev = $('rel-preview'), sx = f.elements['sex'], fn = f.elements['first'], nk = f.elements['nick'], op = f.elements['opar'];
+      const prev = $('rel-preview'), sx = f.elements['sex'], fn = f.elements['first'], op = f.elements['opar'];
       const npl = ['npFirst', 'npLast', 'npBy'].map(n => f.elements[n]).filter(Boolean).map(e => e.closest('label'));
       const femLast = x => (x || '').replace(/ος$/, 'ου').replace(/ης$/, 'η').replace(/ας$/, 'α');
       const npShow = () => {
@@ -3504,12 +3612,12 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       const upd = () => {
         npShow();
         const isEx = rl.value === 'ex_div' || rl.value === 'ex_wid'; exl.forEach(l => l.classList.toggle('hidden', !isEx));
-        const o = byId(+rt.value), nm = ((nk.value || fn.value) || 'Το νέο μέλος').trim();
+        const o = byId(+rt.value), nm = (fn.value || 'Το νέο μέλος').trim();
         prev.textContent = (rl.value === 'none' || !o) ? nm + ' θα μπει στο δέντρο χωρίς σύνδεση.' : 'Θα προστεθεί: ' + nm + ' ως ' + REL_WORD[rl.value] + ' του/της ' + o.name + (rl.value === 'child' && op && byId(+op.value) ? ' και του/της ' + byId(+op.value).name : '') + (rl.value === 'child' && op && op.value === 'new' && (f.elements['npFirst'].value || '').trim() ? ' και του/της ' + f.elements['npFirst'].value.trim() + ' ' + (f.elements['npLast'].value || '').trim() : '') + '.';
       };
       const preset = () => { if (rl.value === 'mother') sx.value = 'F'; else if (rl.value === 'father') sx.value = 'M'; };
       rl.addEventListener('change', () => { preset(); refill(); upd(); });
-      rt.addEventListener('change', () => { refill(); upd(); }); if (op) op.addEventListener('change', upd); ['npFirst', 'npLast'].forEach(n => { const e = f.elements[n]; if (e) e.addEventListener('input', () => { if (n === 'npLast') e.dataset.touched = '1'; upd(); }); }); fn.addEventListener('input', upd); nk.addEventListener('input', upd);
+      rt.addEventListener('change', () => { refill(); upd(); }); if (op) op.addEventListener('change', upd); ['npFirst', 'npLast'].forEach(n => { const e = f.elements[n]; if (e) e.addEventListener('input', () => { if (n === 'npLast') e.dataset.touched = '1'; upd(); }); }); fn.addEventListener('input', upd);
       /* Ο άλλος γονέας: προτείνεται αυτόματα (τρέχων σύζυγος → πρώην σύζυγος → σύντροφος από άλλα παιδιά) */
       function refill() {
         if (!op) return; const o = byId(+rt.value), wrap = op.closest('label');
@@ -3532,7 +3640,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       const f = $('modal-form'), inp = f.elements['last'], box = f.querySelector('[data-suggest="last"]'); if (!inp || !box) return;
       const norm = x => (x || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       const cnt = {}; state.people.forEach(x => [x.last, x.maiden].forEach(n => { if (n) cnt[n] = (cnt[n] || 0) + 1; }));
-      const all = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
+      const all = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]); herList('surnames').forEach(h => { if (h.title && !all.some(n => famKey(n) === famKey(h.title))) all.push(h.title); });
       const upd = () => {
         const q = norm(inp.value.trim()), l = all.filter(n => norm(n) !== q && norm(n).startsWith(q)).slice(0, 8);
         box.innerHTML = l.length ? '<span class="text-xs text-gray-400 w-full">Υπάρχοντα επώνυμα:</span>' + l.map(n => `<button type="button" data-sn="${esc(n)}" class="px-2.5 py-1 rounded-full bg-aegean/10 text-aegean text-xs">${esc(n)}</button>`).join('') : '';
@@ -3605,7 +3713,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
             if (d.opar === 'new' && nf) {
               const osx = sexOf(other), mp = { id: state.nextId++, spouse: null, parents: [], gen: 1 };
               applyPersonData(mp, { first: nf, last: (d.npLast || '').trim() || (osx === 'M' ? other.last : ''), by: d.npBy, alive: 'yes', sex: osx === 'M' ? 'F' : osx === 'F' ? 'M' : '' });
-              state.people.push(mp); p.parents.push(mp.id);
+              state.people.push(mp); p.parents.push(mp.id); linkHeritage(mp);
               if (!other.spouse && !mp.spouse) { other.spouse = mp.id; mp.spouse = other.id; }
               msg = 'Το μέλος προστέθηκε μαζί με ' + (osx === 'M' ? 'τη μητέρα «' : osx === 'F' ? 'τον πατέρα «' : 'τον γονέα «') + mp.name + '».';
             }
@@ -3631,6 +3739,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           }
           state.people.push(p); selectedId = p.id;
           const fm = ensureFather(p); if (fm) msg += ' ' + fm;
+          const hl = linkHeritage(p); if (hl) msg += ' ' + hl;
           save(); refresh(); showToast(msg);
         }
       });
@@ -3769,7 +3878,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         title: 'Επεξεργασία',
         fields: parentFields(p).concat(personFields(p)),
         onMount: () => { bindAlive(); bindSuggest(); bindParents(p); },
-        onSubmit: d => { if (!checkDates(d)) return false; const pm = applyParents(p, d); if (pm === false) return false; applyPersonData(p, d); const fm = ensureFather(p); save(); refresh(); showToast('Οι αλλαγές αποθηκεύτηκαν.' + (pm ? ' ' + pm : '') + (fm ? ' ' + fm : '')); },
+        onSubmit: d => { if (!checkDates(d)) return false; const pm = applyParents(p, d); if (pm === false) return false; applyPersonData(p, d); const fm = ensureFather(p); const hl = linkHeritage(p); save(); refresh(); showToast('Οι αλλαγές αποθηκεύτηκαν.' + (pm ? ' ' + pm : '') + (fm ? ' ' + fm : '') + (hl ? ' ' + hl : '')); },
         danger: { label: 'Διαγραφή', run: () => { deletePerson(id); return false; } }
       });
     }
@@ -3800,7 +3909,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       if (personTab === 'info') {
         const row = (l, v) => v ? `<div class="flex justify-between gap-4 py-2 border-b border-gray-100"><span class="text-gray-500 shrink-0">${l}</span><span class="text-right">${esc(v)}</span></div>` : '';
         c.innerHTML = `<div class="space-y-1 text-sm">
-          ${row('Πλήρες όνομα', p.full)}${row('Πατρώνυμο', p.pat ? 'του ' + p.pat : '')}${row('Πατρικό επώνυμο', p.maiden)}${row('Γέννηση', p.born || p.by)}${row('Θάνατος', (p.dy || p.deceased) ? (p.died || p.dy || 'Έχει πεθάνει') : '')}
+          ${row('Πλήρες όνομα', p.full)}${row('Πατρώνυμο', p.pat ? 'του ' + p.pat : '')}${row('Πατρικό επώνυμο', p.maiden)}${row('Παρατσούκλι', p.paratsouk)}${row('Γέννηση', p.born || p.by)}${row('Θάνατος', (p.dy || p.deceased) ? (p.died || p.dy || 'Έχει πεθάνει') : '')}
           ${row('Ημερομηνίες', p.unc ? 'κατά προσέγγιση / αβέβαιες' : '')}${row('Επάγγελμα', p.job)}${row('Προς έρευνα', p.todo)}${row('Τόπος καταγωγής', p.origin)}${row('Τόπος διαμονής', p.place)}${p.notes ? `<div class="py-2"><p class="text-gray-500 mb-1">Σημειώσεις</p><p class="whitespace-pre-line">${esc(p.notes)}</p></div>` : ''}</div>
           <div class="mt-6 flex gap-3">
             <button data-act="edit" class="flex-1 py-2.5 rounded-xl bg-aegean text-white text-sm font-medium">Επεξεργασία</button>
@@ -3833,7 +3942,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         c.innerHTML += `<button data-act="photo" class="mt-4 w-full py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">Προσθήκη φωτογραφίας</button>`;
       } else if (personTab === 'stories') {
         const l = state.stories[p.id] || [];
-        c.innerHTML = (l.length ? l.map(s => `<div class="bg-white rounded-xl p-4 shadow-card mb-3"><p class="font-medium mb-1">${esc(s.title)}</p><p class="text-sm whitespace-pre-line">${esc(s.text)}</p></div>`).join('') : '<p class="text-sm text-gray-500 py-4">Δεν έχει καταγραφεί καμία ιστορία ακόμα.</p>')
+        c.innerHTML = (l.length ? l.map((s, i) => `<div class="bg-white rounded-xl p-4 shadow-card mb-3"><div class="flex items-start justify-between gap-2"><p class="font-medium mb-1">${esc(s.title)}</p><button type="button" data-act="story-edit" data-i="${i}" class="shrink-0 px-3 py-1 rounded-lg border border-aegean/30 text-aegean text-xs" aria-label="Επεξεργασία ιστορίας">✏️ Επεξεργασία</button></div><p class="text-sm whitespace-pre-line">${esc(s.text)}</p></div>`).join('') : '<p class="text-sm text-gray-500 py-4">Δεν έχει καταγραφεί καμία ιστορία ακόμα.</p>')
           + `<button data-act="story" class="mt-2 w-full py-2.5 rounded-xl bg-aegean text-white text-sm font-medium">Προσθήκη ιστορίας</button>`;
       } else {
         const l = sortedEvents(state.events.filter(e => (e.people || []).includes(p.id)));
@@ -3883,6 +3992,15 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       else if (a.dataset.act === 'mvr') moveSib(personId, 1);
       else if (a.dataset.act === 'photo') uploadPhoto(personId);
       else if (a.dataset.act === 'event') addEvent(personId);
+      else if (a.dataset.act === 'story-edit') {
+        const i = +a.dataset.i, st = (state.stories[personId] || [])[i]; if (!st) return;
+        openModal({
+          title: 'Επεξεργασία ιστορίας',
+          fields: [{ name: 'title', label: 'Τίτλος', required: true, value: st.title }, { name: 'text', label: 'Η ιστορία', type: 'textarea', required: true, value: st.text }],
+          danger: { label: 'Διαγραφή', run: () => { askConfirm('Διαγραφή ιστορίας', 'Να διαγραφεί η ιστορία «' + st.title + '»;', 'Διαγραφή', () => { state.stories[personId].splice(i, 1); save(); renderPerson(); showToast('Η ιστορία διαγράφηκε. Μπορείς να την επαναφέρεις με Αναίρεση.'); }); return false; } },
+          onSubmit: d => { st.title = d.title.trim(); st.text = d.text.trim(); save(); renderPerson(); showToast('Η ιστορία αποθηκεύτηκε.'); }
+        });
+      }
       else if (a.dataset.act === 'story') {
         openModal({
           title: 'Νέα ιστορία',
@@ -4037,6 +4155,9 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
 
     /* ---------- Γενικά ---------- */
     document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && !e.altKey && /^[zy]$/i.test(e.key) && !/^(INPUT|TEXTAREA|SELECT)$/.test((e.target || {}).tagName || '')) {
+        e.preventDefault(); stepHistory(e.key.toLowerCase() === 'y' || e.shiftKey ? 1 : -1); return;
+      }
       if (e.key !== 'Escape') return;
       if (!$('modal').classList.contains('hidden')) closeModal();
       else if (!$('view-person').classList.contains('hidden')) closePerson();
@@ -4171,30 +4292,115 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         `<p class="txt">Οι γενάρχες που καταγράφονται είναι: ${list(P.filter(p => g[p.id] === 1))}.</p>`,
         `<p class="txt">Περιλαμβάνονται ${state.events.length} καταγεγραμμένα γεγονότα και ${photos.length} φωτογραφίες.</p>`].join('');
       ch.push(['Η ιστορία της οικογένειας', hist]);
-      const tree = bookTree(); if (tree) ch.push(['Το γενεαλογικό δέντρο', tree, 'treepg']);
+      const tree = o.tr === false ? '' : bookTree(); if (tree) ch.push(['Το γενεαλογικό δέντρο', tree, 'treepg']);
       ch.push(['Οι γενιές', Array.from({ length: maxG }, (_, i) => i + 1).map(n => { const m = P.filter(p => g[p.id] === n); return m.length ? `<h3>Γενιά ${n}</h3><ul class="gen">${m.map(p => `<li><b>${esc(dispN(p))}</b> <span>${esc(yearsOf(p))}</span></li>`).join('')}</ul>` : ''; }).join('')]);
-      ch.push(['Βιογραφίες', P.map(bio).join('')]);
+      let lastG = 0; ch.push(['Βιογραφίες', P.map(p => (g[p.id] !== lastG ? (lastG = g[p.id], `<h3 class="gh">Γενιά ${lastG}</h3>`) : '') + bio(p)).join('')]);
       const ev = sortedEvents(state.events.concat(o.bd ? state.people.flatMap(p => [p.by ? { y: p.by, m: md(p.bdate)[0], d: md(p.bdate)[1], title: 'Γέννηση: ' + dispN(p), place: p.bplace } : null, p.dy ? { y: p.dy, m: md(p.ddate)[0], d: md(p.ddate)[1], title: 'Θάνατος: ' + dispN(p), place: p.dplace } : null]).filter(Boolean) : []));
-      if (ev.length) ch.push(['Σημαντικά γεγονότα', `<table class="tl">${ev.map(e => `<tr><th>${esc(fmtDate(e))}</th><td>${esc(e.title)}${e.place ? ' <i>(' + esc(e.place) + ')</i>' : ''}${(e.people || []).length ? ' — ' + list((e.people || []).map(byId).filter(Boolean)) : ''}</td></tr>`).join('')}</table>`]);
+      if (ev.length && o.evt !== false) ch.push(['Σημαντικά γεγονότα', `<table class="tl">${ev.map(e => `<tr><th>${esc(fmtDate(e))}</th><td>${esc(e.title)}${e.place ? ' <i>(' + esc(e.place) + ')</i>' : ''}${(e.people || []).length ? ' — ' + list((e.people || []).map(byId).filter(Boolean)) : ''}</td></tr>`).join('')}</table>`]);
+      const H = state.heritage || {}, hl = k => (H[k] || []).filter(x => x.title);
+      const hsec = (k, t, fn) => hl(k).length ? `<h3>${t}</h3>` + hl(k).map(fn).join('') : '';
+      const herHtml = [
+        hsec('recipes', 'Οικογενειακές συνταγές', r => `<div class="rc"><h4>${esc(r.title)}</h4>${r.by ? `<p class="by">Από: ${esc(r.by)}</p>` : ''}${r.ingredients ? `<p class="txt"><b>Υλικά</b>\n${esc(r.ingredients)}</p>` : ''}${r.steps ? `<p class="txt"><b>Εκτέλεση</b>\n${esc(r.steps)}</p>` : ''}</div>`),
+        hsec('surnames', 'Η ιστορία των επωνύμων', r => `<div class="rc"><h4>${esc(r.title)}</h4>${r.origin ? `<p class="by">${esc(r.origin)}</p>` : ''}${r.story ? `<p class="txt">${esc(r.story)}</p>` : ''}</div>`),
+        hsec('nicks', 'Παρατσούκλια', r => `<div class="rc"><h4>${esc(r.title)}</h4>${r.who ? `<p class="by">${esc(r.who)}</p>` : ''}${r.story ? `<p class="txt">${esc(r.story)}</p>` : ''}</div>`),
+        hsec('words', 'Τοπικό λεξικό', r => `<div class="rc"><h4>${esc(r.title)}</h4>${r.meaning ? `<p class="txt">${esc(r.meaning)}</p>` : ''}${r.example ? `<p class="by">«${esc(r.example)}»</p>` : ''}</div>`)
+      ].join('');
+      if (o.her !== false && herHtml) ch.push(['Κληρονομιά', herHtml]);
       if (o.ph && photos.length) ch.push(['Φωτογραφίες', `<div class="album">${photos.map(x => `<figure><img src="${x.src}" alt=""><figcaption>${esc(x.caption)}${x.year ? ', ' + x.year : ''}${x.people.length ? '<br><small>' + list(x.people.map(byId).filter(Boolean)) + '</small>' : ''}</figcaption></figure>`).join('')}</div>`]);
       ch.push(['Ευρετήριο προσώπων', `<ul class="idx">${state.people.slice().sort((a, b) => dispN(a).localeCompare(dispN(b), 'el')).map(p => `<li>${esc(dispN(p))} <span>γενιά ${g[p.id]}</span></li>`).join('')}</ul>`]);
       const cover = o.cover ? { src: o.cover } : null;
-      const css = `@page{size:${o.size};margin:${A5 ? 14 : 20}mm ${A5 ? 12 : 18}mm ${A5 ? 16 : 22}mm;@bottom-center{content:'\\2014  ' counter(page) '  \\2014';font:8.5pt 'Noto Serif',Georgia,serif;color:#B5603E;letter-spacing:.12em}}@page cover{margin:0;@bottom-center{content:none}}@page tree{size:${o.size} landscape;margin:12mm}
-        *{box-sizing:border-box}body{font:${A5 ? 9.5 : 10.5}pt/1.65 'Manrope','Helvetica Neue',Arial,sans-serif;color:#3B2F26;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}h1,h2,h3,h4{font-family:'Noto Serif',Georgia,serif;color:#4A5D3A;font-weight:600}svg [stroke="#1B4F72"]{stroke:#4A5D3A}svg [stroke="#6B8E23"]{stroke:#7C8B58}svg [fill="#1B4F72"]{fill:#4A5D3A}svg [fill="#E67E22"]{fill:#C99A5B}svg text{font-family:'Manrope',Arial,sans-serif}
-        .cover{page:cover;height:${A5 ? 209 : 296}mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,#FBF7EC 0%,#F6F0E3 55%,#EFE5D0 100%);padding:24mm;box-shadow:inset 0 0 0 9mm #F6F0E3,inset 0 0 0 9.5mm rgba(74,93,58,.45),inset 0 0 0 11mm #F6F0E3,inset 0 0 0 11.3mm rgba(181,96,62,.55);page-break-after:always}
-        .cover h1{font-size:32pt;margin:0 0 5mm;line-height:1.2}.cover h1::after{content:"";display:block;width:46mm;height:5mm;margin:6mm auto 0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='12' viewBox='0 0 44 12'%3E%3Cpath d='M0 6Q5.5-1 11 6T22 6T33 6T44 6' fill='none' stroke='%23B5603E' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center/auto 100%}.cover .sub{font:italic 14pt 'Noto Serif',Georgia,serif;color:#B5603E;margin-bottom:12mm}.cover img{width:${A5 ? 60 : 90}mm;height:${A5 ? 60 : 90}mm;object-fit:cover;border-radius:50%;border:2mm solid #FBF7EC;outline:.4mm solid #7C8B58;outline-offset:1.5mm;margin-bottom:12mm}.cover .au{font-size:10.5pt;letter-spacing:.18em;text-transform:uppercase;color:#7C8B58}
-        .toc{page-break-after:always}.toc h2{margin-top:0}.toc ol{font:12pt/2.1 'Noto Serif',Georgia,serif;color:#B5603E}.toc a{color:#3B2F26;text-decoration:none}
-        h2.ch{font-size:20pt;border-bottom:1px solid rgba(124,139,88,.55);padding-bottom:3mm;margin:0 0 7mm;position:relative}h2.ch::after{content:"";position:absolute;left:0;bottom:-1.5px;width:26mm;height:3px;background:#B5603E}section.c{page-break-before:always}.treepg{page:tree}
-        .txt{white-space:pre-line;text-align:justify;hyphens:auto;margin:0 0 4mm}h3{font-size:13.5pt;margin:5mm 0 2mm}h4{font-size:10.5pt;margin:3mm 0 1mm;color:#B5603E}
-        .gen,.idx{list-style:none;padding:0;margin:0}.gen li,.idx li{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(124,139,88,.6);padding:1.2mm 0}.gen span,.idx span{color:#8a7a62}.idx{columns:2;column-gap:10mm}.idx li{break-inside:avoid}
-        .bio{break-inside:avoid;border-bottom:1px solid #E4D9C0;padding:4mm 0 5mm}.bh{display:flex;gap:5mm;align-items:center}.bh h3{margin:0}.bh small{font-weight:normal;color:#8a7a62}.yrs{margin:1mm 0 0;color:#B5603E;font-weight:600;font-family:'Noto Serif',Georgia,serif}.face{width:${A5 ? 22 : 28}mm;height:${A5 ? 22 : 28}mm;object-fit:cover;border-radius:50%;border:1mm solid #FBF7EC;outline:.35mm solid #C99A5B}
-        table{border-collapse:collapse;width:100%;margin:3mm 0;font-size:.95em}th{text-align:left;color:#8a7a62;font-weight:normal;width:26%;vertical-align:top;padding:.8mm 0}td{padding:.8mm 0}.tl th{color:#4A5D3A;font-weight:600;width:32%;border-bottom:1px dotted rgba(124,139,88,.5)}.tl td{border-bottom:1px dotted rgba(124,139,88,.5)}
-        .ev{margin:2mm 0;padding-left:5mm;font-size:.95em}.strip{display:flex;gap:3mm;margin-top:3mm}.strip figure{flex:1;margin:0}.strip img{border-radius:3px;width:100%;height:${A5 ? 28 : 38}mm;object-fit:cover}
-        .album{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.album figure{margin:0;break-inside:avoid}.album img{border-radius:3px;box-shadow:0 .5mm 2mm rgba(59,47,38,.2);width:100%;max-height:${A5 ? 55 : 78}mm;object-fit:cover}figcaption{font:italic 8.5pt 'Noto Serif',Georgia,serif;color:#8a7a62;margin-top:1mm}`;
-      return `<!doctype html><html lang="el"><head><meta charset="utf-8"><title>${esc(o.title)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Noto+Serif:ital,wght@0,500;0,600;0,700;1,400&display=swap"><style>${css}</style></head><body>
+      const G = A5 ? { W: 148, H: 210, T: 18, B: 21, I: 20, O: 14 } : { W: 210, H: 297, T: 25, B: 28, I: 27, O: 20 };
+      const css = `@page{size:${o.size};margin:0}@page tree{size:${o.size} landscape;margin:0}
+        *{box-sizing:border-box}html{-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%}html,body{margin:0}body{font:${A5 ? 7.5 : 8}pt/1.6 'Manrope','Helvetica Neue',Arial,sans-serif;color:#3B2F26;-webkit-print-color-adjust:exact;print-color-adjust:exact}h1,h2,h3,h4{font-family:'Noto Serif',Georgia,serif;color:#4A5D3A;font-weight:600}svg [stroke="#1B4F72"]{stroke:#4A5D3A}svg [stroke="#6B8E23"]{stroke:#7C8B58}svg [fill="#1B4F72"]{fill:#4A5D3A}svg [fill="#E67E22"]{fill:#C99A5B}svg text{font-family:'Manrope',Arial,sans-serif}
+        #src{display:none}
+        .sheet{position:relative;width:${G.W}mm;height:${G.H - 1}mm;overflow:hidden;background:#fff;page-break-after:always;break-after:page;margin:0 auto}.sheet:last-child{page-break-after:auto;break-after:auto}
+        .pc{position:absolute;top:${G.T}mm;bottom:${G.B}mm;overflow:hidden}.odd .pc{left:${G.I}mm;right:${G.O}mm}.even .pc{left:${G.O}mm;right:${G.I}mm}
+        .hd,.ft{position:absolute;left:0;right:0;text-align:center;font:italic 8pt 'Noto Serif',Georgia,serif;color:#8a7a62}.hd{top:${G.T - 12}mm}.ft{bottom:${G.B - 14}mm;font-style:normal;font-size:9pt;color:#B5603E;letter-spacing:.12em}
+        .sheet.land{width:${G.H}mm;height:${G.W - 1}mm;page:tree}.land .pc{top:14mm;bottom:14mm;left:14mm;right:14mm}.land .hd{top:5mm}.land .ft{bottom:5mm}.land svg{width:100%;height:${A5 ? 88 : 140}mm}
+        @media screen{body{background:#7a7a7a;padding:6mm 0}#wrap{height:var(--h,auto);overflow:hidden}#out{width:max-content;transform:scale(var(--z,1));transform-origin:0 0}.sheet{margin:0 auto 6mm;box-shadow:0 1mm 4mm rgba(0,0,0,.5)}}
+        .sheet.cov .cover{height:100%}
+        .cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,#FBF7EC 0%,#F6F0E3 55%,#EFE5D0 100%);padding:24mm;box-shadow:inset 0 0 0 9mm #F6F0E3,inset 0 0 0 9.5mm rgba(74,93,58,.45),inset 0 0 0 11mm #F6F0E3,inset 0 0 0 11.3mm rgba(181,96,62,.55)}
+        .cover h1{font-size:${A5 ? 24 : 30}pt;margin:0 0 5mm;line-height:1.2}.cover h1::after{content:"";display:block;width:46mm;height:5mm;margin:6mm auto 0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='12' viewBox='0 0 44 12'%3E%3Cpath d='M0 6Q5.5-1 11 6T22 6T33 6T44 6' fill='none' stroke='%23B5603E' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center/auto 100%}.cover .sub{font:italic 13pt 'Noto Serif',Georgia,serif;color:#B5603E;margin-bottom:12mm}.cover img{width:${A5 ? 50 : 80}mm;height:${A5 ? 50 : 80}mm;object-fit:cover;border-radius:50%;border:2mm solid #FBF7EC;outline:.4mm solid #7C8B58;outline-offset:1.5mm;margin-bottom:12mm}.cover .au{font-size:10pt;letter-spacing:.18em;text-transform:uppercase;color:#7C8B58}
+        .tocl{list-style:none;padding:0;margin:0;font:11pt/2 'Noto Serif',Georgia,serif;color:#B5603E}.tocl li{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(124,139,88,.6)}.tocl a{color:#3B2F26;text-decoration:none}
+        h2.ch{font-size:${A5 ? 12 : 14}pt;border-bottom:1px solid rgba(124,139,88,.55);padding-bottom:3mm;margin:0 0 6mm;position:relative}h2.ch::after{content:"";position:absolute;left:0;bottom:-1.5px;width:26mm;height:3px;background:#B5603E}
+        .txt{white-space:pre-line;text-align:justify;hyphens:auto;margin:0 0 3mm}h3{font-size:10.5pt;margin:4mm 0 2mm}h4{font-size:8.5pt;margin:3mm 0 1mm;color:#B5603E}
+        .gen,.idx{list-style:none;padding:0;margin:0}.gen li,.idx li{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(124,139,88,.6);padding:1.1mm 0}.gen span,.idx span{color:#8a7a62}
+        .bio{border-bottom:1px solid #E4D9C0;padding:3mm 0 4mm}.bh{display:flex;gap:5mm;align-items:center}.bh h3{margin:0}.bh small{font-weight:normal;color:#8a7a62}.yrs{margin:1mm 0 0;color:#B5603E;font-weight:600;font-family:'Noto Serif',Georgia,serif}.face{width:${A5 ? 18 : 22}mm;height:${A5 ? 18 : 22}mm;object-fit:cover;border-radius:50%;border:1mm solid #FBF7EC;outline:.35mm solid #C99A5B}
+        table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:.95em}th{text-align:left;color:#8a7a62;font-weight:normal;width:26%;vertical-align:top;padding:.8mm 0}td{padding:.8mm 0}.tl{margin:0}.tl th{color:#4A5D3A;font-weight:600;width:32%;border-bottom:1px dotted rgba(124,139,88,.5)}.tl td{border-bottom:1px dotted rgba(124,139,88,.5)}
+        .ev{margin:2mm 0;padding-left:5mm;font-size:.95em}.strip{display:flex;gap:3mm;margin-top:3mm}.strip figure{flex:1;margin:0}.strip img{border-radius:3px;width:100%;height:${A5 ? 24 : 32}mm;object-fit:cover}
+        .album{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:6mm}.album figure{margin:0;background:#fff;padding:3mm 3mm 2mm;box-shadow:0 .6mm 2.5mm rgba(59,47,38,.25)}.album img{width:100%;max-height:${A5 ? 45 : 62}mm;object-fit:cover}.album figcaption{text-align:center;margin-top:2mm}figcaption{font:italic 7.5pt 'Noto Serif',Georgia,serif;color:#8a7a62;margin-top:1mm}
+        .gh{font-size:12pt;text-align:center;color:#B5603E;margin:0 0 3mm;padding:4mm 0 2mm;border-top:1px solid rgba(124,139,88,.5)}.rc{border-left:1.2mm solid #B5603E;background:#FBF7EC;padding:2mm 4mm;margin:0 0 3mm}.rc h4{margin:0 0 1mm;color:#4A5D3A;font-size:9pt}.rc .by{margin:0 0 2mm;color:#B5603E;font:italic 7.5pt 'Noto Serif',Georgia,serif}.rc .txt{margin:0 0 2mm}ul.sp,table.sp{margin:0}`;
+      const PAG = `(function(){
+function go(){
+var src=document.getElementById('src'),out=document.getElementById('out'),title=document.title,starts=[];
+function isH(e){return /^H[1-4]$/.test(e.tagName);}
+function over(c){return c.scrollHeight>c.clientHeight+1;}
+function sheet(kind){var n=out.children.length+1,sh=document.createElement('div');sh.className='sheet '+(n%2?'odd':'even')+(kind?' '+kind:'');
+var c=document.createElement('div');c.className='pc';sh.appendChild(c);
+var h=document.createElement('div');h.className='hd';h.textContent=title;sh.appendChild(h);
+var f=document.createElement('div');f.className='ft';f.textContent='— '+n+' —';sh.appendChild(f);out.appendChild(sh);return c;}
+var cov=src.querySelector('.cover');
+if(cov){var cs=document.createElement('div');cs.className='sheet odd cov';cs.appendChild(cov);out.appendChild(cs);}
+function expand(list){var r=[];list.forEach(function(e){
+if(e.classList.contains('album')){var fs=[].slice.call(e.children);for(var i=0;i<fs.length;i+=2){var d=document.createElement('div');d.className='album';d.appendChild(fs[i]);if(fs[i+1])d.appendChild(fs[i+1]);r.push(d);}}
+else r.push(e);});return r;}
+function splitTxt(c,a,alone){var full=a.textContent,w=full.split(' '),lo=0,hi=w.length-1;
+while(lo<hi){var m=Math.ceil((lo+hi)/2);a.textContent=w.slice(0,m).join(' ');if(over(c))hi=m-1;else lo=m;}
+if(lo<8&&!alone){a.textContent=full;return null;}
+if(lo<1)lo=1;
+var rest=a.cloneNode(false);rest.textContent=w.slice(lo).join(' ');a.textContent=w.slice(0,lo).join(' ');return rest;}
+function chapter(sec,noStart){
+var kind=sec.classList.contains('treepg')?'land':'';
+var q=expand([].slice.call(sec.children));
+var c=sheet(kind);if(!noStart)starts.push(out.children.length);
+var guard=0;
+while(q.length&&guard++<6000){
+var a=q.shift();
+if(a.classList&&a.classList.contains('bio')&&[].some.call(c.children,function(e){return !isH(e);})){
+var hs=[];while(c.children.length&&isH(c.lastElementChild)){hs.unshift(c.lastElementChild);c.removeChild(c.lastElementChild);}
+c=sheet(kind);hs.forEach(function(h){c.appendChild(h);});
+}
+c.appendChild(a);
+if(!over(c))continue;
+var alone=[].every.call(c.children,function(e){return e===a||isH(e);});
+if(a.classList.contains('txt')&&a.textContent.length>350){
+var rest=splitTxt(c,a,alone);
+if(rest){q.unshift(rest);continue;}
+}
+var items=null;
+if(a.tagName==='TABLE'||a.tagName==='UL')items=[].slice.call(a.querySelectorAll(a.tagName==='TABLE'?'tr':'li'));
+var tall=a.getBoundingClientRect().height>c.clientHeight;
+if(items&&items.length>1&&(alone||tall||items.length>4)){
+c.removeChild(a);
+var arr=items.map(function(it){var w=a.cloneNode(false);w.classList.add('sp');var p=a.tagName==='TABLE'?document.createElement('tbody'):w;p.appendChild(it);if(p!==w)w.appendChild(p);return w;});
+q=arr.concat(q);continue;
+}
+if((alone||tall)&&!items&&a.children.length>1){c.removeChild(a);q=[].slice.call(a.children).concat(q);continue;}
+if(alone)continue;
+c.removeChild(a);var mv=[a];
+while(c.children.length>1&&isH(c.lastElementChild)){mv.unshift(c.lastElementChild);c.removeChild(c.lastElementChild);}
+c=sheet(kind);q=mv.concat(q);
+}
+}
+var toc=src.querySelector('.toc');if(toc)chapter(toc,true);
+[].slice.call(src.querySelectorAll('section.c')).forEach(function(s){chapter(s,false);});
+[].slice.call(out.querySelectorAll('.tocl li')).forEach(function(li,i){
+var a=li.querySelector('a'),t=a?a.textContent:li.textContent;li.textContent='';
+var x=document.createElement('a');x.textContent=(i+1)+'. '+t;var p=document.createElement('span');p.textContent=starts[i]||'';li.appendChild(x);li.appendChild(p);});
+if(src.parentNode)src.parentNode.removeChild(src);
+var mw=0;[].forEach.call(out.children,function(e){mw=Math.max(mw,e.getBoundingClientRect().width);});
+var z=Math.min(1,(window.innerWidth-8)/Math.max(mw,1)),hh=out.offsetHeight*z;document.documentElement.style.setProperty('--h',hh+'px');document.documentElement.style.setProperty('--z',z);
+document.body.setAttribute('data-ready','1');
+}
+var done=false;function run(){if(done)return;done=true;try{go();}catch(e){console.error(e);}}
+var ps=[].slice.call(document.images).map(function(i){return i.complete?0:new Promise(function(r){i.onload=r;i.onerror=r;});});
+if(document.fonts&&document.fonts.ready)ps.push(document.fonts.ready);
+Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).then(run);
+})();`;
+      return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(o.title)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Noto+Serif:ital,wght@0,500;0,600;0,700;1,400&display=swap"><style>${css}</style></head><body class="${A5 ? 'a5' : 'a4'}"><div id="src">
         <section class="cover">${cover ? `<img src="${cover.src}" alt="">` : ''}<h1>${esc(o.title)}</h1><div class="sub">${esc(o.subtitle)}</div><div class="au">${esc(o.author)}${o.author ? ' · ' : ''}${new Date().getFullYear()}</div></section>
-        <section class="toc"><h2 class="ch">Περιεχόμενα</h2><ol>${ch.map((c, i) => `<li><a href="#c${i}">${esc(c[0])}</a></li>`).join('')}</ol></section>
-        ${ch.map((c, i) => `<section class="c ${c[2] || ''}" id="c${i}"><h2 class="ch">${i + 1}. ${esc(c[0])}</h2>${c[1]}</section>`).join('')}</body></html>`;
+        <section class="toc"><h2 class="ch">Περιεχόμενα</h2><ol class="tocl">${ch.map((c, i) => `<li><a href="#c${i}">${esc(c[0])}</a></li>`).join('')}</ol></section>
+        ${ch.map((c, i) => `<section class="c ${c[2] || ''}" id="c${i}"><h2 class="ch">${i + 1}. ${esc(c[0])}</h2>${c[1]}</section>`).join('')}</div><div id="wrap"><div id="out"></div></div><script>${PAG}<\/script></body></html>`;
     }
     function showBook(html) {
       const old = $('book-ov'); if (old) old.remove();
@@ -4232,14 +4438,17 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         title: 'Βιβλίο οικογένειας (PDF)', submitText: 'Δημιουργία βιβλίου',
         fields: [
           { type: 'tip', html: '<p class="font-semibold text-aegean mb-2">Φωτογραφία εξωφύλλου (προαιρετικά)</p><div id="bk-cover-prev" class="hidden mb-2"></div><div class="flex flex-wrap gap-2"><button type="button" id="bk-cover-btn" class="px-3 py-2 rounded-xl bg-aegean text-white text-sm">📷 Ανέβασε φωτογραφία</button><button type="button" id="bk-cover-rm" class="hidden px-3 py-2 rounded-xl border border-terracotta/40 text-terracotta text-sm">Αφαίρεση</button></div><p class="text-xs text-gray-500 mt-2">Αν δεν ανεβάσεις, το εξώφυλλο θα είναι χωρίς φωτογραφία.</p><input type="file" id="bk-cover-file" accept="image/*" class="hidden">' },
-          { type: 'info', name: 'bk-info', label: 'Το βιβλίο φτιάχνεται αυτόματα: ιστορία, γενεαλογικό δέντρο, γενιές, βιογραφίες, γεγονότα και φωτογραφίες.' },
+          { type: 'info', name: 'bk-info', label: 'Το βιβλίο φτιάχνεται αυτόματα: ιστορία, δέντρο, γενιές, βιογραφίες, γεγονότα, κληρονομιά και φωτογραφίες. Διάλεξε παρακάτω τι θα περιλαμβάνει.' },
           { name: 'title', label: 'Τίτλος βιβλίου', required: true, value: b.title || S('heroTitle').replace(/\s*\n\s*/g, ' ') },
           { name: 'subtitle', label: 'Υπότιτλος', value: b.subtitle != null ? b.subtitle : 'Η ιστορία της οικογένειάς μας' },
           { name: 'author', label: 'Συγγραφέας / Επιμέλεια', value: b.author != null ? b.author : ((state.settings || {}).userName || '') },
           { name: 'intro', type: 'textarea', label: 'Δική σου εισαγωγή για την ιστορία της οικογένειας (προαιρετικά)', value: b.intro || '', hint: 'Άφησε κενή γραμμή ανάμεσα στις παραγράφους.' },
           { name: 'size', type: 'select', label: 'Μέγεθος σελίδας', value: b.size || 'A4', options: [{ v: 'A4', l: 'A4 (κανονικό)' }, { v: 'A5', l: 'A5 (βιβλιαράκι)' }] },
           { name: 'bd', type: 'checkbox', label: 'Γεννήσεις και θάνατοι στη λίστα γεγονότων', value: b.bd !== false },
-          { name: 'ph', type: 'checkbox', label: 'Άλμπουμ φωτογραφιών στο τέλος', value: b.ph !== false }
+          { name: 'ph', type: 'checkbox', label: 'Άλμπουμ φωτογραφιών στο τέλος', value: b.ph !== false },
+          { name: 'tr', type: 'checkbox', label: 'Γενεαλογικό δέντρο', value: b.tr !== false },
+          { name: 'evt', type: 'checkbox', label: 'Σημαντικά γεγονότα', value: b.evt !== false },
+          { name: 'her', type: 'checkbox', label: 'Κληρονομιά (συνταγές, επώνυμα, παρατσούκλια, λεξικό)', value: b.her !== false }
         ],
         onMount: () => {
           const prev = $('bk-cover-prev'), rm = $('bk-cover-rm'), inp = $('bk-cover-file');
@@ -4253,7 +4462,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           inp.onchange = () => { const fl = inp.files[0]; if (fl) coverImage(fl, src => { bookCover = src; upd(); }); };
         },
         onSubmit: d => {
-          const o = { title: d.title.trim(), subtitle: (d.subtitle || '').trim(), author: (d.author || '').trim(), intro: (d.intro || '').trim(), size: d.size === 'A5' ? 'A5' : 'A4', bd: !!d.bd, ph: !!d.ph };
+          const o = { title: d.title.trim(), subtitle: (d.subtitle || '').trim(), author: (d.author || '').trim(), intro: (d.intro || '').trim(), size: d.size === 'A5' ? 'A5' : 'A4', bd: !!d.bd, ph: !!d.ph, tr: !!d.tr, evt: !!d.evt, her: !!d.her };
           state.book = o; save();
           try { showBook(buildBook(Object.assign({}, o, { cover: bookCover }))); } catch (e) { console.error(e); showToast('Δεν ήταν δυνατή η δημιουργία του βιβλίου.'); }
         }
