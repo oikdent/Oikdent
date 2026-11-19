@@ -3529,6 +3529,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
         { name: 'ddate', label: 'Ημερομηνία θανάτου', type: 'date', value: ddate },
         { name: 'dy', label: 'Ή μόνο το έτος θανάτου', type: 'number', min: 1500, max: 2100, value: p.dy },
         { name: 'dplace', label: 'Τόπος θανάτου', value: dplace, list: cityList() },
+        { name: 'story', label: 'Μικρή ιστορία (θα μπει στο βιβλίο)', type: 'textarea', value: p.story, placeholder: 'Γράψε λίγες γραμμές για τον άνθρωπο αυτόν: πώς ήταν, τι θυμάσαι, μια ιστορία…' },
         { type: 'detstart', label: compact ? '➕ Επιπλέον στοιχεία (συμπληρώνεις ό,τι ξέρεις)' : 'Επιπλέον στοιχεία', open: !compact },
         { name: 'place', label: 'Πόλη διαμονής', value: p.place, list: cityList(), hint: 'Χρησιμοποιείται στις Τοποθεσίες' },
         { name: 'origin', label: 'Τόπος καταγωγής (χωριό / περιοχή)', value: p.origin },
@@ -3591,7 +3592,7 @@ html.dark .text-gray-800,html.dark .text-gray-700{color:#EDE5D2}html.dark .text-
         p.died = [fmtIso(p.ddate), p.dplace].filter(Boolean).join(', ');
         p.deceased = true;
       } else { p.ddate = ''; p.dplace = ''; p.dy = null; p.died = ''; p.deceased = false; }
-      p.place = (d.place || '').trim(); p.origin = (d.origin || '').trim(); p.job = (d.job || '').trim(); p.notes = (d.notes || '').trim();
+      p.place = (d.place || '').trim(); p.origin = (d.origin || '').trim(); p.job = (d.job || '').trim(); p.notes = (d.notes || '').trim(); p.story = (d.story || '').trim();
       p.emoji = autoEmoji(p.sex, p.by, p.dy);
     }
 const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'father', l: 'Ο πατέρας του/της' }, { v: 'spouse', l: 'Ο/Η σύζυγος του/της' }, { v: 'child', l: 'Το παιδί του/της' }, { v: 'sibling', l: 'Ο αδελφός / Η αδελφή του/της' }, { v: 'halfsib_m', l: 'Ετεροθαλής αδελφός/ή — κοινός πατέρας' }, { v: 'halfsib_f', l: 'Ετεροθαλής αδελφός/ή — κοινή μητέρα' }, { v: 'adopt_parent', l: 'Ο θετός γονέας του/της' }, { v: 'adopted', l: 'Το θετό παιδί του/της' }, { v: 'ex_div', l: 'Ο/Η πρώην σύζυγος του/της (διαζύγιο)' }, { v: 'ex_wid', l: 'Ο/Η σύζυγος του/της που πέθανε (χηρεία)' }, { v: 'none', l: 'Χωρίς σύνδεση' }];
@@ -3910,7 +3911,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         const row = (l, v) => v ? `<div class="flex justify-between gap-4 py-2 border-b border-gray-100"><span class="text-gray-500 shrink-0">${l}</span><span class="text-right">${esc(v)}</span></div>` : '';
         c.innerHTML = `<div class="space-y-1 text-sm">
           ${row('Πλήρες όνομα', p.full)}${row('Πατρώνυμο', p.pat ? 'του ' + p.pat : '')}${row('Πατρικό επώνυμο', p.maiden)}${row('Παρατσούκλι', p.paratsouk)}${row('Γέννηση', p.born || p.by)}${row('Θάνατος', (p.dy || p.deceased) ? (p.died || p.dy || 'Έχει πεθάνει') : '')}
-          ${row('Ημερομηνίες', p.unc ? 'κατά προσέγγιση / αβέβαιες' : '')}${row('Επάγγελμα', p.job)}${row('Προς έρευνα', p.todo)}${row('Τόπος καταγωγής', p.origin)}${row('Τόπος διαμονής', p.place)}${p.notes ? `<div class="py-2"><p class="text-gray-500 mb-1">Σημειώσεις</p><p class="whitespace-pre-line">${esc(p.notes)}</p></div>` : ''}</div>
+          ${row('Ημερομηνίες', p.unc ? 'κατά προσέγγιση / αβέβαιες' : '')}${row('Επάγγελμα', p.job)}${row('Προς έρευνα', p.todo)}${row('Τόπος καταγωγής', p.origin)}${row('Τόπος διαμονής', p.place)}${p.story ? `<div class="py-2"><p class="text-gray-500 mb-1">Μικρή ιστορία</p><p class="whitespace-pre-line">${esc(p.story)}</p></div>` : ''}${p.notes ? `<div class="py-2"><p class="text-gray-500 mb-1">Σημειώσεις</p><p class="whitespace-pre-line">${esc(p.notes)}</p></div>` : ''}</div>
           <div class="mt-6 flex gap-3">
             <button data-act="edit" class="flex-1 py-2.5 rounded-xl bg-aegean text-white text-sm font-medium">Επεξεργασία</button>
             <button data-act="rel" class="flex-1 py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">Προσθήκη συγγενή</button>
@@ -4278,13 +4279,14 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         const f = faceOf(p), pa = p.parents.map(byId).filter(Boolean), sp = byId(p.spouse), kids = childrenOf(p);
         const sibs = state.people.filter(x => x.id !== p.id && p.parents.length && x.parents.some(i => p.parents.includes(i)));
         const st = state.stories[p.id] || [], pe = sortedEvents(state.events.filter(e => (e.people || []).includes(p.id)));
-        const notes = p.notes && !/^Πρότυπο μέλος/.test(p.notes) ? p.notes : '';
-        const mine = photos.filter(x => x.people.includes(p.id) && x.src !== f).slice(0, 3);
-        return `<article class="bio"><div class="bh">${f ? `<img class="face" src="${f}" alt="">` : ''}<div><h3>${esc(dispN(p))}${p.maiden ? ` <small>(το γένος ${esc(p.maiden)})</small>` : ''}</h3><p class="yrs">${esc(yearsOf(p))}${p.job ? ' · ' + esc(p.job) : ''}</p></div></div>
-          <table>${row('Γέννηση', esc(p.born || p.by || ''))}${row('Θάνατος', (p.dy || p.deceased) ? esc(p.died || p.dy || '') : '')}${row('Γονείς', pa.map(x => esc(dispN(x)) + ((p.adoptive || []).includes(x.id) ? ' (θετός)' : '')).join(', '))}${row('Σύζυγος', sp ? esc(dispN(sp)) : '')}${row('Προηγούμενοι γάμοι', (p.spouses || []).map(m => { const q = byId(m.id); return q ? esc(dispN(q)) + ' (' + (m.type === 'widowed' ? 'χηρεία' : 'διαζύγιο') + ((m.from || m.to) ? ', ' + (m.from || '?') + '–' + (m.to || '') : '') + ')' : ''; }).filter(Boolean).join(', '))}${row('Παιδιά', list(kids))}${row('Αδέλφια', list(sibs))}${row('Καταγωγή', esc(p.origin || ''))}${row('Διαμονή', esc(p.place || ''))}</table>
-          ${notes ? `<p class="txt">${esc(notes)}</p>` : ''}${st.map(s => `<h4>${esc(s.title)}</h4><p class="txt">${esc(s.text)}</p>`).join('')}
+        const notes = p.notes && !/^(Πρότυπο μέλος|Δημιουργήθηκε αυτόματα)/.test(p.notes) ? p.notes : '';
+        const nkItem = p.paratsouk ? (state.heritage && state.heritage.nicks || []).find(h => nkey(h.title) === nkey(p.paratsouk) && h.story) : null;
+        const ap = p.unc ? ' (περίπου)' : '';
+        return `<article class="bio"><div class="bh"><div><h3>${esc(dispN(p))}${p.maiden ? ` <small>(το γένος ${esc(p.maiden)})</small>` : ''}</h3>${p.paratsouk ? `<p class="nk">«${esc(p.paratsouk)}»</p>` : ''}<p class="yrs">${esc(yearsOf(p))}${p.job ? ' · ' + esc(p.job) : ''}</p></div>${f ? `<img class="face" src="${f}" alt="">` : ''}</div>
+          <table>${row('Το παρατσούκλι', nkItem ? esc(nkItem.story) : '')}${row('Πατρώνυμο', esc(p.pat || ''))}${row('Γέννηση', (p.born || p.by) ? esc(p.born || p.by) + ap : '')}${row('Θάνατος', (p.dy || p.deceased) ? esc(p.died || p.dy || '') + ap : '')}${row('Γονείς', pa.map(x => esc(dispN(x)) + ((p.adoptive || []).includes(x.id) ? ' (θετός)' : '')).join(', '))}${row('Σύζυγος', sp ? esc(dispN(sp)) : '')}${row('Προηγούμενοι γάμοι', (p.spouses || []).map(m => { const q = byId(m.id); return q ? esc(dispN(q)) + ' (' + (m.type === 'widowed' ? 'χηρεία' : 'διαζύγιο') + ((m.from || m.to) ? ', ' + (m.from || '?') + '–' + (m.to || '') : '') + ')' : ''; }).filter(Boolean).join(', '))}${row('Παιδιά', list(kids))}${row('Αδέλφια', list(sibs))}${row('Καταγωγή', esc(p.origin || ''))}${row('Διαμονή', esc(p.place || ''))}</table>
+          ${p.story ? `<p class="txt quote">${esc(p.story)}</p>` : ''}${notes ? `<p class="txt">${esc(notes)}</p>` : ''}${st.map(s => `<h4>${esc(s.title)}</h4><p class="txt">${esc(s.text)}</p>`).join('')}
           ${pe.length ? `<ul class="ev">${pe.map(e => `<li><b>${esc(fmtDate(e))}</b> — ${esc(e.title)}${e.place ? ' (' + esc(e.place) + ')' : ''}</li>`).join('')}</ul>` : ''}
-          ${mine.length ? `<div class="strip">${mine.map(x => `<figure><img src="${x.src}" alt=""><figcaption>${esc(x.caption)}${x.year ? ', ' + x.year : ''}</figcaption></figure>`).join('')}</div>` : ''}</article>`;
+          </article>`;
       };
       const ch = [];
       const hist = [o.intro ? o.intro.split(/\n\s*\n/).map(t => `<p class="txt">${esc(t)}</p>`).join('') : '',
@@ -4325,11 +4327,11 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         h2.ch{font-size:${A5 ? 12 : 14}pt;border-bottom:1px solid rgba(124,139,88,.55);padding-bottom:3mm;margin:0 0 6mm;position:relative}h2.ch::after{content:"";position:absolute;left:0;bottom:-1.5px;width:26mm;height:3px;background:#B5603E}
         .txt{white-space:pre-line;text-align:justify;hyphens:auto;margin:0 0 3mm}h3{font-size:10.5pt;margin:4mm 0 2mm}h4{font-size:8.5pt;margin:3mm 0 1mm;color:#B5603E}
         .gen,.idx{list-style:none;padding:0;margin:0}.gen li,.idx li{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(124,139,88,.6);padding:1.1mm 0}.gen span,.idx span{color:#8a7a62}
-        .bio{border-bottom:1px solid #E4D9C0;padding:3mm 0 4mm}.bh{display:flex;gap:5mm;align-items:center}.bh h3{margin:0}.bh small{font-weight:normal;color:#8a7a62}.yrs{margin:1mm 0 0;color:#B5603E;font-weight:600;font-family:'Noto Serif',Georgia,serif}.face{width:${A5 ? 18 : 22}mm;height:${A5 ? 18 : 22}mm;object-fit:cover;border-radius:50%;border:1mm solid #FBF7EC;outline:.35mm solid #C99A5B}
+        .bio{border-bottom:1px solid #E4D9C0;padding:3mm 0 4mm}.bh{display:flex;gap:5mm;align-items:center;justify-content:space-between}.bh h3{margin:0}.bh small{font-weight:normal;color:#8a7a62}.yrs{margin:1mm 0 0;color:#B5603E;font-weight:600;font-family:'Noto Serif',Georgia,serif}.face{width:${A5 ? 18 : 22}mm;height:${A5 ? 18 : 22}mm;object-fit:cover;border-radius:50%;border:1mm solid #FBF7EC;outline:.35mm solid #C99A5B}
         table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:.95em}th{text-align:left;color:#8a7a62;font-weight:normal;width:26%;vertical-align:top;padding:.8mm 0}td{padding:.8mm 0}.tl{margin:0}.tl th{color:#4A5D3A;font-weight:600;width:32%;border-bottom:1px dotted rgba(124,139,88,.5)}.tl td{border-bottom:1px dotted rgba(124,139,88,.5)}
         .ev{margin:2mm 0;padding-left:5mm;font-size:.95em}.strip{display:flex;gap:3mm;margin-top:3mm}.strip figure{flex:1;margin:0}.strip img{border-radius:3px;width:100%;height:${A5 ? 24 : 32}mm;object-fit:cover}
         .album{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:6mm}.album figure{margin:0;background:#fff;padding:3mm 3mm 2mm;box-shadow:0 .6mm 2.5mm rgba(59,47,38,.25)}.album img{width:100%;max-height:${A5 ? 45 : 62}mm;object-fit:cover}.album figcaption{text-align:center;margin-top:2mm}figcaption{font:italic 7.5pt 'Noto Serif',Georgia,serif;color:#8a7a62;margin-top:1mm}
-        .gh{font-size:12pt;text-align:center;color:#B5603E;margin:0 0 3mm;padding:4mm 0 2mm;border-top:1px solid rgba(124,139,88,.5)}.rc{border-left:1.2mm solid #B5603E;background:#FBF7EC;padding:2mm 4mm;margin:0 0 3mm}.rc h4{margin:0 0 1mm;color:#4A5D3A;font-size:9pt}.rc .by{margin:0 0 2mm;color:#B5603E;font:italic 7.5pt 'Noto Serif',Georgia,serif}.rc .txt{margin:0 0 2mm}ul.sp,table.sp{margin:0}`;
+        .gh{font-size:12pt;text-align:center;color:#B5603E;margin:0 0 3mm;padding:4mm 0 2mm;border-top:1px solid rgba(124,139,88,.5)}.rc{border-left:1.2mm solid #B5603E;background:#FBF7EC;padding:2mm 4mm;margin:0 0 3mm}.rc h4{margin:0 0 1mm;color:#4A5D3A;font-size:9pt}.rc .by{margin:0 0 2mm;color:#B5603E;font:italic 7.5pt 'Noto Serif',Georgia,serif}.rc .txt{margin:0 0 2mm}ul.sp,table.sp{margin:0}.nk{margin:.5mm 0 0;color:#7C8B58;font:italic 9pt 'Noto Serif',Georgia,serif}.quote{border-left:1mm solid #B5603E;padding:1mm 0 1mm 4mm;margin:3mm 0;font-style:italic;font-family:'Noto Serif',Georgia,serif;background:#FBF7EC}`;
       const PAG = `(function(){
 function go(){
 var src=document.getElementById('src'),out=document.getElementById('out'),title=document.title,starts=[];
