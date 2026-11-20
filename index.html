@@ -3456,30 +3456,29 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       const title='Οικογενειακός κλάδος — '+anchor.name;
       const w=window.open('','_blank');if(!w){showToast('Επίτρεψε τα αναδυόμενα παράθυρα για εκτύπωση.');return;}
       w.document.open();w.document.write('<!doctype html><html lang="el"><head><meta charset="utf-8"><title>'+title.replace(/</g,'&lt;')+'</title><style>@page{size:A3 landscape;margin:12mm}*{box-sizing:border-box}body{margin:0;background:#f7f1e5;color:#3b2f26;font-family:Georgia,serif}.head{text-align:center;padding:0 0 10mm}.head h1{font-size:25pt;margin:0;color:#4a5d3a}.head p{font-size:11pt;color:#8a7256;margin:5mm 0 0}.canvas{position:relative;overflow:visible;margin:auto;transform-origin:top center}.person-node{border:0!important;box-shadow:none!important;background:transparent!important;cursor:default!important}.person-node p{font-family:Arial,sans-serif!important;font-size:9pt!important;color:#3b2f26!important}.person-node div{border-color:#f7f1e5!important;box-shadow:0 2px 8px #88765a40!important}.tree-line,.tree-line-cross,.tree-line-marriage{stroke:#7c8b58!important;stroke-width:2!important}.tree-line-cross{stroke-dasharray:5 4!important}.legend{margin-top:8mm;text-align:center;font:10pt Arial;color:#7c8b58}</style></head><body><header class="head"><h1>'+title.replace(/</g,'&lt;')+'</h1><p>Οικογενειακό γενεαλογικό δέντρο</p></header><div id="canvas"></div><div class="legend">Εκτύπωση οικογενειακού κλάδου · '+new Date().getFullYear()+'</div>
-<style id="museum-sidebar-contrast-fix">
-/* Sidebar navigation contrast fix: readable on the dark museum panel */
-#sidebar button.nav-item,
-#sidebar button.nav-item:not(.bg-aegean):not(.bg-terracotta):not(.bg-ochre):not(.bg-olive):not(.bg-white) {
-  background: rgba(247,242,232,.055) !important;
-  background-color: rgba(247,242,232,.055) !important;
-  color: #F7F2E8 !important;
-  -webkit-text-fill-color: #F7F2E8 !important;
-  border: 1px solid rgba(207,177,124,.12) !important;
+<style id="museum-sidebar-gold-buttons">
+/* Gold button backgrounds; preserve the existing text and icon colors */
+#sidebar button.nav-item {
+  background: #BD9A61 !important;
+  background-color: #BD9A61 !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
 }
-#sidebar button.nav-item svg { color: inherit !important; stroke: currentColor !important; }
 #sidebar button.nav-item:hover {
-  background: rgba(189,154,97,.16) !important;
-  background-color: rgba(189,154,97,.16) !important;
-  color: #E3C58F !important;
-  -webkit-text-fill-color: #E3C58F !important;
+  background: #C9A873 !important;
+  background-color: #C9A873 !important;
 }
 #sidebar button.nav-item.active {
-  background: rgba(189,154,97,.2) !important;
-  background-color: rgba(189,154,97,.2) !important;
-  color: #F1D7A5 !important;
-  -webkit-text-fill-color: #F1D7A5 !important;
-  border-color: rgba(189,154,97,.28) !important;
-  box-shadow: inset 3px 0 #BD9A61 !important;
+  background: #A98248 !important;
+  background-color: #A98248 !important;
+  box-shadow: inset 3px 0 rgba(255,255,255,.35) !important;
+}
+#nav-more > summary.nav-label {
+  background: #BD9A61 !important;
+  border-radius: 12px;
+  padding: 12px 14px !important;
+}
+#nav-more > summary.nav-label:hover {
+  background: #C9A873 !important;
 }
 </style>
 
