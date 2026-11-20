@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Casa di Famiglia — Οικογενειακό Αρχείο</title>
+  <title>Οικογενειακό Δέντρο</title>
   <style>
     body {
       background-color: #F5F0E1;
@@ -2077,171 +2077,133 @@ input,select,textarea{border-radius:11px!important}
 #tree-area .person-node p{font-family:var(--font-sans)!important}
 @media(max-width:640px){button:not(.person-node):not(.map-pin){min-height:40px}#tree-view-controls button{padding-inline:10px}}
 </style>
+<style id="atlas-total-redesign">
+/* ==========================================================
+   ATLAS / FAMILY ARCHIVE — full visual redesign layer
+   Functional DOM, IDs, data model and event handlers preserved.
+   ========================================================== */
+:root{
+ --atlas-ink:#172b35;--atlas-deep:#10232d;--atlas-sea:#24576a;--atlas-cyan:#d8e8e6;
+ --atlas-paper:#f4f1e9;--atlas-white:#fffefa;--atlas-sand:#e8e1d4;--atlas-line:#ded8cc;
+ --atlas-olive:#65745a;--atlas-rust:#a75c43;--atlas-gold:#b99a62;--atlas-muted:#78827f;
+ --atlas-shadow:0 18px 50px rgba(24,42,48,.08);--atlas-radius:22px;
+}
+html,body{background:var(--atlas-paper)!important;color:var(--atlas-ink)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif!important}
+body{background-image:radial-gradient(circle at 86% 4%,rgba(36,87,106,.07),transparent 28%),linear-gradient(135deg,rgba(255,255,255,.28),transparent 55%)!important}
+#app{min-height:100vh;background:transparent}
+/* Desktop: replace the old vertical sidebar with a full-width editorial masthead */
+@media(min-width:768px){
+ #sidebar{position:sticky!important;inset:0 0 auto 0!important;z-index:45!important;width:100%!important;height:auto!important;min-height:82px;transform:none!important;display:flex!important;flex-direction:row!important;align-items:center!important;background:rgba(255,254,250,.94)!important;backdrop-filter:blur(18px);border:0!important;border-bottom:1px solid var(--atlas-line)!important;box-shadow:0 5px 28px rgba(23,43,53,.045)!important}
+ #sidebar>div:first-child{padding:14px 28px!important;border:0!important;min-width:270px}
+ #sidebar>div:first-child>div>div:first-child{width:48px!important;height:48px!important;border-radius:15px!important;background:var(--atlas-deep)!important;color:#f5f1e8!important}
+ #sidebar>div:first-child h1{font-family:Georgia,serif!important;font-size:21px!important;letter-spacing:-.04em;color:var(--atlas-ink)!important}
+ #sidebar>div:first-child p{color:var(--atlas-muted)!important;letter-spacing:.08em;text-transform:uppercase;font-size:9px!important}
+ #sidebar nav{display:flex!important;align-items:center!important;gap:5px!important;padding:0 12px!important;overflow:visible!important;flex:1!important}
+ #sidebar nav>.nav-label{display:none!important}
+ #sidebar nav>div.space-y-1{display:flex!important;align-items:center!important;gap:4px!important}
+ #sidebar nav>div.space-y-1 button,#sidebar nav details button{width:auto!important;white-space:nowrap;padding:11px 13px!important;border-radius:999px!important;font-size:12px!important;font-weight:600!important;color:#66716f!important;transition:background .2s,color .2s,transform .2s!important}
+ #sidebar nav>div.space-y-1 button:hover,#sidebar nav details button:hover{background:#edf1ed!important;color:var(--atlas-ink)!important;transform:translateY(-1px)}
+ #sidebar nav .nav-item.active{background:var(--atlas-deep)!important;color:#fff!important;box-shadow:0 5px 14px rgba(16,35,45,.14)}
+ #sidebar nav .nav-item .ui-icon{width:17px;height:17px;flex-basis:17px}
+ #sidebar nav details{position:relative;margin:0!important}
+ #sidebar nav details summary{list-style:none;border:1px solid var(--atlas-line);border-radius:999px;padding:10px 14px!important;color:var(--atlas-muted)!important;background:transparent!important}
+ #sidebar nav details summary::-webkit-details-marker{display:none}
+ #sidebar nav details[open]>div{position:absolute;top:calc(100% + 12px);right:0;min-width:230px;padding:10px;background:var(--atlas-white);border:1px solid var(--atlas-line);border-radius:18px;box-shadow:var(--atlas-shadow);display:flex;flex-direction:column;z-index:60}
+ #sidebar nav details button{width:100%!important;justify-content:flex-start}
+ #sidebar>div:last-child{display:none!important}
+ #main-content{margin:0!important;padding:0!important;min-height:calc(100vh - 82px)}
+ #mobile-header,#sidebar-overlay{display:none!important}
+}
+/* Mobile header + drawer retain the same navigation actions, with new styling */
+#mobile-header{height:64px!important;background:rgba(255,254,250,.95)!important;border-color:var(--atlas-line)!important;box-shadow:0 5px 22px rgba(23,43,53,.05)!important}
+#mobile-header>div>div{border-radius:13px!important;background:var(--atlas-deep)!important}
+#mobile-header #app-title-m{font-family:Georgia,serif!important;color:var(--atlas-ink)!important;letter-spacing:-.03em}
+#menu-btn{background:#e8eeea!important;color:var(--atlas-ink)!important;border-radius:13px!important}
+@media(max-width:767px){
+ #sidebar{background:var(--atlas-white)!important;border:0!important;box-shadow:var(--atlas-shadow)!important;width:min(86vw,340px)!important}
+ #sidebar>div:first-child{border-color:var(--atlas-line)!important}
+ #sidebar nav .nav-item{border-radius:13px!important;min-height:48px;padding:12px 14px!important}
+ #sidebar nav .nav-item.active{background:var(--atlas-deep)!important;color:white!important}
+ #main-content{padding-top:64px!important;padding-bottom:calc(5.2rem + env(safe-area-inset-bottom,0px))!important}
+ #bottom-nav{background:rgba(255,254,250,.96)!important;border-color:var(--atlas-line)!important;box-shadow:0 -8px 30px rgba(23,43,53,.06)!important;grid-template-columns:repeat(5,minmax(0,1fr))!important}
+ .bn-item{color:#77817d!important;min-height:62px!important;font-size:10px!important}
+ .bn-item.bn-on{color:var(--atlas-deep)!important;background:transparent!important}
+ .bn-item.bn-on:before{content:"";width:22px;height:3px;border-radius:9px;background:var(--atlas-rust);position:absolute;top:0}
+}
+/* Global surfaces: stop looking like a recolored Tailwind template */
+button{transition:transform .18s ease,box-shadow .18s ease,background .18s ease!important}
+button:active{transform:scale(.98)}
+input,select,textarea{border:1px solid var(--atlas-line)!important;border-radius:13px!important;background:var(--atlas-white)!important;color:var(--atlas-ink)!important;box-shadow:inset 0 1px 1px rgba(23,43,53,.025)!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--atlas-sea)!important;box-shadow:0 0 0 4px rgba(36,87,106,.10)!important}
+#main-content .view:not(#view-tree){animation:atlas-enter .34s ease both}
+@keyframes atlas-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+/* Home becomes a magazine-like family archive dashboard */
+#view-home .hero-bg{background:var(--atlas-deep)!important;min-height:370px;isolation:isolate}
+#view-home .hero-bg:after{content:"";position:absolute;z-index:-1;right:-8%;top:-42%;width:min(62vw,720px);aspect-ratio:1;border:1px solid rgba(231,225,212,.22);border-radius:50%;box-shadow:0 0 0 48px rgba(231,225,212,.035),0 0 0 96px rgba(231,225,212,.025),0 0 0 144px rgba(231,225,212,.02)}
+#view-home .hero-bg>div:last-child{max-width:1240px!important;padding:72px 7vw 96px!important}
+#view-home #hero-label{font-size:10px!important;letter-spacing:.24em!important;color:#c5b38d!important;font-weight:700}
+#view-home #hero-title{font-family:Georgia,"Times New Roman",serif!important;font-weight:400!important;letter-spacing:-.055em!important;max-width:800px;font-size:clamp(42px,6vw,76px)!important;line-height:1.02!important}
+#view-home #hero-text{font-size:16px!important;max-width:520px!important;color:#cbd7d5!important;line-height:1.8}
+#view-home .hero-bg button{border-radius:999px!important;padding:13px 22px!important;font-size:12px!important;letter-spacing:.02em}
+#view-home .hero-bg button:first-child{background:#e9e4d8!important;color:var(--atlas-deep)!important;box-shadow:none!important}
+#view-home .hero-bg button:last-child{background:transparent!important;border:1px solid rgba(255,255,255,.35)!important}
+#view-home>section:nth-of-type(2){max-width:1180px!important;margin:-38px auto 0!important;padding:0 28px!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;position:relative;z-index:5}
+#view-home>section:nth-of-type(2)>div{background:var(--atlas-white)!important;border:1px solid rgba(222,216,204,.8)!important;border-radius:18px!important;padding:22px 20px!important;box-shadow:0 12px 30px rgba(23,43,53,.06)!important}
+#view-home>section:nth-of-type(2)>div>div:first-child{font-size:10px!important;text-transform:uppercase;letter-spacing:.12em;color:var(--atlas-muted)!important}
+#view-home>section:nth-of-type(2) .text-2xl{font-family:Georgia,serif!important;font-size:36px!important;font-weight:400!important;color:var(--atlas-ink)!important;margin-top:6px}
+#view-home>section:nth-of-type(2) .text-olive{color:var(--atlas-rust)!important}
+#view-home>section:nth-of-type(3){max-width:1180px!important;padding:52px 28px 34px!important}
+#view-home>section:nth-of-type(3) h2,#view-home .todo-section h2,#view-home .soc-section h2,#view-home .fav-section h2{font-family:Georgia,serif!important;color:var(--atlas-ink)!important;font-size:28px!important;font-weight:400!important;letter-spacing:-.03em}
+#view-home .soc-section,#view-home .fav-section,#view-home .todo-section{max-width:1180px!important}
+#view-home .bg-white,#view-home .bg-white\/95{background:var(--atlas-white)!important}
+/* All section headings and content frames */
+#view-people>div,#view-photos>div,#view-map>div,#view-timeline>div,#view-heritage>div,#view-stats>div,#view-settings>div{max-width:1240px!important;padding:42px clamp(18px,4vw,56px)!important}
+#view-people h2,#view-photos h2,#view-map h2,#view-timeline h2,#view-heritage h2,#view-stats h2,#view-settings h2{font-family:Georgia,serif!important;font-weight:400!important;letter-spacing:-.045em!important;color:var(--atlas-ink)!important;font-size:clamp(30px,4vw,42px)!important}
+#people-grid{gap:18px!important}
+#people-grid>.person-card{background:var(--atlas-white)!important;border:1px solid var(--atlas-line)!important;border-radius:20px!important;box-shadow:0 8px 25px rgba(23,43,53,.045)!important;overflow:hidden}
+#people-grid>.person-card:hover{transform:translateY(-4px)!important;box-shadow:var(--atlas-shadow)!important}
+/* Tree workspace: new control deck and calm cartographic canvas */
+#view-tree{background:var(--atlas-paper)!important}
+#view-tree>div:first-child{background:var(--atlas-white)!important;border-color:var(--atlas-line)!important;padding:18px clamp(14px,3vw,36px)!important}
+#view-tree>div:first-child h2{font-family:Georgia,serif!important;font-size:27px!important;font-weight:400!important;color:var(--atlas-ink)!important}
+#view-tree>div:first-child button{border-radius:999px!important;padding:9px 14px!important;border-color:var(--atlas-line)!important;color:var(--atlas-ink)!important;background:#f7f5ef!important}
+#view-tree>div:first-child button:first-child{background:var(--atlas-deep)!important;color:#fff!important;border-color:var(--atlas-deep)!important}
+#tree-area{background-color:#f0eee7!important;background-image:linear-gradient(rgba(36,87,106,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(36,87,106,.045) 1px,transparent 1px)!important;background-size:34px 34px!important}
+#tree-sidepanel{background:var(--atlas-white)!important;border-color:var(--atlas-line)!important}
+/* Person detail + dialogs */
+#view-person>div{background:var(--atlas-white)!important;border-radius:26px!important;border:1px solid var(--atlas-line)!important;box-shadow:0 28px 90px rgba(10,27,34,.28)!important}
+#view-person h2{font-family:Georgia,serif!important;font-weight:400!important;color:var(--atlas-ink)!important}
+#view-person .person-avatar{border:5px solid var(--atlas-white)!important;background:var(--atlas-deep)!important}
+#view-person .person-tabs{border-color:var(--atlas-line)!important}
+#modal{backdrop-filter:blur(5px)}
+#modal-form{background:var(--atlas-white)!important;border:1px solid var(--atlas-line)!important;border-radius:24px!important;box-shadow:0 25px 80px rgba(10,27,34,.25)!important}
+#modal-form h3{font-family:Georgia,serif!important;font-weight:400!important;color:var(--atlas-ink)!important;font-size:25px!important}
+#modal-actions{border-color:var(--atlas-line)!important}
+/* Book view created dynamically by openBook(): preserve content, restyle editorial output */
+#book-modal,#book-view,.book-shell{font-family:Georgia,"Times New Roman",serif!important}
+/* Dark mode remains supported, but now uses the new design language */
+html.dark body{background:#111d23!important;color:#e7e5dc!important}
+html.dark #sidebar,html.dark #mobile-header,html.dark #bottom-nav,html.dark #tree-sidepanel{background:#17272f!important;border-color:#30434a!important}
+html.dark #sidebar nav .nav-item{color:#bdc8c5!important}
+html.dark #sidebar nav .nav-item.active{background:#d9e3dc!important;color:#17272f!important}
+html.dark #view-home .hero-bg{background:#0c1c24!important}
+html.dark #view-home>section:nth-of-type(2)>div,html.dark #people-grid>.person-card,html.dark #modal-form,html.dark #view-person>div{background:#1b2d35!important;border-color:#34474d!important}
+html.dark input,html.dark select,html.dark textarea{background:#1b2d35!important;color:#eee!important;border-color:#40545a!important}
+html.dark #tree-area{background-color:#13242b!important;background-image:linear-gradient(rgba(220,230,220,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(220,230,220,.055) 1px,transparent 1px)!important}
+html.dark #view-home>section:nth-of-type(2) .text-2xl,html.dark #view-home>section:nth-of-type(3) h2{color:#eee!important}
+@media(max-width:640px){
+ #view-home .hero-bg{min-height:350px}
+ #view-home .hero-bg>div:last-child{padding:54px 24px 78px!important}
+ #view-home>section:nth-of-type(2){grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:0 16px!important;gap:9px}
+ #view-home>section:nth-of-type(2)>div{padding:16px!important;border-radius:15px!important}
+ #view-home>section:nth-of-type(2) .text-2xl{font-size:30px!important}
+ #view-home>section:nth-of-type(3){padding:38px 18px 28px!important}
+ #view-people>div,#view-photos>div,#view-map>div,#view-timeline>div,#view-heritage>div,#view-stats>div,#view-settings>div{padding:30px 18px!important}
+ #view-tree>div:first-child{position:relative!important;top:auto!important}
+}
+@media(prefers-reduced-motion:reduce){#main-content .view:not(#view-tree){animation:none!important}button{transition:none!important}}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap&subset=greek" rel="stylesheet">
-  <style id="casa-di-famiglia-redesign">
-  :root{
-    --casa-green:#173c32;--casa-green-2:#285747;--casa-gold:#b38b4f;
-    --casa-gold-light:#dfc99e;--casa-paper:#f5f0e6;--casa-card:#fffdf8;
-    --casa-ink:#26342d;--casa-muted:#777d72;--casa-line:#e4dccd;
-    --font-sans:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
-    --font-serif:'Cormorant Garamond',Georgia,serif;
-  }
-  html{background:var(--casa-paper)}
-  body{background:var(--casa-paper)!important;color:var(--casa-ink)!important;font-family:var(--font-sans)!important;letter-spacing:.005em}
-  body::before{display:none!important}
-  h1,h2,h3,.font-serif{font-family:var(--font-serif)!important;letter-spacing:.005em}
-  #main-content{background:var(--casa-paper);min-height:100vh}
-  @media(min-width:768px){#main-content{padding-top:0!important}}
-  /* Left navigation becomes a dark, formal family-archive rail */
-  #sidebar{
-    background:var(--casa-green)!important;color:#f7f2e8!important;
-    border:0!important;border-right:1px solid #b38b4f55!important;
-    box-shadow:8px 0 35px rgba(22,43,34,.12)!important;
-    width:272px!important
-  }
-  @media(min-width:768px){#main-content{margin-left:272px!important}}
-  #sidebar>div:first-child{padding:25px 20px 21px!important;border-bottom:1px solid #ffffff25!important}
-  #sidebar>div:first-child>div>div:first-child{
-    background:transparent!important;border:1px solid var(--casa-gold)!important;
-    border-radius:4px!important;color:var(--casa-gold-light)!important;width:46px!important;height:50px!important
-  }
-  #sidebar>div:first-child>div>div:first-child svg{stroke:var(--casa-gold-light)!important}
-  #sidebar h1{font-size:25px!important;line-height:1!important;color:#fff8e9!important;font-weight:600!important}
-  #sidebar #app-family{color:#d8c9a8!important;font-size:10px!important;letter-spacing:.16em;text-transform:uppercase;margin-top:5px}
-  #sidebar .nav-label{color:var(--casa-gold-light)!important;font-size:9px!important;letter-spacing:.22em!important;padding:17px 14px 7px!important}
-  #sidebar .nav-item{
-    color:#e8e7dc!important;border-radius:7px!important;padding:11px 13px!important;
-    font-size:12px!important;letter-spacing:.01em;min-height:43px
-  }
-  #sidebar .nav-item svg{color:#d1b47d!important}
-  #sidebar .nav-item:hover{background:#ffffff12!important;color:#fff!important}
-  #sidebar .nav-item.active{
-    background:#ffffff18!important;color:#fff!important;font-weight:700!important;
-    box-shadow:inset 3px 0 var(--casa-gold)!important
-  }
-  #sidebar .nav-item.active svg{color:var(--casa-gold-light)!important}
-  #sidebar details summary{color:var(--casa-gold-light)!important}
-  #sidebar>div:last-child{border-color:#ffffff25!important;color:#d8c9a8!important;padding:17px 20px!important}
-  #sidebar #app-footer{font:italic 16px var(--font-serif)!important;color:#e4d8c0!important}
-  /* Mobile masthead and bottom navigation */
-  #mobile-header{
-    background:var(--casa-green)!important;color:#fff!important;border:0!important;
-    box-shadow:0 4px 20px #152c2450!important
-  }
-  #mobile-header .bg-aegean{background:transparent!important;border:1px solid var(--casa-gold)!important;color:var(--casa-gold-light)!important}
-  #mobile-header .text-aegean{color:#fff8e9!important}
-  #bottom-nav{background:var(--casa-green)!important;border:0!important;box-shadow:0 -5px 24px #152c2430!important}
-  #bottom-nav .bn-item{color:#d7d8cd!important}
-  #bottom-nav .bn-item.bn-on{color:var(--casa-gold-light)!important;background:#ffffff16!important;border-radius:8px!important}
-  /* Home page: editorial hero, gold hairline, restrained ornament */
-  .hero-bg{
-    background:linear-gradient(115deg,#173c32 0%,#214d3d 58%,#315b48 100%)!important;
-    border-radius:0 0 0 44px!important;position:relative;isolation:isolate;
-    box-shadow:0 18px 42px #173c3225!important
-  }
-  .hero-bg:after{content:"";position:absolute;inset:18px 18px 18px auto;width:28%;border:1px solid #d7bc8050;border-left:0;pointer-events:none;z-index:-1}
-  .hero-bg .relative.max-w-5xl{padding-top:72px!important;padding-bottom:78px!important}
-  #hero-label{color:var(--casa-gold-light)!important;letter-spacing:.24em!important;font-size:10px!important}
-  #hero-title{font-size:clamp(42px,5.4vw,70px)!important;line-height:.96!important;font-weight:500!important;max-width:760px}
-  #hero-text{font:500 20px/1.45 var(--font-serif)!important;color:#e7e6da!important;max-width:560px}
-  .hero-bg button{border-radius:4px!important;min-height:46px;padding:12px 20px!important;letter-spacing:.04em}
-  .hero-bg button.bg-white{background:#f8f2e6!important;color:var(--casa-green)!important;border:1px solid var(--casa-gold)!important}
-  .hero-bg button.bg-white\/20{background:#ffffff12!important;color:#fff!important;border:1px solid #d7bc8070!important}
-  /* Surface system */
-  #main-content .bg-white,
-  #main-content .bg-white\/95,
-  #main-content .shadow-card,
-  #main-content .shadow-soft,
-  #filter-panel,#tree-sidepanel,#modal-form{
-    background:var(--casa-card)!important;border-color:var(--casa-line)!important;
-    box-shadow:0 7px 24px rgba(49,57,43,.055)!important
-  }
-  #main-content .rounded-2xl{border-radius:10px!important}
-  #main-content .rounded-xl{border-radius:8px!important}
-  #main-content section.max-w-5xl{max-width:1180px!important}
-  #main-content .text-aegean{color:var(--casa-green-2)!important}
-  #main-content h2.font-serif{font-size:30px!important;color:var(--casa-green)!important;font-weight:600!important}
-  #main-content .text-gray-500{color:var(--casa-muted)!important}
-  #main-content .border-aegean\/10,#main-content .border-aegean\/20{border-color:var(--casa-line)!important}
-  #main-content .bg-aegean\/10{background:#e8eee8!important}
-  /* Stat tiles */
-  #view-home section.grid, #view-home .grid.grid-cols-2{gap:13px!important}
-  #view-home .shadow-card.text-center{position:relative;border:1px solid var(--casa-line)!important;border-radius:9px!important;padding:22px 16px!important}
-  #view-home .shadow-card.text-center:before{content:"";position:absolute;top:0;left:18px;right:18px;height:2px;background:var(--casa-gold)}
-  #view-home .shadow-card.text-center .text-2xl{font:600 39px var(--font-serif)!important;color:var(--casa-green)!important}
-  #view-home .shadow-card.text-center .ui-icon{color:var(--casa-gold)!important}
-  /* Buttons: crisp, tailored rather than glossy */
-  button:not(.person-node):not(.map-pin):not(#login-remember){
-    font-family:var(--font-sans)!important;border-radius:7px!important;
-    box-shadow:none!important;letter-spacing:.015em;transition:background .18s,border-color .18s,color .18s,transform .18s!important
-  }
-  button.bg-aegean,#modal-actions button[type=submit]{
-    background:var(--casa-green)!important;color:#fffaf0!important;border:1px solid var(--casa-green)!important;
-    box-shadow:none!important;border-radius:7px!important
-  }
-  button.bg-terracotta{background:#995846!important;color:white!important}
-  button.bg-ochre{background:var(--casa-gold)!important;color:#201c14!important}
-  button.bg-white{border:1px solid var(--casa-line)!important}
-  button:not(.person-node):not(.map-pin):hover{filter:brightness(.98);box-shadow:0 4px 12px #24382a10!important}
-  /* Inputs and dialogs */
-  input,select,textarea{border-radius:7px!important;border-color:var(--casa-line)!important;background:var(--casa-card)!important;color:var(--casa-ink)!important;box-shadow:none!important}
-  input:focus,select:focus,textarea:focus{border-color:var(--casa-gold)!important;outline:2px solid #b38b4f22!important}
-  #modal-form{border-radius:12px!important;border:1px solid var(--casa-line)!important}
-  #modal-title{font:600 31px var(--font-serif)!important;color:var(--casa-green)!important}
-  #toast{background:var(--casa-green)!important;color:#fff!important;border:1px solid #b38b4f80!important;box-shadow:0 12px 30px #142b2340!important}
-  /* Tree canvas and cards retain all original interactions */
-  #tree-area{background-color:#f8f5ed!important;background-image:radial-gradient(#c7b99455 .8px,transparent .8px)!important;background-size:18px 18px!important}
-  .tree-canvas{background-color:#f8f5ed!important}
-  .tree-line,.tree-line-cross,.tree-line-marriage{stroke:var(--casa-gold)!important}
-  .person-card{border-radius:8px!important}
-  .polaroid{background:#fffdf7!important;border:1px solid var(--casa-line)!important;box-shadow:0 8px 20px #29382b16!important}
-  /* Map, heritage, timeline, stats and family-book panels */
-  #view-map .bg-white,#view-heritage .bg-white,#view-timeline .bg-white,#view-stats .bg-white,
-  #view-archive .bg-white,#book-modal .bg-white{border:1px solid var(--casa-line)!important}
-  .nav-label{color:var(--casa-gold)!important}
-  ::-webkit-scrollbar-thumb{background:var(--casa-gold)!important;border-radius:10px}
-  ::-webkit-scrollbar-track{background:#eee8dc!important}
-  :focus-visible{outline:2px solid var(--casa-gold)!important;outline-offset:2px}
-  /* Login screen matches the new identity */
-  #login-screen{background:radial-gradient(ellipse at 50% 30%,#315b48 0%,#173c32 72%)!important}
-  #login-box{background:#fffdf8!important;border:1px solid #b38b4f80!important;border-radius:12px!important;box-shadow:0 24px 70px #071a1455!important}
-  #login-box h1{font:600 34px var(--font-serif)!important;color:var(--casa-green)!important}
-  #login-box p.sub{color:#777d72!important}
-  #login-box input{background:#fff!important;color:#26342d!important}
-  #login-box button[type=submit]{background:var(--casa-green)!important;border-radius:7px!important}
-  #login-box button#login-remember{background:#f5f0e6!important;color:var(--casa-green)!important;border-color:var(--casa-line)!important}
-  /* Dark theme preserves the same identity with deeper surfaces */
-  html.dark{--casa-paper:#171f1b;--casa-card:#222d27;--casa-ink:#eee9dd;--casa-muted:#b3b8ac;--casa-line:#3b4940}
-  html.dark body,html.dark #main-content{background:#171f1b!important;color:#eee9dd!important}
-  html.dark #sidebar{background:#101f19!important}
-  html.dark #main-content .bg-white,html.dark #main-content .bg-white\/95,
-  html.dark #main-content .shadow-card,html.dark #filter-panel,html.dark #tree-sidepanel,html.dark #modal-form{background:#222d27!important;border-color:#3b4940!important}
-  html.dark #main-content .text-aegean,html.dark #main-content h2.font-serif{color:#d2bd91!important}
-  html.dark #main-content .text-gray-500{color:#b3b8ac!important}
-  html.dark #tree-area,html.dark .tree-canvas{background-color:#1c2821!important;background-image:radial-gradient(#65745f55 .8px,transparent .8px)!important}
-  html.dark input,html.dark select,html.dark textarea{background:#1c2821!important;color:#eee9dd!important;border-color:#465449!important}
-  html.dark .polaroid{background:#26342d!important}
-  html.dark #login-screen{background:radial-gradient(ellipse at 50% 30%,#315b48 0%,#101f19 72%)!important}
-  html.dark #login-box{background:#222d27!important;color:#eee9dd!important}
-  html.dark #login-box h1{color:#e1d0a9!important}
-  @media(max-width:767px){
-    #sidebar{width:min(86vw,310px)!important}
-    #main-content .hero-bg{border-radius:0 0 0 28px!important}
-    #hero-title{font-size:43px!important}
-    .hero-bg .relative.max-w-5xl{padding:54px 25px 62px!important}
-    #view-home section.max-w-5xl{padding-left:16px!important;padding-right:16px!important}
-    #view-home section.-mt-8{margin-top:-18px!important}
-    #view-home .shadow-card.text-center{padding:16px 8px!important}
-    #view-home .shadow-card.text-center .text-2xl{font-size:31px!important}
-    #bottom-nav .bn-item{min-height:58px!important}
-  }
-  @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
-  @media print{#sidebar,#mobile-header,#bottom-nav{display:none!important}#main-content{margin:0!important}}
-  </style>
-
+</style>
 </head>
 <body class="font-sans text-gray-800 antialiased">
   <!-- Οθόνη σύνδεσης -->
@@ -2260,7 +2222,7 @@ input,select,textarea{border-radius:11px!important}
   </style>
   <div id="login-screen" role="dialog" aria-modal="true" aria-label="Σύνδεση">
     <form id="login-box" autocomplete="off">
-      <h1>Casa di Famiglia</h1>
+      <h1>🌳 Οικογενειακό Δέντρο</h1>
       <p class="sub">Συνδέσου για να συνεχίσεις</p>
       <label>Όνομα χρήστη<input id="login-user" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required></label>
       <label>Κωδικός<input id="login-pass" type="password" inputmode="numeric" autocomplete="current-password" required></label>
@@ -2318,7 +2280,7 @@ input,select,textarea{border-radius:11px!important}
         <div class="w-8 h-8 rounded-full bg-aegean flex items-center justify-center text-white text-sm">
           <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M6 8h12M6 8v5m12-5v5M12 8v5M4 13h4m-4 0v5m4-5v5m6-5h4m-4 0v5m4-5v5"/><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="2" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="5" height="4" rx="1"/><rect x="9.5" y="17" width="5" height="4" rx="1"/></svg>
         </div>
-        <span class="font-serif font-bold text-aegean" id="app-title-m">Casa di Famiglia</span>
+        <span class="font-serif font-bold text-aegean" id="app-title-m">Οικογενειακό Δέντρο</span>
       </div>
     </header>
 
@@ -2333,7 +2295,7 @@ input,select,textarea{border-radius:11px!important}
             <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M6 8h12M6 8v5m12-5v5M12 8v5M4 13h4m-4 0v5m4-5v5m6-5h4m-4 0v5m4-5v5"/><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="2" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="5" height="4" rx="1"/><rect x="9.5" y="17" width="5" height="4" rx="1"/></svg>
           </div>
           <div>
-            <h1 class="font-serif text-aegean font-bold text-lg leading-tight">Casa di Famiglia</h1>
+            <h1 class="font-serif text-aegean font-bold text-lg leading-tight">Το Δέντρο</h1>
             <p class="text-xs text-gray-500" id="app-family">Όνομα οικογένειας</p>
           </div>
         </div>
