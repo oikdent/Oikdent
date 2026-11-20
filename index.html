@@ -3455,7 +3455,35 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       clone.querySelectorAll('svg path').forEach(p=>{if(p.getAttribute('opacity')==='.15'||p.style.opacity==='.15')p.remove();});
       const title='Οικογενειακός κλάδος — '+anchor.name;
       const w=window.open('','_blank');if(!w){showToast('Επίτρεψε τα αναδυόμενα παράθυρα για εκτύπωση.');return;}
-      w.document.open();w.document.write('<!doctype html><html lang="el"><head><meta charset="utf-8"><title>'+title.replace(/</g,'&lt;')+'</title><style>@page{size:A3 landscape;margin:12mm}*{box-sizing:border-box}body{margin:0;background:#f7f1e5;color:#3b2f26;font-family:Georgia,serif}.head{text-align:center;padding:0 0 10mm}.head h1{font-size:25pt;margin:0;color:#4a5d3a}.head p{font-size:11pt;color:#8a7256;margin:5mm 0 0}.canvas{position:relative;overflow:visible;margin:auto;transform-origin:top center}.person-node{border:0!important;box-shadow:none!important;background:transparent!important;cursor:default!important}.person-node p{font-family:Arial,sans-serif!important;font-size:9pt!important;color:#3b2f26!important}.person-node div{border-color:#f7f1e5!important;box-shadow:0 2px 8px #88765a40!important}.tree-line,.tree-line-cross,.tree-line-marriage{stroke:#7c8b58!important;stroke-width:2!important}.tree-line-cross{stroke-dasharray:5 4!important}.legend{margin-top:8mm;text-align:center;font:10pt Arial;color:#7c8b58}</style></head><body><header class="head"><h1>'+title.replace(/</g,'&lt;')+'</h1><p>Οικογενειακό γενεαλογικό δέντρο</p></header><div id="canvas"></div><div class="legend">Εκτύπωση οικογενειακού κλάδου · '+new Date().getFullYear()+'</div></body></html>');w.document.close();
+      w.document.open();w.document.write('<!doctype html><html lang="el"><head><meta charset="utf-8"><title>'+title.replace(/</g,'&lt;')+'</title><style>@page{size:A3 landscape;margin:12mm}*{box-sizing:border-box}body{margin:0;background:#f7f1e5;color:#3b2f26;font-family:Georgia,serif}.head{text-align:center;padding:0 0 10mm}.head h1{font-size:25pt;margin:0;color:#4a5d3a}.head p{font-size:11pt;color:#8a7256;margin:5mm 0 0}.canvas{position:relative;overflow:visible;margin:auto;transform-origin:top center}.person-node{border:0!important;box-shadow:none!important;background:transparent!important;cursor:default!important}.person-node p{font-family:Arial,sans-serif!important;font-size:9pt!important;color:#3b2f26!important}.person-node div{border-color:#f7f1e5!important;box-shadow:0 2px 8px #88765a40!important}.tree-line,.tree-line-cross,.tree-line-marriage{stroke:#7c8b58!important;stroke-width:2!important}.tree-line-cross{stroke-dasharray:5 4!important}.legend{margin-top:8mm;text-align:center;font:10pt Arial;color:#7c8b58}</style></head><body><header class="head"><h1>'+title.replace(/</g,'&lt;')+'</h1><p>Οικογενειακό γενεαλογικό δέντρο</p></header><div id="canvas"></div><div class="legend">Εκτύπωση οικογενειακού κλάδου · '+new Date().getFullYear()+'</div>
+<style id="museum-sidebar-contrast-fix">
+/* Sidebar navigation contrast fix: readable on the dark museum panel */
+#sidebar button.nav-item,
+#sidebar button.nav-item:not(.bg-aegean):not(.bg-terracotta):not(.bg-ochre):not(.bg-olive):not(.bg-white) {
+  background: rgba(247,242,232,.055) !important;
+  background-color: rgba(247,242,232,.055) !important;
+  color: #F7F2E8 !important;
+  -webkit-text-fill-color: #F7F2E8 !important;
+  border: 1px solid rgba(207,177,124,.12) !important;
+}
+#sidebar button.nav-item svg { color: inherit !important; stroke: currentColor !important; }
+#sidebar button.nav-item:hover {
+  background: rgba(189,154,97,.16) !important;
+  background-color: rgba(189,154,97,.16) !important;
+  color: #E3C58F !important;
+  -webkit-text-fill-color: #E3C58F !important;
+}
+#sidebar button.nav-item.active {
+  background: rgba(189,154,97,.2) !important;
+  background-color: rgba(189,154,97,.2) !important;
+  color: #F1D7A5 !important;
+  -webkit-text-fill-color: #F1D7A5 !important;
+  border-color: rgba(189,154,97,.28) !important;
+  box-shadow: inset 3px 0 #BD9A61 !important;
+}
+</style>
+
+</body></html>');w.document.close();
       const c=w.document.getElementById('canvas');c.appendChild(clone);c.style.width=src.style.width;c.style.height=src.style.height;clone.style.margin='0 auto';clone.style.position='relative';
       const maxW=w.innerWidth-40,maxH=w.innerHeight-160,scale=Math.min(maxW/Math.max(clone.scrollWidth,1),maxH/Math.max(clone.scrollHeight,1),1);clone.style.transform='scale('+scale+')';clone.style.transformOrigin='top center';c.style.height=(clone.scrollHeight*scale)+'px';
       w.focus();setTimeout(()=>w.print(),500);
@@ -4504,7 +4532,35 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         const dd = (iso, y) => iso || (y ? String(y) : '');
         return `<tr><td>${esc(p.gen || '')}</td><td><b>${esc(p.full || p.name)}</b>${p.maiden ? ' (το γένος ' + esc(p.maiden) + ')' : ''}</td><td>${esc(dd(p.bdate, p.by))}</td><td>${esc(dd(p.ddate, p.dy))}</td><td>${esc(p.parents.map(nm).filter(Boolean).join(', '))}</td><td>${esc(nm(p.spouse))}</td><td>${esc([p.place, p.job].filter(Boolean).join(' · '))}</td></tr>`;
       }).join('');
-      const html = `<!doctype html><html lang="el"><head><meta charset="utf-8"><title>Οικογενειακό δέντρο</title><style>body{font-family:Georgia,serif;margin:24px;color:#222}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #bbb;padding:6px 8px;text-align:left;vertical-align:top}th{background:#eee}h1{font-size:22px}</style></head><body><h1>Οικογενειακό δέντρο — ${state.people.length} μέλη</h1><table><tr><th>Γενιά</th><th>Όνομα</th><th>Γέννηση</th><th>Θάνατος</th><th>Γονείς</th><th>Σύζυγος</th><th>Τόπος · Επάγγελμα</th></tr>${rows}</table><p style="font-size:12px;color:#777">Άνοιξέ το σε browser και πάτα Εκτύπωση → Αποθήκευση ως PDF.</p></body></html>`;
+      const html = `<!doctype html><html lang="el"><head><meta charset="utf-8"><title>Οικογενειακό δέντρο</title><style>body{font-family:Georgia,serif;margin:24px;color:#222}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #bbb;padding:6px 8px;text-align:left;vertical-align:top}th{background:#eee}h1{font-size:22px}</style></head><body><h1>Οικογενειακό δέντρο — ${state.people.length} μέλη</h1><table><tr><th>Γενιά</th><th>Όνομα</th><th>Γέννηση</th><th>Θάνατος</th><th>Γονείς</th><th>Σύζυγος</th><th>Τόπος · Επάγγελμα</th></tr>${rows}</table><p style="font-size:12px;color:#777">Άνοιξέ το σε browser και πάτα Εκτύπωση → Αποθήκευση ως PDF.</p>
+<style id="museum-sidebar-contrast-fix">
+/* Sidebar navigation contrast fix: readable on the dark museum panel */
+#sidebar button.nav-item,
+#sidebar button.nav-item:not(.bg-aegean):not(.bg-terracotta):not(.bg-ochre):not(.bg-olive):not(.bg-white) {
+  background: rgba(247,242,232,.055) !important;
+  background-color: rgba(247,242,232,.055) !important;
+  color: #F7F2E8 !important;
+  -webkit-text-fill-color: #F7F2E8 !important;
+  border: 1px solid rgba(207,177,124,.12) !important;
+}
+#sidebar button.nav-item svg { color: inherit !important; stroke: currentColor !important; }
+#sidebar button.nav-item:hover {
+  background: rgba(189,154,97,.16) !important;
+  background-color: rgba(189,154,97,.16) !important;
+  color: #E3C58F !important;
+  -webkit-text-fill-color: #E3C58F !important;
+}
+#sidebar button.nav-item.active {
+  background: rgba(189,154,97,.2) !important;
+  background-color: rgba(189,154,97,.2) !important;
+  color: #F1D7A5 !important;
+  -webkit-text-fill-color: #F1D7A5 !important;
+  border-color: rgba(189,154,97,.28) !important;
+  box-shadow: inset 3px 0 #BD9A61 !important;
+}
+</style>
+
+</body></html>`;
       download('oikogeneiako-dentro-lista.html', html, 'text/html');
     }
     function openExport() {
@@ -5037,7 +5093,35 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
       return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(o.title)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=GFS+Didot&display=swap"><style>${css}</style></head><body class="${A5 ? 'a5' : 'a4'}"><div id="src">
         <section class="cover"><div class="cv1"></div><div class="cv2"></div><div class="cv-sp"></div><h1>${esc(o.title)}</h1><div class="sub">${esc(o.subtitle)}</div>${cover ? `<img src="${cover.src}" alt="">` : '<div class="cv-sun"></div>'}<div class="au">${esc(o.author)}${o.author ? ' · ' : ''}${new Date().getFullYear()}</div></section>
         <section class="toc"><h2 class="ch">Περιεχόμενα</h2><ol class="tocl">${ch.map((c, i) => `<li><a href="#c${i}">${esc(c[0])}</a></li>`).join('')}</ol></section>
-        ${ch.map((c, i) => `<section class="c ${c[2] || ''}" id="c${i}"><h2 class="ch">${i + 1}. ${esc(c[0])}</h2>${c[1]}</section>`).join('')}</div><div id="wrap"><div id="out"></div></div><script>${PAG}<\/script></body></html>`;
+        ${ch.map((c, i) => `<section class="c ${c[2] || ''}" id="c${i}"><h2 class="ch">${i + 1}. ${esc(c[0])}</h2>${c[1]}</section>`).join('')}</div><div id="wrap"><div id="out"></div></div><script>${PAG}<\/script>
+<style id="museum-sidebar-contrast-fix">
+/* Sidebar navigation contrast fix: readable on the dark museum panel */
+#sidebar button.nav-item,
+#sidebar button.nav-item:not(.bg-aegean):not(.bg-terracotta):not(.bg-ochre):not(.bg-olive):not(.bg-white) {
+  background: rgba(247,242,232,.055) !important;
+  background-color: rgba(247,242,232,.055) !important;
+  color: #F7F2E8 !important;
+  -webkit-text-fill-color: #F7F2E8 !important;
+  border: 1px solid rgba(207,177,124,.12) !important;
+}
+#sidebar button.nav-item svg { color: inherit !important; stroke: currentColor !important; }
+#sidebar button.nav-item:hover {
+  background: rgba(189,154,97,.16) !important;
+  background-color: rgba(189,154,97,.16) !important;
+  color: #E3C58F !important;
+  -webkit-text-fill-color: #E3C58F !important;
+}
+#sidebar button.nav-item.active {
+  background: rgba(189,154,97,.2) !important;
+  background-color: rgba(189,154,97,.2) !important;
+  color: #F1D7A5 !important;
+  -webkit-text-fill-color: #F1D7A5 !important;
+  border-color: rgba(189,154,97,.28) !important;
+  box-shadow: inset 3px 0 #BD9A61 !important;
+}
+</style>
+
+</body></html>`;
     }
     function showBook(html) {
       const old = $('book-ov'); if (old) old.remove();
@@ -5114,5 +5198,33 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
     applySettings(); switchView('home');
   })();
   </script>
+
+<style id="museum-sidebar-contrast-fix">
+/* Sidebar navigation contrast fix: readable on the dark museum panel */
+#sidebar button.nav-item,
+#sidebar button.nav-item:not(.bg-aegean):not(.bg-terracotta):not(.bg-ochre):not(.bg-olive):not(.bg-white) {
+  background: rgba(247,242,232,.055) !important;
+  background-color: rgba(247,242,232,.055) !important;
+  color: #F7F2E8 !important;
+  -webkit-text-fill-color: #F7F2E8 !important;
+  border: 1px solid rgba(207,177,124,.12) !important;
+}
+#sidebar button.nav-item svg { color: inherit !important; stroke: currentColor !important; }
+#sidebar button.nav-item:hover {
+  background: rgba(189,154,97,.16) !important;
+  background-color: rgba(189,154,97,.16) !important;
+  color: #E3C58F !important;
+  -webkit-text-fill-color: #E3C58F !important;
+}
+#sidebar button.nav-item.active {
+  background: rgba(189,154,97,.2) !important;
+  background-color: rgba(189,154,97,.2) !important;
+  color: #F1D7A5 !important;
+  -webkit-text-fill-color: #F1D7A5 !important;
+  border-color: rgba(189,154,97,.28) !important;
+  box-shadow: inset 3px 0 #BD9A61 !important;
+}
+</style>
+
 </body>
 </html>
