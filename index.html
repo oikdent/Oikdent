@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Οικογενειακό Δέντρο</title>
+  <title>Casa di Famiglia — Οικογενειακό Αρχείο</title>
   <style>
     body {
       background-color: #F5F0E1;
@@ -2077,6 +2077,30 @@ input,select,textarea{border-radius:11px!important}
 #tree-area .person-node p{font-family:var(--font-sans)!important}
 @media(max-width:640px){button:not(.person-node):not(.map-pin){min-height:40px}#tree-view-controls button{padding-inline:10px}}
 </style>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=GFS+Didot&display=swap" rel="stylesheet">
+  <style id="casa-di-famiglia-design-system">
+  :root{--casa-ivory:#F3EBDD;--casa-paper:#FFFCF6;--casa-sand:#E9DDC9;--casa-forest:#263B35;--casa-navy:#263247;--casa-gold:#B08A50;--casa-terra:#854B40;--casa-ink:#302A24;--casa-muted:#766D60;--casa-line:rgba(65,55,42,.15);--font-sans:'Inter',system-ui,sans-serif;--font-serif:'Cormorant Garamond','GFS Didot',Georgia,serif;--color-aegean:var(--casa-forest);--color-olive:#65765A;--color-terracotta:var(--casa-terra);--color-ochre:var(--casa-gold);--cream:var(--casa-ivory);--sand:var(--casa-sand);--card:var(--casa-paper);--ink:var(--casa-ink);--line:var(--casa-line);--lg-fill:var(--casa-paper);--lg-fill-strong:#fffdf9;--lg-input:#fffdf9;--lg-edge:var(--casa-line);--lg-shadow:0 2px 5px rgba(48,42,36,.04),0 12px 30px -20px rgba(48,42,36,.28)}
+  html.dark{--casa-ivory:#18231F;--casa-paper:#24312B;--casa-sand:#202B26;--casa-forest:#D1C09D;--casa-navy:#E8DDC8;--casa-gold:#C6A66E;--casa-terra:#C88973;--casa-ink:#F0E9DC;--casa-muted:#B7AE9E;--casa-line:rgba(222,207,178,.15);--color-aegean:var(--casa-forest);--color-olive:#A8B493;--color-terracotta:var(--casa-terra);--color-ochre:var(--casa-gold);--cream:var(--casa-ivory);--sand:var(--casa-sand);--card:var(--casa-paper);--ink:var(--casa-ink);--line:var(--casa-line);--lg-fill:var(--casa-paper);--lg-fill-strong:#2A3932;--lg-input:#1F2C26;--lg-edge:var(--casa-line);--lg-shadow:0 3px 12px rgba(0,0,0,.18),0 16px 35px -24px rgba(0,0,0,.65)}
+  html,body{font-family:'Inter',system-ui,sans-serif!important}body{background:var(--casa-ivory)!important;color:var(--casa-ink)!important}h1,h2,h3,h4,.font-serif{font-family:'Cormorant Garamond','GFS Didot',Georgia,serif!important;font-weight:600;letter-spacing:.01em}h1,h2,h3{color:var(--casa-navy)}
+  body::before{background:radial-gradient(ellipse at 12% 8%,rgba(176,138,80,.10),transparent 45%),radial-gradient(ellipse at 90% 85%,rgba(38,59,53,.07),transparent 48%)!important;opacity:1}
+  #sidebar{background:var(--casa-sand)!important;border-right:1px solid var(--casa-line)!important;box-shadow:4px 0 24px rgba(48,42,36,.045)!important}#sidebar>div:first-child{border-bottom:1px solid rgba(176,138,80,.35)!important}#sidebar>div:first-child>div:first-child>div:first-child{background:var(--casa-forest)!important;border:1px solid var(--casa-gold);box-shadow:0 0 0 3px rgba(176,138,80,.12)}#sidebar>div:first-child h1{font-size:1.42rem!important;letter-spacing:.025em!important;color:var(--casa-navy)!important}#sidebar .nav-label{font-size:10px!important;letter-spacing:.17em!important;color:var(--casa-muted)!important;font-weight:700!important;text-transform:uppercase;padding:12px 12px 7px}
+  #sidebar .nav-item{border-radius:8px!important;min-height:43px;color:var(--casa-ink)!important;font-size:13px!important;transition:background .18s ease,color .18s ease}#sidebar .nav-item:hover{background:rgba(176,138,80,.10)!important}#sidebar .nav-item.active{background:rgba(176,138,80,.13)!important;color:var(--casa-forest)!important;box-shadow:inset 3px 0 0 var(--casa-gold)!important;font-weight:700!important}html.dark #sidebar .nav-item.active{color:var(--casa-gold)!important;background:rgba(198,166,110,.12)!important}
+  #mobile-header{background:var(--casa-paper)!important;border-bottom:1px solid var(--casa-line)!important;box-shadow:0 3px 15px rgba(48,42,36,.06)!important}#mobile-header .bg-aegean{background:var(--casa-forest)!important;border:1px solid var(--casa-gold)}
+  .hero-bg{background:linear-gradient(118deg,rgba(38,59,53,.97),rgba(38,50,71,.94))!important;position:relative}.hero-bg:after{content:'✦';position:absolute;right:6%;top:12%;font-family:'Cormorant Garamond',serif;font-size:clamp(100px,18vw,230px);line-height:1;color:rgba(198,166,110,.12);pointer-events:none}.hero-bg h1,.hero-bg h2,.hero-bg p{position:relative;z-index:1}.hero-bg .text-aegean{color:#F3EBDD!important}
+  .bg-white,.bg-white\/95,.bg-white\/70,#tree-sidepanel,#filter-panel,#modal-form{background:var(--casa-paper)!important;border-color:var(--casa-line)!important;box-shadow:var(--lg-shadow)!important}html.dark .bg-white,html.dark .bg-white\/95,html.dark .bg-white\/70{background:var(--casa-paper)!important}
+  .rounded-2xl{border-radius:13px!important}.rounded-xl{border-radius:9px!important}.shadow-card,.shadow-soft{box-shadow:var(--lg-shadow)!important}.border-aegean\/10,.border-aegean\/20,.border-gray-100{border-color:var(--casa-line)!important}
+  button.bg-aegean,.bg-aegean.text-white{background:var(--casa-forest)!important;color:#fffaf0!important;border:1px solid rgba(176,138,80,.6)!important}html.dark button.bg-aegean,html.dark .bg-aegean.text-white{background:#BDA575!important;color:#1D2923!important}button.bg-ochre,.bg-ochre{background:var(--casa-gold)!important;color:#fff!important}button:hover{filter:brightness(.98)}
+  .text-aegean{color:var(--casa-forest)!important}.text-olive{color:var(--color-olive)!important}.text-ochre{color:var(--casa-gold)!important}.text-terracotta{color:var(--casa-terra)!important}html.dark .text-gray-800,html.dark .text-gray-700{color:var(--casa-ink)!important}html.dark .text-gray-500{color:var(--casa-muted)!important}
+  input,select,textarea{border-color:var(--casa-line)!important;border-radius:8px!important;background:var(--casa-paper)!important;color:var(--casa-ink)!important}html.dark input,html.dark select,html.dark textarea{background:var(--lg-input)!important;color:var(--casa-ink)!important}input:focus,select:focus,textarea:focus{outline:2px solid rgba(176,138,80,.25)!important;border-color:var(--casa-gold)!important}
+  .person-card{border:1px solid rgba(176,138,80,.22)!important;border-radius:12px!important;background:var(--casa-paper)!important}.person-card:hover{box-shadow:0 12px 28px rgba(48,42,36,.11)!important}.polaroid{background:var(--casa-paper)!important;border:1px solid rgba(176,138,80,.28)!important;box-shadow:0 8px 22px -14px rgba(48,42,36,.5)!important;transform:none!important}.polaroid:hover{transform:translateY(-3px)!important}.tree-canvas{background-image:radial-gradient(rgba(176,138,80,.15) .7px,transparent .7px)!important;background-size:22px 22px!important}.tree-line,.tree-line-cross,.tree-line-marriage{stroke:var(--casa-gold)!important}.tree-line-cross{stroke-dasharray:5 5!important}
+  .archive-kicker{font-size:10px;letter-spacing:.22em;font-weight:700;color:var(--casa-gold);margin-bottom:8px}.archive-card{border:1px solid rgba(176,138,80,.22);transition:transform .18s ease,box-shadow .18s ease}.archive-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(48,42,36,.10)}.archive-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;font-size:22px;color:var(--casa-gold);background:rgba(176,138,80,.12);border:1px solid rgba(176,138,80,.28)}
+  #toast{background:var(--casa-forest)!important;color:#fff!important;border:1px solid var(--casa-gold)!important}::-webkit-scrollbar-thumb{background:var(--casa-gold)!important;border-radius:10px}::selection{background:rgba(176,138,80,.25)}:focus-visible{outline:2px solid var(--casa-gold)!important;outline-offset:3px}
+  @media(max-width:767px){#sidebar{width:min(86vw,320px)!important}.hero-bg{min-height:220px}.hero-bg .max-w-2xl{padding-top:2.5rem;padding-bottom:3rem}.archive-card{padding:1rem!important}}
+  @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  @media print{body{background:#fff!important;color:#222!important}#sidebar,#mobile-header,#bottom-nav,#sidebar-overlay{display:none!important}#main-content{margin:0!important}}
+  </style>
+
 </head>
 <body class="font-sans text-gray-800 antialiased">
   <!-- Οθόνη σύνδεσης -->
@@ -2153,7 +2177,7 @@ input,select,textarea{border-radius:11px!important}
         <div class="w-8 h-8 rounded-full bg-aegean flex items-center justify-center text-white text-sm">
           <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M6 8h12M6 8v5m12-5v5M12 8v5M4 13h4m-4 0v5m4-5v5m6-5h4m-4 0v5m4-5v5"/><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="2" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="5" height="4" rx="1"/><rect x="9.5" y="17" width="5" height="4" rx="1"/></svg>
         </div>
-        <span class="font-serif font-bold text-aegean" id="app-title-m">Οικογενειακό Δέντρο</span>
+        <span class="font-serif font-bold text-aegean" id="app-title-m">Casa di Famiglia</span>
       </div>
     </header>
 
@@ -2168,8 +2192,8 @@ input,select,textarea{border-radius:11px!important}
             <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M6 8h12M6 8v5m12-5v5M12 8v5M4 13h4m-4 0v5m4-5v5m6-5h4m-4 0v5m4-5v5"/><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="2" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="5" height="4" rx="1"/><rect x="9.5" y="17" width="5" height="4" rx="1"/></svg>
           </div>
           <div>
-            <h1 class="font-serif text-aegean font-bold text-lg leading-tight">Το Δέντρο</h1>
-            <p class="text-xs text-gray-500" id="app-family">Όνομα οικογένειας</p>
+            <h1 class="font-serif text-aegean font-bold text-lg leading-tight">Casa di Famiglia</h1>
+            <p class="text-xs text-gray-500 tracking-wide" id="app-family">Οικογενειακό αρχείο</p>
           </div>
         </div>
         <button onclick="closeSidebar()" class="md:hidden w-11 h-11 rounded-lg text-gray-500 hover:bg-gray-100 flex items-center justify-center" aria-label="Κλείσιμο μενού">
@@ -2180,14 +2204,14 @@ input,select,textarea{border-radius:11px!important}
         <p class="nav-label">Κύρια</p>
         <div class="space-y-1"><button data-view="home" class="nav-item active w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg> Αρχική</button><button data-view="tree" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M6 8h12M6 8v5m12-5v5M12 8v5M4 13h4m-4 0v5m4-5v5m6-5h4m-4 0v5m4-5v5"/><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="2" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="5" height="4" rx="1"/><rect x="9.5" y="17" width="5" height="4" rx="1"/></svg> Δέντρο</button><button data-view="people" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1M16 5.5a3 3 0 0 1 0 5.5m2 3a4 4 0 0 1 3 4v2"/></svg> Μέλη οικογένειας</button></div>
         <p class="nav-label">Αρχείο</p>
-        <div class="space-y-1"><button data-view="photos" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 18"/></svg> Φωτογραφίες</button><button data-view="timeline" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Χρονολόγιο</button><button data-view="map" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> Τοποθεσίες</button></div>
+        <div class="space-y-1"><button data-view="archive" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v15H4zM8 5V3h8v2M8 10h8M8 14h5"/></svg> Έγγραφα &amp; τεκμήρια</button><button data-view="photos" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 18"/></svg> Φωτογραφίες</button><button data-view="timeline" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Χρονολόγιο</button><button data-view="map" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> Τοποθεσίες</button></div>
         <details id="nav-more" class="mt-4">
           <summary class="nav-label cursor-pointer select-none">Περισσότερα</summary>
           <div class="space-y-1 mt-1"><button data-view="heritage" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v10l8 4 8-4V7z"/><path d="M8 10c1.5-2 6.5-2 8 0-1.5 2-6.5 2-8 0Zm0 4c1.5-2 6.5-2 8 0-1.5 2-6.5 2-8 0Z"/></svg> Κληρονομιά</button><button data-view="stats" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5m0 14h17"/><rect x="7" y="12" width="3" height="5" rx=".5"/><rect x="12" y="8" width="3" height="9" rx=".5"/><rect x="17" y="4" width="3" height="13" rx=".5"/></svg> Στατιστικά</button><button type="button" onclick="openBook()" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition text-ochre font-semibold"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A3 3 0 0 1 7 3h5v17H7a3 3 0 0 0-3 1.5zM20 5.5A3 3 0 0 0 17 3h-5v17h5a3 3 0 0 1 3 1.5z"/></svg> Βιβλίο οικογένειας</button><button data-view="settings" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm hover:bg-aegean/5 transition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .6 1-1.7 1.7-1-.6a6 6 0 0 1-1.5.6l-.3 1.2h-2.4l-.3-1.2a6 6 0 0 1-1.5-.6l-1 .6L8.6 16.1l.6-1a6 6 0 0 1-.6-1.5l-1.2-.3v-2.4l1.2-.3a6 6 0 0 1 .6-1.5l-.6-1L8.3 4.4l1.7-1.7 1 .6a6 6 0 0 1 1.5-.6l.3-1.2h2.4l.3 1.2a6 6 0 0 1 1.5.6l1-.6 1.7 1.7-.6 1a6 6 0 0 1 .6 1.5l1.2.3v2.4l-1.2.3a6 6 0 0 1-.6 1.5Z"/></svg> Ρυθμίσεις</button></div>
         </details>
       </nav>
       <div class="p-4 border-t border-aegean/10 text-xs text-gray-500">
-        <p id="app-footer">🌿 Η ιστορία της οικογένειάς μας</p>
+        <p id="app-footer">La nostra storia · Από γενιά σε γενιά</p>
       </div>
     </aside>
 
@@ -2270,6 +2294,24 @@ input,select,textarea{border-radius:11px!important}
           <div class="flex flex-wrap gap-2" id="fav-list"></div>
         </section>
 
+      </div>
+
+            <!-- FAMILY DOCUMENT ARCHIVE -->
+      <div id="view-archive" class="view hidden fade-in">
+        <section class="max-w-6xl mx-auto px-5 md:px-8 py-8 md:py-10">
+          <div class="flex flex-wrap items-end justify-between gap-4 mb-7">
+            <div><p class="archive-kicker">ARCHIVIO DI FAMIGLIA</p><h2 class="font-serif text-3xl md:text-4xl text-aegean">Έγγραφα &amp; τεκμήρια</h2><p class="text-sm text-gray-500 mt-2">Πιστοποιητικά, επιστολές, φωτογραφίες και πηγές που τεκμηριώνουν την οικογενειακή ιστορία.</p></div>
+            <button type="button" onclick="openDocumentForm()" class="px-4 py-3 rounded-xl bg-aegean text-white text-sm font-semibold shadow-card">＋ Προσθήκη τεκμηρίου</button>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6" id="archive-stats"></div>
+          <div class="bg-white rounded-2xl p-4 md:p-5 shadow-card mb-5 flex flex-wrap gap-3 items-center">
+            <input id="archive-search" class="flex-1 min-w-[180px] px-3 py-2 rounded-xl border border-aegean/20 bg-white text-sm" placeholder="Αναζήτηση σε τίτλους, πρόσωπα και πηγές…" oninput="renderArchive()">
+            <select id="archive-filter" class="px-3 py-2 rounded-xl border border-aegean/20 bg-white text-sm" onchange="renderArchive()"><option value="all">Όλες οι κατηγορίες</option><option>Πιστοποιητικό</option><option>Φωτογραφία</option><option>Επιστολή</option><option>Έγγραφο</option><option>Προφορική μαρτυρία</option><option>Άλλο</option></select>
+          </div>
+          <div id="archive-list" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+          <div id="archive-empty" class="hidden text-center rounded-2xl border border-dashed border-aegean/25 p-10"><div class="text-4xl mb-3">⌑</div><h3 class="font-serif text-xl text-aegean">Το αρχείο ξεκινά εδώ</h3><p class="text-sm text-gray-500 mt-2">Πρόσθεσε το πρώτο οικογενειακό τεκμήριο και σύνδεσέ το με ένα πρόσωπο.</p></div>
+          <p class="text-xs text-gray-400 mt-6">Τα αρχεία αποθηκεύονται τοπικά στη συσκευή σου μαζί με τα δεδομένα της εφαρμογής. Κράτα τακτικά αντίγραφα ασφαλείας.</p>
+        </section>
       </div>
 
             <!-- TREE VIEW -->
@@ -2426,8 +2468,9 @@ input,select,textarea{border-radius:11px!important}
               <div class="flex items-center justify-between py-2">
                 <span class="text-sm">Θέμα</span>
                 <div class="flex gap-2">
-                  <button id="theme-light" onclick="setTheme('light')" class="px-3 py-1 rounded-lg text-sm border">Φωτεινό</button>
-                  <button id="theme-dark" onclick="setTheme('dark')" class="px-3 py-1 rounded-lg text-sm border">Σκοτεινό</button>
+                  <button id="theme-light" onclick="setTheme('light')" class="px-3 py-1.5 rounded-lg text-sm border">Φωτεινό</button>
+                  <button id="theme-dark" onclick="setTheme('dark')" class="px-3 py-1.5 rounded-lg text-sm border">Σκοτεινό</button>
+                  <button id="theme-auto" onclick="setTheme('auto')" class="px-3 py-1.5 rounded-lg text-sm border">Αυτόματο</button>
                 </div>
               </div>
             </div>
@@ -2539,10 +2582,10 @@ input,select,textarea{border-radius:11px!important}
 
     /* ---------- Δεδομένα ---------- */
     function defaults() {
-      return { nextId: 1, nextEv: 1, nextPh: 1, people: [], events: [], photos: [], stories: {} };
+      return { nextId: 1, nextEv: 1, nextPh: 1, people: [], events: [], photos: [], stories: {}, documents: [] };
     }
     /* Κείμενα εφαρμογής (επεξεργάσιμα από τις Ρυθμίσεις). Κενό πεδίο = προεπιλογή. */
-    const SET_DEF = { userName: 'Όνομα χρήστη', userRole: 'Διαχειριστής δέντρου', title: 'Οικογενειακό Δέντρο', family: 'Όνομα οικογένειας', heroLabel: 'Καλώς ήρθατε', heroTitle: 'Οικογενειακό Δέντρο', heroText: 'Καταγράψτε τις ρίζες και την ιστορία της οικογένειάς σας.', footer: '🌿 Η ιστορία της οικογένειάς μας' };
+    const SET_DEF = { userName: 'Όνομα χρήστη', userRole: 'Διαχειριστής δέντρου', title: 'Casa di Famiglia', family: 'Οικογενειακό αρχείο', heroLabel: 'Καλώς ήρθατε στο οικογενειακό σας αρχείο', heroTitle: 'Η ιστορία μας, από γενιά σε γενιά', heroText: 'Οι άνθρωποι, οι τόποι και οι μνήμες που συνθέτουν την ιστορία της οικογένειάς μας.', footer: 'La nostra storia · Από γενιά σε γενιά' };
     function fixCounters(st) {
       const nx = (arr, cur) => Math.max(cur || 1, ...arr.map(x => (+x.id || 0) + 1));
       st.nextId = nx(st.people, st.nextId); st.nextEv = nx(st.events, st.nextEv); st.nextPh = nx(st.photos, st.nextPh); delete st.recent;
@@ -2553,7 +2596,7 @@ input,select,textarea{border-radius:11px!important}
         if (!raw) return null;
         const s = JSON.parse(raw);
         if (s && Array.isArray(s.people) && Array.isArray(s.events) && Array.isArray(s.photos)) {
-          s.stories = s.stories || {}; fixCounters(s);
+          s.stories = s.stories || {}; s.documents = Array.isArray(s.documents) ? s.documents : []; fixCounters(s);
           s.people.forEach(q => { if (q.nick != null) { if (q.first) q.name = (q.first + ' ' + (q.last || '')).trim(); delete q.nick; } });
           return s;
         }
@@ -2799,6 +2842,7 @@ input,select,textarea{border-radius:11px!important}
       else if (name === 'tree') { renderTree(); renderSidePanel(selectedId); }
       else if (name === 'people') renderPeople();
       else if (name === 'photos') renderPhotos();
+      else if (name === 'archive') renderArchive();
       else if (name === 'map') renderMap();
       else if (name === 'timeline') renderTimeline();
       else if (name === 'heritage') renderHeritage();
@@ -3369,6 +3413,27 @@ input,select,textarea{border-radius:11px!important}
       $('stat-photos').textContent = state.photos.length;
       $('stat-places').textContent = new Set(state.people.map(p => p.place).filter(Boolean)).size;
     }
+
+    /* ---------- Οικογενειακό αρχείο τεκμηρίων ---------- */
+    function renderArchive() {
+      state.documents = Array.isArray(state.documents) ? state.documents : [];
+      const docs = state.documents.slice().sort((a,b) => (b.created||0)-(a.created||0));
+      const q = (($('archive-search') || {}).value || '').trim().toLocaleLowerCase('el');
+      const f = (($('archive-filter') || {}).value || 'all');
+      const filtered = docs.filter(d => (f === 'all' || d.category === f) && (!q || [d.title,d.description,d.source,d.personName,d.fileName].join(' ').toLocaleLowerCase('el').includes(q)));
+      const stats = $('archive-stats');
+      if (stats) stats.innerHTML = [['Τεκμήρια',docs.length],['Επιβεβαιωμένα',docs.filter(d=>d.confidence==='Επιβεβαιωμένο').length],['Πιθανές πληροφορίες',docs.filter(d=>d.confidence==='Πιθανό').length],['Συνδεδεμένα πρόσωπα',new Set(docs.map(d=>d.personId).filter(Boolean)).size]].map(x=>`<div class="bg-white rounded-xl p-4 shadow-card"><div class="text-2xl font-serif text-aegean">${x[1]}</div><div class="text-xs text-gray-500">${x[0]}</div></div>`).join('');
+      const list = $('archive-list'), empty = $('archive-empty'); if (!list) return;
+      empty.classList.toggle('hidden', filtered.length !== 0);
+      list.innerHTML = filtered.map(d => { const p = d.personId ? byId(+d.personId) : null; const icon = d.category==='Φωτογραφία'?'▧':d.category==='Επιστολή'?'✉':d.category==='Πιστοποιητικό'?'▤':'⌑'; const conf = d.confidence || 'Ανεπιβεβαίωτο'; const color = conf==='Επιβεβαιωμένο'?'text-olive':conf==='Πιθανό'?'text-ochre':'text-terracotta'; return `<article class="archive-card bg-white rounded-2xl p-5 shadow-card flex flex-col gap-3"><div class="flex items-start justify-between gap-3"><span class="archive-icon">${icon}</span><span class="text-[11px] uppercase tracking-wider ${color}">${esc(conf)}</span></div><div><p class="text-[11px] uppercase tracking-wider text-gray-400">${esc(d.category||'Τεκμήριο')}</p><h3 class="font-serif text-xl text-aegean mt-1">${esc(d.title)}</h3><p class="text-sm text-gray-500 mt-1">${esc(d.description||'Χωρίς περιγραφή')}</p></div><div class="text-xs text-gray-500 space-y-1">${p?`<p>Πρόσωπο: <b>${esc(p.name)}</b></p>`:''}${d.source?`<p>Πηγή: ${esc(d.source)}</p>`:''}${d.date?`<p>Ημερομηνία: ${esc(d.date)}</p>`:''}${d.fileName?`<p>Αρχείο: ${esc(d.fileName)}</p>`:''}</div><div class="flex items-center gap-2 mt-auto pt-2 border-t border-gray-100">${d.data?`<a class="text-sm text-aegean font-semibold" href="${d.data}" download="${esc(d.fileName||'tekmirio')}">Λήψη αρχείου ↓</a>`:''}<button type="button" onclick="deleteDocument(${d.id})" class="ml-auto text-xs text-terracotta px-2 py-1">Διαγραφή</button></div></article>`; }).join('');
+    }
+    function openDocumentForm() {
+      let attachment = '', attachmentName = '';
+      const opts = { title:'Νέο οικογενειακό τεκμήριο', submitText:'Αποθήκευση τεκμηρίου', body:`<div class="space-y-3"><label class="block text-sm">Τίτλος *<input name="title" required class="${INPUT}" placeholder="π.χ. Πιστοποιητικό γάμου παππού"></label><div class="grid grid-cols-2 gap-3"><label class="block text-sm">Κατηγορία<select name="category" class="${INPUT}"><option>Πιστοποιητικό</option><option>Φωτογραφία</option><option>Επιστολή</option><option>Έγγραφο</option><option>Προφορική μαρτυρία</option><option>Άλλο</option></select></label><label class="block text-sm">Αξιοπιστία<select name="confidence" class="${INPUT}"><option>Επιβεβαιωμένο</option><option>Πιθανό</option><option selected>Ανεπιβεβαίωτο</option></select></label></div><label class="block text-sm">Σύνδεση με μέλος<select name="personId" class="${INPUT}"><option value="">Χωρίς σύνδεση</option>${state.people.slice().sort((a,b)=>a.name.localeCompare(b.name,'el')).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select></label><label class="block text-sm">Ημερομηνία ή χρονολογία<input name="date" class="${INPUT}" placeholder="π.χ. 1948 ή 12/06/1948"></label><label class="block text-sm">Πηγή / προέλευση<input name="source" class="${INPUT}" placeholder="π.χ. Ληξιαρχείο, οικογενειακή μαρτυρία"></label><label class="block text-sm">Περιγραφή<textarea name="description" rows="3" class="${INPUT}" placeholder="Τι αποδεικνύει ή τι γνωρίζουμε για αυτό το τεκμήριο;"></textarea></label><label class="block text-sm">Επισύναψη αρχείου (προαιρετικά)<input id="archive-file" type="file" class="${INPUT}" accept="image/*,.pdf,.txt"/><span class="block text-xs text-gray-400 mt-1">Μέγιστο μέγεθος 1,5 MB για να παραμένει ασφαλής η τοπική αποθήκευση.</span></label><p id="archive-file-status" class="text-xs text-gray-500"></p></div>`, onMount:()=>{ $('archive-file').addEventListener('change',e=>{const file=e.target.files&&e.target.files[0]; if(!file)return; if(file.size>1.5*1024*1024){e.target.value='';showToast('Το αρχείο είναι μεγαλύτερο από 1,5 MB.');return;} const fr=new FileReader();fr.onload=()=>{attachment=fr.result;attachmentName=file.name;$('archive-file-status').textContent='Έτοιμο: '+file.name;};fr.onerror=()=>showToast('Δεν ήταν δυνατή η ανάγνωση του αρχείου.');fr.readAsDataURL(file);});}, onSubmit:d=>{if(!d.title.trim())return false; const person=d.personId?byId(+d.personId):null; state.documents.push({id:Date.now()+Math.floor(Math.random()*1000),title:d.title.trim(),category:d.category,confidence:d.confidence,personId:d.personId?+d.personId:null,personName:person?person.name:'',date:d.date.trim(),source:d.source.trim(),description:d.description.trim(),fileName:attachmentName,data:attachment,created:Date.now()});save();closeModal();renderArchive();showToast('Το τεκμήριο προστέθηκε στο αρχείο.');}};
+      openModal(opts);
+    }
+    function deleteDocument(id) { const d=state.documents.find(x=>x.id===id); if(!d)return; openModal({title:'Διαγραφή τεκμηρίου',body:`<p class="text-sm">Να διαγραφεί το «${esc(d.title)}» από το οικογενειακό αρχείο;</p>`,submitText:'Διαγραφή',onSubmit:()=>{state.documents=state.documents.filter(x=>x.id!==id);save();closeModal();renderArchive();showToast('Το τεκμήριο διαγράφηκε.');}}); }
+    window.openDocumentForm=openDocumentForm; window.deleteDocument=deleteDocument; window.renderArchive=renderArchive;
 
     /* ---------- Στατιστικά ---------- */
     function renderStatsView() {
@@ -4248,18 +4313,20 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
     window.resetData = resetData;
 
     /* ---------- Θέμα ---------- */
+    function effectiveTheme(t) { return t === 'auto' ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : t; }
     function applyThemeButtons() {
-      const dark = document.documentElement.classList.contains('dark');
-      $('theme-light').className = 'px-3 py-1 rounded-lg text-sm border ' + (!dark ? 'bg-aegean text-white border-aegean' : 'border-aegean/20 text-gray-500');
-      $('theme-dark').className = 'px-3 py-1 rounded-lg text-sm border ' + (dark ? 'bg-aegean text-white border-aegean' : 'border-aegean/20 text-gray-500');
+      const pref = (()=>{try{return localStorage.getItem(STORE+'-theme')||'light'}catch(e){return 'light'}})();
+      ['light','dark','auto'].forEach(t=>{const b=$('theme-'+t);if(!b)return;const active=pref===t;b.className='px-3 py-1.5 rounded-lg text-sm border '+(active?'bg-aegean text-white border-aegean':'border-aegean/20 text-gray-500');});
     }
     function setTheme(t) {
-      document.documentElement.classList.toggle('dark', t === 'dark');
-      try { localStorage.setItem(STORE + '-theme', t); } catch (e) {}
+      const chosen = ['light','dark','auto'].includes(t) ? t : 'light';
+      document.documentElement.classList.toggle('dark', effectiveTheme(chosen)==='dark');
+      try { localStorage.setItem(STORE + '-theme', chosen); } catch (e) {}
       applyThemeButtons();
     }
     window.setTheme = setTheme;
-    try { if (localStorage.getItem(STORE + '-theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
+    try { const savedTheme=localStorage.getItem(STORE+'-theme')||'light'; document.documentElement.classList.toggle('dark',effectiveTheme(savedTheme)==='dark'); } catch (e) {}
+    if (window.matchMedia) { const mq=window.matchMedia('(prefers-color-scheme: dark)'); const syncAuto=()=>{try{if(localStorage.getItem(STORE+'-theme')==='auto')document.documentElement.classList.toggle('dark',mq.matches)}catch(e){}}; if(mq.addEventListener)mq.addEventListener('change',syncAuto);else if(mq.addListener)mq.addListener(syncAuto); }
 
     /* ---------- Γενικά ---------- */
     document.addEventListener('keydown', e => {
@@ -4340,16 +4407,38 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
     /* ---------- Βιβλίο οικογένειας (PDF) ---------- */
     const dispN = p => p.full || p.name;
     function genMap() {
-      const g = {}; state.people.forEach(p => { g[p.id] = 1; });
-      for (let i = 0; i < state.people.length + 2; i++) state.people.forEach(p => {
-        const pa = p.parents.map(byId).filter(Boolean), s = byId(p.spouse);
-        if (pa.length) g[p.id] = Math.max(...pa.map(x => g[x.id])) + 1;
-        else if (s && s.parents.length) g[p.id] = g[s.id];
+      /* Κάθε πρόσωπο παίρνει γενιά σε ΕΝΑ κοινό σύστημα: παιδί = γονέας + 1, σύζυγος = ίδια γενιά με τον/την σύντροφο.
+         Έτσι οι γαμπροί/νύφες και οι οικογένειές τους μπαίνουν στη σωστή γενιά, όσο βαθιά κι αν φτάνει ο κλάδος τους.
+         Μόνο όσοι δεν συνδέονται καθόλου με το υπόλοιπο δέντρο τοποθετούνται με βάση το έτος γέννησης. */
+      const P = state.people, ix = new Map(P.map((p, i) => [p.id, i])), par = P.map((_, i) => i), off = P.map(() => 0);
+      const find = i => { if (par[i] === i) return i; const p = par[i], r = find(p); off[i] += off[p]; par[i] = r; return r; };
+      const join = (a, b, d) => {
+        if (a == null || b == null) return;
+        const ra = find(a), rb = find(b); if (ra === rb) return;
+        par[rb] = ra; off[rb] = off[a] + d - off[b];
+      };
+      P.forEach((p, i) => (p.parents || []).forEach(id => join(ix.get(id), i, 1)));
+      P.forEach((p, i) => { if (p.spouse != null) join(i, ix.get(p.spouse), 0); });
+      P.forEach((p, i) => (p.spouses || []).forEach(m => join(i, ix.get(m.id), 0)));
+      const comp = new Map();
+      P.forEach((p, i) => { const r = find(i); if (!comp.has(r)) comp.set(r, []); comp.get(r).push(i); });
+      const med = a => { const s = a.slice().sort((x, y) => x - y); return s.length ? s[s.length >> 1] : null; };
+      const info = [];
+      comp.forEach(m => {
+        const mn = Math.min(...m.map(i => off[i])), rel = m.map(i => off[i] - mn);
+        info.push({ m, rel, y0: med(m.map((i, k) => P[i].by ? P[i].by - 28 * rel[k] : null).filter(v => v != null)) });
+      });
+      const main = info.reduce((a, c) => (!a || c.m.length > a.m.length) ? c : a, null), g = {};
+      info.forEach(c => {
+        const s = (c !== main && main && main.y0 != null && c.y0 != null) ? Math.max(0, Math.round((c.y0 - main.y0) / 28)) : 0;
+        c.m.forEach((i, k) => { g[P[i].id] = c.rel[k] + s + 1; });
       });
       return g;
     }
     function buildBook(o) {
       const g = genMap(), P = state.people.slice().sort((a, b) => g[a.id] - g[b.id] || (a.by || 9999) - (b.by || 9999) || a.id - b.id);
+      const GL = ['Α΄', 'Β΄', 'Γ΄', 'Δ΄', 'Ε΄', 'ΣΤ΄', 'Ζ΄', 'Η΄', 'Θ΄', 'Ι΄', 'ΙΑ΄', 'ΙΒ΄', 'ΙΓ΄', 'ΙΔ΄', 'ΙΕ΄'], gl = n => (GL[n - 1] || n + 'η') + ' Γενιά';
+      const gy = m => { const ys = m.map(p => p.by).filter(Boolean); return ys.length ? `<small class="gy">γεννήσεις ${Math.min(...ys)}–${Math.max(...ys)}</small>` : ''; };
       const list = a => a.map(x => esc(dispN(x))).join(', '), maxG = Math.max(1, ...Object.values(g));
       const yrs = state.people.flatMap(p => [p.by, p.dy]).filter(Boolean), pl = [...new Set(state.people.flatMap(placesOf))];
       const md = iso => { const m = /^\d{4}-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? [+m[1], +m[2]] : [0, 0]; };
@@ -4369,25 +4458,31 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           </article>`;
       };
       const ch = [];
-      if (o.dedication) ch.push(['Αφιέρωση', `<div class="dedication"><p>${esc(o.dedication).replace(/\n/g, '<br>')}</p></div>`]);
-      if (o.foreword) ch.push(['Πρόλογος', o.foreword.split(/\n\s*\n/).map(t => `<p class="txt">${esc(t)}</p>`).join('')]);
+      if (o.dedication) ch.push(['Αφιέρωση', `<div class="dedication"><p>${esc(o.dedication).replace(/\n/g, '<br>')}</p></div>`, 'fit']);
+      if (o.foreword) ch.push(['Πρόλογος', o.foreword.split(/\n\s*\n/).map(t => `<p class="txt">${esc(t)}</p>`).join(''), 'fit']);
       const hist = [o.intro ? o.intro.split(/\n\s*\n/).map(t => `<p class="txt">${esc(t)}</p>`).join('') : '',
         `<p class="txt">Το βιβλίο αυτό καταγράφει ${state.people.length} πρόσωπα σε ${maxG} ${maxG === 1 ? 'γενιά' : 'γενιές'}${yrs.length ? ', από το ' + Math.min(...yrs) + ' έως το ' + Math.max(...yrs) : ''}.${pl.length ? ' Η οικογένεια συνδέεται με τους τόπους: ' + esc(pl.join(', ')) + '.' : ''}</p>`,
         `<p class="txt">Οι γενάρχες που καταγράφονται είναι: ${list(P.filter(p => g[p.id] === 1))}.</p>`,
         `<p class="txt">Περιλαμβάνονται ${state.events.length} καταγεγραμμένα γεγονότα και ${photos.length} φωτογραφίες.</p>`].join('');
       ch.push(['Η ιστορία της οικογένειας', hist]);
-      ch.push(['Οι γενιές', Array.from({ length: maxG }, (_, i) => i + 1).map(n => { const m = P.filter(p => g[p.id] === n); return m.length ? `<h3>Γενιά ${n}</h3><ul class="gen">${m.map(p => `<li><b>${esc(dispN(p))}</b> <span>${esc(yearsOf(p))}</span></li>`).join('')}</ul>` : ''; }).join('')]);
+      ch.push(['Οι γενιές', Array.from({ length: maxG }, (_, i) => i + 1).map(n => { const m = P.filter(p => g[p.id] === n); return m.length ? `<h3>${gl(n)}${gy(m)}</h3><ul class="gen">${m.map(p => `<li><b>${esc(dispN(p))}</b> <span>${esc(yearsOf(p))}</span></li>`).join('')}</ul>` : ''; }).join('')]);
       // Separate family branches, derived only from parent relationships recorded in the tree.
       const roots = P.filter(p => !p.parents.length);
+      const seenBranch = new Set();
       const branchHtml = roots.map(root => {
         const seen = new Set();
         const collect = p => { if (seen.has(p.id)) return; seen.add(p.id); childrenOf(p).forEach(collect); };
         collect(root);
+        const rsp = byId(root.spouse), both = rsp && !rsp.parents.length;
+        if (both) collect(rsp);
+        const bkey = [...seen].sort((a, b) => a - b).join(',');
+        if (seenBranch.has(bkey)) return '';
+        seenBranch.add(bkey);
         const branch = P.filter(p => seen.has(p.id));
-        return `<article class="branch"><h3>${esc(dispN(root))}</h3><p class="by">${branch.length} καταγεγραμμένα μέλη · ${Math.max(1, ...branch.map(p => g[p.id] || 1))} γενιές</p><ul class="gen">${branch.map(p => `<li><b>${esc(dispN(p))}</b><span>${esc(yearsOf(p))}</span></li>`).join('')}</ul></article>`;
+        return `<article class="branch"><h3>${esc(dispN(root))}${both ? ' &amp; ' + esc(dispN(rsp)) : ''}</h3><p class="by">${branch.length} καταγεγραμμένα μέλη · ${Math.max(1, ...branch.map(p => g[p.id] || 1))} γενιές</p><ul class="gen">${branch.map(p => `<li><b>${esc(dispN(p))}</b><span>${esc(yearsOf(p))}</span></li>`).join('')}</ul></article>`;
       }).join('');
       if (branchHtml) ch.push(['Οικογενειακοί κλάδοι', branchHtml]);
-      let lastG = 0; ch.push(['Βιογραφίες', P.map(p => (g[p.id] !== lastG ? (lastG = g[p.id], `<h3 class="gh">Γενιά ${lastG}</h3>`) : '') + bio(p)).join('')]);
+      let lastG = 0; ch.push(['Βιογραφίες', P.map(p => (g[p.id] !== lastG ? (lastG = g[p.id], `<h3 class="gh">${gl(lastG)}</h3>`) : '') + bio(p)).join('')]);
       const ev = sortedEvents(state.events.concat(o.bd ? state.people.flatMap(p => [p.by ? { y: p.by, m: md(p.bdate)[0], d: md(p.bdate)[1], title: 'Γέννηση: ' + dispN(p), place: p.bplace } : null, p.dy ? { y: p.dy, m: md(p.ddate)[0], d: md(p.ddate)[1], title: 'Θάνατος: ' + dispN(p), place: p.dplace } : null]).filter(Boolean) : []));
       if (ev.length && o.evt !== false) ch.push(['Σημαντικά γεγονότα', `<table class="tl">${ev.map(e => `<tr><th>${esc(fmtDate(e))}</th><td>${esc(e.title)}${e.place ? ' <i>(' + esc(e.place) + ')</i>' : ''}${(e.people || []).length ? ' — ' + list((e.people || []).map(byId).filter(Boolean)) : ''}</td></tr>`).join('')}</table>`]);
       const H = state.heritage || {}, hl = k => (H[k] || []).filter(x => x.title);
@@ -4402,40 +4497,201 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       const places = [...new Set(state.people.flatMap(p => [p.origin, p.place, p.bplace, p.dplace]).concat(state.events.map(e => e.place)).filter(x => (x || '').trim()))].sort((a,b) => a.localeCompare(b, 'el'));
       if (o.loc !== false && places.length) ch.push(['Τόποι και καταγωγή', `<p class="txt">Οι παρακάτω τόποι εμφανίζονται στα στοιχεία των μελών και στα καταγεγραμμένα γεγονότα. Η καταγραφή δεν αποτελεί από μόνη της ιστορική τεκμηρίωση.</p><ul class="gen">${places.map(place => `<li>${esc(place)}</li>`).join('')}</ul>`]);
       if (o.ph && photos.length) ch.push(['Φωτογραφίες', `<div class="album">${photos.slice().sort((a,b) => (a.year || 9999) - (b.year || 9999)).map(x => `<figure><img src="${x.src}" alt=""><figcaption>${esc(x.caption)}${x.year ? ', ' + x.year : ''}${x.people.length ? '<br><small>' + list(x.people.map(byId).filter(Boolean)) + '</small>' : ''}</figcaption></figure>`).join('')}</div>`]);
-      ch.push(['Ευρετήριο προσώπων', `<ul class="idx">${state.people.slice().sort((a, b) => dispN(a).localeCompare(dispN(b), 'el')).map(p => `<li>${esc(dispN(p))} <span>γενιά ${g[p.id]}</span></li>`).join('')}</ul>`]);
-      if (o.sources) ch.push(['Πηγές και τεκμηρίωση', `<p class="txt">${esc(o.sources).replace(/\n/g, '<br>')}</p><p class="source-note">Οι πηγές και οι σημειώσεις παρατίθενται όπως καταγράφηκαν από τον επιμελητή. Οι πληροφορίες δεν έχουν ανεξάρτητα επαληθευτεί από το πρόγραμμα.</p>`]);
-      if (o.closing) ch.push(['Ένα μήνυμα στις επόμενες γενιές', `<div class="dedication closing"><p>${esc(o.closing).replace(/\n/g, '<br>')}</p></div>`]);
+      ch.push(['Ευρετήριο προσώπων', `<ul class="idx">${state.people.slice().sort((a, b) => dispN(a).localeCompare(dispN(b), 'el')).map(p => `<li>${esc(dispN(p))} <span>${gl(g[p.id])}</span></li>`).join('')}</ul>`]);
+      if (o.sources) ch.push(['Πηγές και τεκμηρίωση', `<p class="txt">${esc(o.sources).replace(/\n/g, '<br>')}</p><p class="source-note">Οι πηγές και οι σημειώσεις παρατίθενται όπως καταγράφηκαν από τον επιμελητή. Οι πληροφορίες δεν έχουν ανεξάρτητα επαληθευτεί από το πρόγραμμα.</p>`, 'fit']);
+      if (o.closing) ch.push(['Ένα μήνυμα στις επόμενες γενιές', `<div class="dedication closing"><p>${esc(o.closing).replace(/\n/g, '<br>')}</p></div>`, 'fit']);
       const cover = o.cover ? { src: o.cover } : null;
       const G = A5 ? { W: 148, H: 210, T: 18, B: 21, I: 20, O: 14 } : { W: 210, H: 297, T: 25, B: 28, I: 27, O: 20 };
+      const bi = A5 ? 3 : 6, bw = A5 ? 3 : 4, sh = A5 ? 8 : 11;
+      /* ---------- Μεσογειακά μοτίβα (SVG) ---------- */
+      const sv = (w, h, b, vy) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 ${vy || 0} ${w} ${h}">${b}</svg>`;
+      const U = s => 'url("data:image/svg+xml,' + encodeURIComponent(s) + '")';
+      const mMeander = c => U(sv(12, 12, `<path d="M0 11H12M1 11V1H11V8H4V4H8" fill="none" stroke="${c}" stroke-width="1.3"/>`));
+      const mWave = (a, b) => U(sv(24, 10, `<path d="M0 3.5Q6 -.5 12 3.5T24 3.5" fill="none" stroke="${a}" stroke-width="1.1"/><path d="M0 7.2Q6 3.2 12 7.2T24 7.2" fill="none" stroke="${b}" stroke-width="1"/>`));
+      const mScallop = (a, b) => U(sv(12, 6, `<path d="M0 .4A6 5.4 0 0 0 12 .4" fill="none" stroke="${a}" stroke-width=".9"/><path d="M2.6 .4A3.4 3 0 0 0 9.4 .4" fill="none" stroke="${b}" stroke-width=".7"/>`));
+      const mTile = (a, b) => U(sv(20, 20, `<rect x=".4" y=".4" width="19.2" height="19.2" fill="none" stroke="${a}" stroke-width=".7"/><g fill="${a}"><ellipse cx="10" cy="5" rx="2.2" ry="3.8"/><ellipse cx="10" cy="15" rx="2.2" ry="3.8"/><ellipse cx="5" cy="10" rx="3.8" ry="2.2"/><ellipse cx="15" cy="10" rx="3.8" ry="2.2"/></g><circle cx="10" cy="10" r="1.7" fill="${b}"/><g fill="${b}"><circle cx="2.2" cy="2.2" r="1.2"/><circle cx="17.8" cy="2.2" r="1.2"/><circle cx="2.2" cy="17.8" r="1.2"/><circle cx="17.8" cy="17.8" r="1.2"/></g>`));
+      const mMosaic = (a, b, c) => U(sv(12, 12, `<path d="M6 0L12 6L6 12L0 6Z" fill="${a}"/><path d="M6 2.6L9.4 6L6 9.4L2.6 6Z" fill="${b}"/><circle cx="6" cy="6" r="1" fill="${c}"/>`));
+      const f1 = n => n.toFixed(1);
+      const mOlive = (a, b) => {
+        let s = `<path d="M5 27Q100 5 195 21" fill="none" stroke="${a}" stroke-width="1.3" stroke-linecap="round"/>`;
+        for (let i = 1; i <= 9; i++) {
+          const t = i / 10, u = 1 - t, x = u * u * 5 + 2 * u * t * 100 + t * t * 195, y = u * u * 27 + 2 * u * t * 5 + t * t * 21;
+          s += `<ellipse cx="${f1(x + 4)}" cy="${f1(y - 4.6)}" rx="8.5" ry="2.7" transform="rotate(-32 ${f1(x + 4)} ${f1(y - 4.6)})" fill="${a}"/><ellipse cx="${f1(x + 4)}" cy="${f1(y + 4.6)}" rx="8.5" ry="2.7" transform="rotate(32 ${f1(x + 4)} ${f1(y + 4.6)})" fill="${a}"/>`;
+          if (i % 3 === 0) s += `<path d="M${f1(x)} ${f1(y)}L${f1(x + 1)} ${f1(y + 9)}" stroke="${a}" stroke-width=".8"/><ellipse cx="${f1(x + 1)}" cy="${f1(y + 12)}" rx="2.6" ry="3.4" fill="${b}"/>`;
+        }
+        s += `<ellipse cx="200" cy="19" rx="8.5" ry="2.7" transform="rotate(-12 200 19)" fill="${a}"/>`;
+        return U(sv(210, 40, s));
+      };
+      const mSun = (a, b) => {
+        let s = `<path d="M44 59A16 16 0 0 1 76 59Z" fill="${a}"/><path d="M14 59.4H106" stroke="${b}" stroke-width="1.2"/>`;
+        for (let i = 1; i <= 11; i++) {
+          const t = Math.PI * (1 - i / 12), r2 = i % 2 ? 31 : 38;
+          s += `<path d="M${f1(60 + Math.cos(t) * 22)} ${f1(59 - Math.sin(t) * 22)}L${f1(60 + Math.cos(t) * r2)} ${f1(59 - Math.sin(t) * r2)}" stroke="${a}" stroke-width="1.6" stroke-linecap="round"/>`;
+        }
+        return U(sv(120, 41, s, 20));
+      };
+      const mOrn = (a, b) => U(sv(60, 10, `<path d="M0 5H23M37 5H60" stroke="${a}" stroke-width=".7"/><path d="M30 .8L34.2 5L30 9.2L25.8 5Z" fill="${b}"/><circle cx="21" cy="5" r="1.1" fill="${b}"/><circle cx="39" cy="5" r="1.1" fill="${b}"/>`));
+      const mDia = (a, b) => U(sv(36, 8, `<path d="M18 0L22 4L18 8L14 4Z" fill="${a}"/><path d="M6 1.5L9 4L6 6.5L3 4Z" fill="${b}"/><path d="M30 1.5L33 4L30 6.5L27 4Z" fill="${b}"/>`));
+      const mLeaf = a => U(sv(20, 10, `<path d="M1 5Q10 -1.5 19 5Q10 11.5 1 5Z" fill="${a}"/>`));
+      /* ---------- Παλέτες: μία για κάθε σχεδιασμό σελίδας ---------- */
+      const PAL = [
+        { bg: '#FCFAF4', hc: '#1E4E79', ac: '#1E4E79', c2: '#C9962E', tn: 'rgba(30,78,121,.06)' },   // 0 Αιγαίο: γαλάζιο και χρυσό, μαίανδρος
+        { bg: '#FBF2E6', hc: '#A4452A', ac: '#A4452A', c2: '#D9A441', tn: 'rgba(164,69,42,.07)' },   // 1 Τερακότα: κεραμιδί, φολίδες
+        { bg: '#F7F8EC', hc: '#4F6236', ac: '#5E6E33', c2: '#A9B77A', tn: 'rgba(107,122,58,.09)' },  // 2 Ελιά: κλαδί ελιάς
+        { bg: '#F1F7F9', hc: '#16507A', ac: '#2A6F9E', c2: '#8EC1D6', tn: 'rgba(42,119,168,.08)' },  // 3 Κύματα
+        { bg: '#FEFDF9', hc: '#14396B', ac: '#14396B', c2: '#D49A2A', tn: 'rgba(20,57,107,.06)' },   // 4 Πλακάκια
+        { bg: '#FBF3DF', hc: '#7E521A', ac: '#96631A', c2: '#C0562F', tn: 'rgba(183,121,31,.10)' },  // 5 Ήλιος: ώχρα
+        { bg: '#FAF5EA', hc: '#A9482C', ac: '#1E4E79', c2: '#C9962E', tn: 'rgba(169,72,44,.07)' },   // 6 Ψηφιδωτό
+        { bg: '#F6F4F1', hc: '#2C4637', ac: '#2C4637', c2: '#8D7AA8', tn: 'rgba(44,70,55,.07)' }    // 7 Κυπαρίσσι και λεβάντα, αψίδα
+      ];
+      const DV = [
+        `${mOrn(PAL[0].hc, PAL[0].c2)} center/auto 100% no-repeat`,
+        `${mScallop(PAL[1].hc, PAL[1].c2)} left center/auto 100% repeat-x`,
+        `${mOlive(PAL[2].ac, PAL[2].hc)} center/auto 100% no-repeat`,
+        `${mWave(PAL[3].ac, PAL[3].c2)} center/auto 100% repeat-x`,
+        `${mTile(PAL[4].hc, PAL[4].c2)} center/auto 100% repeat-x`,
+        `${mSun(PAL[5].ac, PAL[5].c2)} right center/auto 100% no-repeat`,
+        'none',
+        `${mDia(PAL[7].hc, PAL[7].c2)} center/auto 100% no-repeat`
+      ];
+      const cornerRing = (a, b) => ['0 0|left top', '100% 0|right top', '0 100%|left bottom', '100% 100%|right bottom'].map(s => { const [at, pos] = s.split('|'); return `radial-gradient(circle at ${at},transparent 0 4mm,${a} 4mm 4.4mm,transparent 4.4mm 6mm,${b} 6mm 6.3mm,transparent 6.3mm) ${pos}/9mm 9mm no-repeat`; }).join(',');
+      const BLUE = '#17466E', GOLD = '#C9962E', TERRA = '#A4452A';
       const css = `@page{size:${o.size};margin:0}@page tree{size:${o.size} landscape;margin:0}
-        *{box-sizing:border-box}html{-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%}html,body{margin:0}body{font:${A5 ? 7.5 : 8}pt/1.6 'Manrope','Helvetica Neue',Arial,sans-serif;color:#3B2F26;-webkit-print-color-adjust:exact;print-color-adjust:exact}h1,h2,h3,h4{font-family:'Noto Serif',Georgia,serif;color:#4A5D3A;font-weight:600}svg [stroke="#1B4F72"]{stroke:#4A5D3A}svg [stroke="#6B8E23"]{stroke:#7C8B58}svg [fill="#1B4F72"]{fill:#4A5D3A}svg [fill="#E67E22"]{fill:#C99A5B}svg text{font-family:'Manrope',Arial,sans-serif}
+        *{box-sizing:border-box}html{-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%}html,body{margin:0}
+        body{font:${A5 ? 9.2 : 10.2}pt/1.55 'EB Garamond','Noto Serif',Georgia,serif;color:#3B2F26;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+        h1,h2{font-family:'GFS Didot','Noto Serif',Georgia,serif;font-weight:400}h3,h4{font-family:'EB Garamond','Noto Serif',Georgia,serif;font-weight:600}h1,h2,h3{color:var(--hc,${BLUE})}h4{color:var(--ac,${TERRA})}
+        svg text{font-family:'EB Garamond',Georgia,serif}
         #src{display:none}
-        .sheet{position:relative;width:${G.W}mm;height:${G.H - 1}mm;overflow:hidden;background:#fff;page-break-after:always;break-after:page;margin:0 auto}.sheet:last-child{page-break-after:auto;break-after:auto}
+        .sheet{position:relative;width:${G.W}mm;height:${G.H - 1}mm;overflow:hidden;background:var(--bg,#FBF8F0);page-break-after:always;break-after:page;margin:0 auto;--bi:${bi}mm;--bw:${bw}mm}.sheet:last-child{page-break-after:auto;break-after:auto}
         .pc{position:absolute;top:${G.T}mm;bottom:${G.B}mm;overflow:hidden}.odd .pc{left:${G.I}mm;right:${G.O}mm}.even .pc{left:${G.O}mm;right:${G.I}mm}
-        .hd,.ft{position:absolute;left:0;right:0;text-align:center;font:italic 8pt 'Noto Serif',Georgia,serif;color:#8a7a62}.hd{top:${G.T - 12}mm}.ft{bottom:${G.B - 14}mm;font-style:normal;font-size:9pt;color:#B5603E;letter-spacing:.12em}
+        .hd,.ft{position:absolute;left:0;right:0;text-align:center}.hd{top:${A5 ? G.T - 10 : G.T - 12}mm;font:italic ${A5 ? 8 : 9}pt/1.3 'EB Garamond',Georgia,serif;color:var(--ac)}.ft{bottom:${A5 ? G.B - 12 : G.B - 14}mm;font:400 ${A5 ? 9 : 10}pt/1.2 'GFS Didot',Georgia,serif;color:var(--ac)}
+        .ft span{display:inline-block;min-width:8mm;padding:.8mm 2.2mm}
         .sheet.land{width:${G.H}mm;height:${G.W - 1}mm;page:tree}.land .pc{top:14mm;bottom:14mm;left:14mm;right:14mm}.land .hd{top:5mm}.land .ft{bottom:5mm}.land svg{width:100%;height:${A5 ? 88 : 140}mm}
-        @media screen{body{background:#7a7a7a;padding:6mm 0}#wrap{height:var(--h,auto);overflow:hidden}#out{width:max-content;transform:scale(var(--z,1));transform-origin:0 0}.sheet{margin:0 auto 6mm;box-shadow:0 1mm 4mm rgba(0,0,0,.5)}}
-        .sheet.cov .cover{height:100%}
-        .dedication{min-height:90mm;display:flex;align-items:center;justify-content:center;text-align:center;padding:15mm;font:italic 15pt/1.8 'Noto Serif',Georgia,serif;color:#7C8B58}.dedication p{max-width:120mm}.closing{color:#B5603E}.closing:before{content:'✦';display:block;font-size:20pt;color:#7C8B58;margin-bottom:5mm}.branch{border:1px solid #D9C9A5;border-radius:3mm;padding:4mm 5mm;margin:0 0 4mm;background:linear-gradient(135deg,#FBF7EC,#F5EEDC);position:relative}.branch:before{content:'❧';position:absolute;right:4mm;top:2mm;color:#C99A5B;font-size:18pt}.branch h3{margin-top:0}.branch-tree-title{text-align:center;margin-bottom:4mm}.branch-tree-title h3{font:600 16pt 'Noto Serif',Georgia,serif;color:#4A5D3A;margin:0}.branch-tree-title .by{font:italic 9pt 'Noto Serif',Georgia,serif;color:#8a7a62;margin:2mm 0 0}.source-note{margin-top:6mm;padding:3mm;border-top:1px solid #D9C9A5;color:#8a7a62;font:italic 8pt 'Noto Serif',Georgia,serif}.cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at center,#FFFDF7 0%,#FBF7EC 48%,#EDE2CC 100%);padding:24mm;box-shadow:inset 0 0 0 8mm #FBF7EC,inset 0 0 0 8.5mm rgba(74,93,58,.45),inset 0 0 0 10mm #FBF7EC,inset 0 0 0 10.3mm rgba(181,96,62,.55),inset 0 0 0 12mm #FBF7EC,inset 0 0 0 12.3mm rgba(201,154,91,.65)}
-        .cover h1{font-size:${A5 ? 24 : 30}pt;margin:0 0 5mm;line-height:1.2}.cover h1::after{content:"";display:block;width:46mm;height:5mm;margin:6mm auto 0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='12' viewBox='0 0 44 12'%3E%3Cpath d='M0 6Q5.5-1 11 6T22 6T33 6T44 6' fill='none' stroke='%23B5603E' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center/auto 100%}.cover .sub{font:italic 13pt 'Noto Serif',Georgia,serif;color:#B5603E;margin-bottom:12mm}.cover img{width:${A5 ? 50 : 80}mm;height:${A5 ? 50 : 80}mm;object-fit:cover;border-radius:50%;border:2mm solid #FBF7EC;outline:.4mm solid #7C8B58;outline-offset:1.5mm;margin-bottom:12mm}.cover .au{font-size:10pt;letter-spacing:.18em;text-transform:uppercase;color:#7C8B58}
-        .tocl{list-style:none;padding:0;margin:0;font:11pt/2 'Noto Serif',Georgia,serif;color:#B5603E}.tocl li{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(124,139,88,.6)}.tocl a{color:#3B2F26;text-decoration:none}
-        h2.ch{font-size:${A5 ? 12 : 14}pt;border-bottom:1px solid rgba(124,139,88,.55);padding-bottom:3mm;margin:0 0 6mm;position:relative;letter-spacing:.025em}h2.ch::after{content:"";position:absolute;left:0;bottom:-1.5px;width:26mm;height:3px;background:#B5603E}h2.ch:before{content:'❧';float:right;color:#C99A5B;font-size:17pt;line-height:.8}
-        .txt{white-space:pre-line;text-align:justify;hyphens:auto;margin:0 0 3mm}h3{font-size:10.5pt;margin:4mm 0 2mm}h4{font-size:8.5pt;margin:3mm 0 1mm;color:#B5603E}
-        .gen,.idx{list-style:none;padding:0;margin:0}.gen li,.idx li{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(124,139,88,.6);padding:1.1mm 0}.gen span,.idx span{color:#8a7a62}
-        .bio{border-bottom:1px solid #E4D9C0;padding:3mm 0 4mm}.bh{display:flex;gap:5mm;align-items:center;justify-content:space-between}.bh h3{margin:0}.bh small{font-weight:normal;color:#8a7a62}.yrs{margin:1mm 0 0;color:#B5603E;font-weight:600;font-family:'Noto Serif',Georgia,serif}.face{width:${A5 ? 18 : 22}mm;height:${A5 ? 18 : 22}mm;object-fit:cover;border-radius:50%;border:1mm solid #FBF7EC;outline:.35mm solid #C99A5B}
-        table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:.95em}th{text-align:left;color:#8a7a62;font-weight:normal;width:26%;vertical-align:top;padding:.8mm 0}td{padding:.8mm 0}.tl{margin:0}.tl th{color:#4A5D3A;font-weight:600;width:32%;border-bottom:1px dotted rgba(124,139,88,.5)}.tl td{border-bottom:1px dotted rgba(124,139,88,.5)}
-        .ev{margin:2mm 0;padding-left:5mm;font-size:.95em}.strip{display:flex;gap:3mm;margin-top:3mm}.strip figure{flex:1;margin:0}.strip img{border-radius:3px;width:100%;height:${A5 ? 24 : 32}mm;object-fit:cover}
-        .album{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:6mm}.album figure{margin:0;background:#FFFDF8;padding:3mm 3mm 2mm;border:1px solid #E7DCC5;box-shadow:0 .6mm 2.5mm rgba(59,47,38,.18);transform:rotate(-.25deg)}.album figure:nth-child(even){transform:rotate(.3deg)}.album img{width:100%;max-height:${A5 ? 45 : 62}mm;object-fit:cover}.album figcaption{text-align:center;margin-top:2mm}figcaption{font:italic 7.5pt 'Noto Serif',Georgia,serif;color:#8a7a62;margin-top:1mm}
-        .gh{font-size:12pt;text-align:center;color:#B5603E;margin:0 0 3mm;padding:4mm 0 2mm;border-top:1px solid rgba(124,139,88,.5)}.rc{border-left:1.2mm solid #B5603E;background:#FBF7EC;padding:2mm 4mm;margin:0 0 3mm}.rc h4{margin:0 0 1mm;color:#4A5D3A;font-size:9pt}.rc .by{margin:0 0 2mm;color:#B5603E;font:italic 7.5pt 'Noto Serif',Georgia,serif}.rc .txt{margin:0 0 2mm}ul.sp,table.sp{margin:0}.nk{margin:.5mm 0 0;color:#7C8B58;font:italic 9pt 'Noto Serif',Georgia,serif}.quote{border-left:1mm solid #B5603E;padding:1mm 0 1mm 4mm;margin:3mm 0;font-style:italic;font-family:'Noto Serif',Georgia,serif;background:#FBF7EC}`;
+        @media screen{body{background:#4b463f;padding:6mm 0}#wrap{height:var(--h,auto);overflow:hidden}#out{width:max-content;transform:scale(var(--z,1));transform-origin:0 0}.sheet{margin:0 auto 6mm;box-shadow:0 1mm 4mm rgba(0,0,0,.55)}}
+
+        /* ===== 8 σχεδιασμοί σελίδας: κάθε σελίδα παίρνει τον επόμενο της σειράς ===== */
+        ${PAL.map((p, i) => `.sheet.d${i}{--bg:${p.bg};--hc:${p.hc};--ac:${p.ac};--c2:${p.c2};--tn:${p.tn};--dv:${DV[i]}}`).join('\n        ')}
+        .sheet:before,.sheet:after,.sheet>i{content:'';position:absolute;display:block;pointer-events:none}
+
+        /* 0 Αιγαίο: διπλό πλαίσιο και μαίανδρος */
+        .d0:before{inset:var(--bi);border:.3mm solid var(--hc)}.d0:after{inset:calc(var(--bi) + 1.2mm);border:.25mm solid var(--c2)}
+        .d0 .o1,.d0 .o2{left:calc(var(--bi) + 2.6mm);right:calc(var(--bi) + 2.6mm);height:var(--bw);background:${mMeander(PAL[0].hc)} left center/auto 100% repeat-x}
+        .d0 .o1{top:calc(var(--bi) + 2.2mm)}.d0 .o2{bottom:calc(var(--bi) + 2.2mm)}
+        .d0 .hd:after{content:'';display:block;width:26mm;height:.25mm;background:var(--c2);margin:1.2mm auto 0}
+        .d0 .ft span{border-top:.25mm solid var(--c2);border-bottom:.25mm solid var(--c2)}
+        .d0 h2.ch{text-align:center}
+
+        /* 1 Τερακότα: χοντρό κεραμιδί πλαίσιο, φολίδες, τεταρτοκύκλια στις γωνίες */
+        .d1:before{inset:var(--bi);border:.9mm solid var(--hc)}.d1:after{inset:calc(var(--bi) + 1.9mm);border:.25mm solid var(--c2)}
+        .d1 .o3{inset:calc(var(--bi) + 1.9mm);background:${cornerRing(PAL[1].hc, PAL[1].c2)}}
+        .d1 .o1,.d1 .o2{left:calc(var(--bi) + 11mm);right:calc(var(--bi) + 11mm);height:2.4mm;background:${mScallop(PAL[1].hc, PAL[1].c2)} left top/auto 100% repeat-x}
+        .d1 .o1{top:calc(var(--bi) + 2.2mm)}.d1 .o2{bottom:calc(var(--bi) + 2.2mm);transform:scaleY(-1)}
+        .d1 .hd{text-align:left;padding-left:${A5 ? 12 : 17}mm}
+        .d1 .ft span{background:var(--hc);color:var(--bg);border-radius:50%;min-width:7mm;height:7mm;padding:0;line-height:7mm}
+        .d1 h2.ch{text-align:left;border-left:1.6mm solid var(--hc);padding-left:4mm}.d1 h2.ch:after{left:4mm}
+
+        /* 2 Ελιά: ελαιόδεντρο στην κορυφή και στη βάση */
+        .d2:before{inset:calc(var(--bi) + 2mm);border:.3mm solid var(--c2);border-radius:3mm}
+        .d2 .o1,.d2 .o2{left:50%;width:${A5 ? 36 : 50}mm;height:${(sh * 0.96).toFixed(1)}mm;margin-left:-${A5 ? 18 : 25}mm;background:${mOlive(PAL[2].ac, PAL[2].hc)} center/contain no-repeat,linear-gradient(var(--bg),var(--bg)) center/100% 1.6mm no-repeat}
+        .d2 .o1{top:calc(var(--bi) + 2mm - ${(sh * 0.48).toFixed(2)}mm)}.d2 .o2{bottom:calc(var(--bi) + 2mm - ${(sh * 0.48).toFixed(2)}mm);transform:scaleY(-1)}
+        .d2 .hd{display:none}
+        .d2 .ft span:before,.d2 .ft span:after{content:'';display:inline-block;width:5mm;height:2.6mm;vertical-align:middle;margin:0 1.4mm;background:${mLeaf(PAL[2].c2)} center/contain no-repeat}
+        .d2 .ft span{padding:0}
+        .d2 h2.ch{text-align:center;font-style:italic;padding-bottom:${A5 ? 8 : 10}mm}.d2 h2.ch:after{height:${A5 ? 6 : 8}mm}
+
+        /* 3 Κύματα: δύο κυματιστές ζώνες και πλευρικές γραμμές */
+        .d3:before{top:calc(var(--bi) + var(--bw) + 1mm);bottom:calc(var(--bi) + var(--bw) + 1mm);left:calc(var(--bi) + 1mm);right:calc(var(--bi) + 1mm);border-left:.3mm solid var(--c2);border-right:.3mm solid var(--c2)}
+        .d3 .o1,.d3 .o2{left:calc(var(--bi) + 1mm);right:calc(var(--bi) + 1mm);height:var(--bw);background:${mWave(PAL[3].ac, PAL[3].c2)} center/auto 100% repeat-x}
+        .d3 .o1{top:calc(var(--bi) + 1mm)}.d3 .o2{bottom:calc(var(--bi) + 1mm)}
+        .d3 .hd:before,.d3 .hd:after{content:'';display:inline-block;width:14mm;height:.3mm;background:var(--c2);vertical-align:middle;margin:0 3mm}
+        .d3 .ft span{padding:0}.d3 .ft span:before,.d3 .ft span:after{content:'';display:inline-block;width:9mm;height:2.2mm;vertical-align:middle;margin:0 2mm;background:${mWave(PAL[3].ac, PAL[3].c2)} center/auto 100% repeat-x}
+        .d3 h2.ch{text-align:center}
+
+        /* 4 Πλακάκια: κορνίζα από κεραμικά πλακίδια (αζουλέχο) */
+        .d4 .o1,.d4 .o2{left:var(--bi);right:var(--bi);height:var(--bw);background:${mTile(PAL[4].hc, PAL[4].c2)} left center/var(--bw) var(--bw) repeat-x}
+        .d4 .o1{top:var(--bi)}.d4 .o2{bottom:var(--bi)}
+        .d4:before,.d4:after{top:calc(var(--bi) + var(--bw));bottom:calc(var(--bi) + var(--bw));width:var(--bw);background:${mTile(PAL[4].hc, PAL[4].c2)} center top/var(--bw) var(--bw) repeat-y}
+        .d4:before{left:var(--bi)}.d4:after{right:var(--bi)}
+        .d4 .hd:before,.d4 .hd:after{content:'';display:inline-block;width:2.6mm;height:2.6mm;background:${mTile(PAL[4].hc, PAL[4].c2)} center/contain no-repeat;vertical-align:-.3mm;margin:0 2.4mm}
+        .d4 .ft span{border:.3mm solid var(--hc);background:var(--tn)}
+        .d4.odd .ft{text-align:right;padding-right:${A5 ? 12 : 17}mm}.d4.even .ft{text-align:left;padding-left:${A5 ? 12 : 17}mm}
+        .d4 h2.ch{text-align:center;border:.3mm solid var(--hc);background:var(--tn);padding:3mm 3mm ${A5 ? 7 : 8}mm}
+
+        /* 5 Ήλιος: ανατολή στη βάση, χρυσό πλαίσιο, κουκκίδες στην κορυφή */
+        .d5:before{inset:var(--bi);border:.5mm solid var(--c2)}.d5:after{inset:calc(var(--bi) + 1.4mm);border:.25mm solid var(--ac)}
+        .d5 .o1{bottom:calc(var(--bi) + 1.4mm);left:50%;width:${A5 ? 26 : 38}mm;height:${A5 ? 9 : 13}mm;margin-left:-${A5 ? 13 : 19}mm;background:${mSun(PAL[5].ac, PAL[5].c2)} center bottom/contain no-repeat}
+        .d5 .o2{top:calc(var(--bi) + 3.4mm);left:calc(var(--bi) + 8mm);right:calc(var(--bi) + 8mm);height:1.2mm;background:radial-gradient(circle,var(--ac) 40%,transparent 44%) center/2.6mm 100% repeat-x}
+        .d5 .hd{display:none}
+        .d5.odd .ft{text-align:right;padding-right:${A5 ? 12 : 17}mm}.d5.even .ft{text-align:left;padding-left:${A5 ? 12 : 17}mm}
+        .d5 .ft span{border:.3mm solid var(--c2);border-radius:50%;min-width:7mm;height:7mm;padding:0;line-height:6.4mm}
+        .d5 h2.ch{text-align:right;padding-bottom:${A5 ? 8 : 9}mm}.d5 h2.ch:after{height:${A5 ? 5.5 : 6.5}mm}
+
+        /* 6 Ψηφιδωτό: κάθετη ζώνη ψηφίδων στο εξωτερικό περιθώριο */
+        .d6:before{inset:var(--bi);border:.3mm solid var(--ac)}
+        .d6 .o3{top:var(--bi);bottom:var(--bi);width:6mm;background:${mMosaic(PAL[6].hc, PAL[6].c2, PAL[6].ac)} center top/6mm 6mm repeat-y;box-shadow:inset 0 0 0 .3mm var(--ac)}
+        .d6.odd .o3{right:var(--bi)}.d6.even .o3{left:var(--bi)}
+        .d6 .hd{text-align:right;padding-right:${A5 ? 12 : 17}mm}
+        .d6.odd .ft{text-align:right;padding-right:${A5 ? 12 : 17}mm}.d6.even .ft{text-align:left;padding-left:${A5 ? 12 : 17}mm}
+        .d6 .ft span{border-bottom:.8mm solid var(--c2)}
+        .d6 h2.ch{text-align:left;border-bottom:1mm solid var(--hc);padding-bottom:3mm}.d6 h2.ch:after{display:none}
+
+        /* 7 Κυπαρίσσι και λεβάντα: αψίδα σαν μεσογειακή πόρτα */
+        .d7:before{inset:var(--bi);border:.6mm solid var(--hc);border-radius:${A5 ? 26 : 44}mm ${A5 ? 26 : 44}mm 1.5mm 1.5mm}
+        .d7:after{inset:calc(var(--bi) + 1.5mm);border:.25mm solid var(--c2);border-radius:${A5 ? 24.5 : 42.5}mm ${A5 ? 24.5 : 42.5}mm .5mm .5mm}
+        .d7 .o2{bottom:calc(var(--bi) + 2.6mm);left:50%;width:22mm;height:2.4mm;margin-left:-11mm;background:${mDia(PAL[7].hc, PAL[7].c2)} center/contain no-repeat}
+        .d7 .ft{bottom:${A5 ? G.B - 10 : G.B - 11}mm}
+        .d7 .ft span{border:.3mm solid var(--hc);border-radius:2.5mm 2.5mm 0 0;padding:.6mm 3mm}
+        .d7 h2.ch{text-align:center;letter-spacing:.04em}
+
+        /* ===== Κεφάλαια ===== */
+        h2.ch{position:relative;font-size:${A5 ? 13.5 : 16.5}pt;line-height:1.25;margin:0 0 7mm;padding:0 0 ${A5 ? 4.5 : 5.5}mm;color:var(--hc,${BLUE})}
+        h2.ch:after{content:'';position:absolute;left:0;right:0;bottom:0;height:3.2mm;background:var(--dv,none)}
+        .txt{white-space:pre-line;text-align:justify;hyphens:auto;margin:0 0 3mm}h3{font-size:${A5 ? 11 : 12}pt;margin:4mm 0 2mm}h4{font-size:${A5 ? 9.5 : 10.5}pt;margin:3mm 0 1mm}
+        .gen,.idx{list-style:none;padding:0;margin:0}.gen li,.idx li{display:flex;justify-content:space-between;border-bottom:1px dotted var(--c2,#C9962E);padding:1.1mm 0}.gen span,.idx span{color:#8a7a62}
+        .gy{display:block;margin:0;font:italic 400 ${A5 ? 8 : 9}pt 'EB Garamond',Georgia,serif;color:#8a7a62}
+        .tocl{list-style:none;padding:0;margin:0;font:${A5 ? 11 : 12}pt/2 'EB Garamond',Georgia,serif;color:var(--ac)}.tocl li{display:flex;justify-content:space-between;border-bottom:1px dotted var(--c2,#C9962E)}.tocl a{color:#3B2F26;text-decoration:none}
+        .dedication{min-height:90mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12mm;font:italic ${A5 ? 1.41 : 1.47}em/1.8 'EB Garamond',Georgia,serif;color:var(--ac)}.dedication p{max-width:120mm;margin:0}
+        .dedication:before{content:'';display:block;width:${A5 ? 36 : 48}mm;height:${A5 ? 7 : 9.5}mm;margin:0 auto 6mm;background:${mOlive(PAL[2].ac, PAL[2].hc)} center/contain no-repeat}.closing{color:${TERRA}}
+        .branch{border:1px solid var(--c2,#C9962E);border-radius:1.5mm;padding:4mm 5mm;margin:0 0 4mm;background:var(--tn,rgba(0,0,0,.04))}.branch h3{margin-top:0}
+        .branch-tree-title{text-align:center;margin-bottom:4mm}.branch-tree-title h3{margin:0}.branch-tree-title .by{font:italic 9pt 'EB Garamond',Georgia,serif;color:#8a7a62;margin:2mm 0 0}
+        .by{margin:0 0 2mm;font:italic ${A5 ? 8.5 : 9.5}pt 'EB Garamond',Georgia,serif;color:var(--ac)}
+        .source-note{margin-top:6mm;padding:3mm;border-top:1px solid var(--c2,#C9962E);color:#8a7a62;font:italic ${A5 ? 8.5 : 9.5}pt 'EB Garamond',Georgia,serif}
+        .bio{border-bottom:1px solid var(--c2,#C9962E);padding:3mm 0 4mm}.bh{display:flex;flex-direction:column-reverse;gap:3.5mm;align-items:center;text-align:center;margin-bottom:3mm}.bh h3{margin:0;font-size:${A5 ? 14 : 17}pt;line-height:1.25}.bh>div:after{content:'';display:block;height:3.2mm;margin-top:3mm;background:var(--dv,none)}.bh small{font-weight:normal;color:#8a7a62}
+        .yrs{margin:1mm 0 0;color:var(--ac);font-weight:600}.nk{margin:.5mm 0 0;color:var(--ac);font:italic ${A5 ? 10 : 11}pt 'EB Garamond',Georgia,serif}
+        .face{width:${A5 ? 26 : 34}mm;height:${A5 ? 26 : 34}mm;object-fit:cover;border-radius:50%;border:1mm solid var(--bg,#FBF8F0);outline:.35mm solid var(--c2,#C9962E)}
+        table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:.95em}th{text-align:left;color:#8a7a62;font-weight:normal;width:26%;vertical-align:top;padding:.8mm 0}td{padding:.8mm 0}
+        .tl{margin:0}.tl th{color:var(--hc);font-weight:600;width:32%;border-bottom:1px dotted var(--c2,#C9962E)}.tl td{border-bottom:1px dotted var(--c2,#C9962E)}
+        .ev{margin:2mm 0;padding-left:5mm;font-size:.95em}
+        .album{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:6mm}.album figure{margin:0;background:#FFFEFB;padding:3mm 3mm 2mm;border:1px solid var(--c2,#C9962E);box-shadow:0 .6mm 2.5mm rgba(59,47,38,.18);transform:rotate(-.25deg)}.album figure:nth-child(even){transform:rotate(.3deg)}.album img{width:100%;max-height:${A5 ? 45 : 62}mm;object-fit:cover}.album figcaption{text-align:center;margin-top:2mm}figcaption{font:italic ${A5 ? 8.5 : 9.5}pt 'EB Garamond',Georgia,serif;color:#8a7a62;margin-top:1mm}
+        .gh{font:400 ${A5 ? 12 : 14}pt 'GFS Didot','Noto Serif',Georgia,serif;text-align:center;color:var(--ac);margin:0 0 3mm;padding:4mm 0 2mm;border-top:1px solid var(--c2,#C9962E)}
+        .rc{border-left:1.2mm solid var(--ac);background:var(--tn);padding:2mm 4mm;margin:0 0 3mm}.rc h4{margin:0 0 1mm;color:var(--hc)}.rc .txt{margin:0 0 2mm}ul.sp,table.sp{margin:0}
+        .quote{border-left:1mm solid var(--ac);padding:1mm 0 1mm 4mm;margin:3mm 0;font-style:italic;background:var(--tn)}
+
+        /* ===== Εξώφυλλο: Αιγαίο, μαίανδρος, κλαδί ελιάς ===== */
+        .sheet.cov{background:${BLUE}}
+        .cover{position:absolute;inset:${A5 ? 7 : 10}mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#FBF7EC;padding:${A5 ? 18 : 24}mm ${A5 ? 12 : 18}mm}
+        .cover:before{content:'';position:absolute;inset:3mm;border:.3mm solid ${GOLD}}.cover:after{content:'';position:absolute;inset:4.5mm;border:.2mm solid ${BLUE}}
+        .cover .cv1,.cover .cv2{position:absolute;left:${A5 ? 8 : 10}mm;right:${A5 ? 8 : 10}mm;height:${A5 ? 3.5 : 5}mm;background:${mMeander(BLUE)} left center/auto 100% repeat-x}.cover .cv1{top:${A5 ? 8 : 10}mm}.cover .cv2{bottom:${A5 ? 8 : 10}mm}
+        .cover .cv-sp{width:${A5 ? 44 : 62}mm;height:${A5 ? 9 : 12.5}mm;margin:0 0 ${A5 ? 6 : 9}mm;background:${mOlive(PAL[2].ac, TERRA)} center/contain no-repeat}
+        .cover h1{font-size:${A5 ? 25 : 32}pt;line-height:1.2;margin:0 0 4mm;color:${BLUE}}
+        .cover h1:after{content:'';display:block;width:${A5 ? 40 : 54}mm;height:${A5 ? 3.4 : 4.2}mm;margin:${A5 ? 5 : 6.5}mm auto 0;background:${mWave(BLUE, GOLD)} center/auto 100% repeat-x}
+        .cover .sub{font:italic ${A5 ? 12 : 14}pt 'EB Garamond',Georgia,serif;color:${TERRA};margin:0 0 ${A5 ? 9 : 12}mm}
+        .cover img{width:${A5 ? 48 : 76}mm;height:${A5 ? 48 : 76}mm;object-fit:cover;border-radius:50%;box-shadow:0 0 0 1.2mm #FBF7EC,0 0 0 1.7mm ${GOLD},0 0 0 3.4mm #FBF7EC,0 0 0 3.9mm ${BLUE};margin:2mm 0 ${A5 ? 9 : 12}mm}
+        .cover .cv-sun{width:${A5 ? 46 : 66}mm;height:${A5 ? 16 : 23}mm;margin:0 0 ${A5 ? 9 : 12}mm;background:${mSun('#C0562F', GOLD)} center bottom/contain no-repeat}
+        .cover .au{font:400 ${A5 ? 10 : 11.5}pt 'GFS Didot',Georgia,serif;letter-spacing:.12em;color:${BLUE}}`;
+
       const PAG = `(function(){
 function go(){
 var src=document.getElementById('src'),out=document.getElementById('out'),title=document.title,starts=[];
 function isH(e){return /^H[1-4]$/.test(e.tagName);}
 function over(c){return c.scrollHeight>c.clientHeight+1;}
-function sheet(kind){var n=out.children.length+1,sh=document.createElement('div');sh.className='sheet '+(n%2?'odd':'even')+(kind?' '+kind:'');
+var curCh='';
+function sheet(kind){var n=out.children.length+1,sh=document.createElement('div');sh.className='sheet '+(n%2?'odd':'even')+(kind?' '+kind:'')+' d'+((n*3)%8);
 var c=document.createElement('div');c.className='pc';sh.appendChild(c);
-var h=document.createElement('div');h.className='hd';h.textContent=title;sh.appendChild(h);
-var f=document.createElement('div');f.className='ft';f.textContent='— '+n+' —';sh.appendChild(f);out.appendChild(sh);return c;}
+var h=document.createElement('div');h.className='hd';h.textContent=(n%2&&curCh)?curCh:title;sh.appendChild(h);
+var f=document.createElement('div');f.className='ft';var sp=document.createElement('span');sp.textContent=n;f.appendChild(sp);sh.appendChild(f);
+['o1','o2','o3'].forEach(function(k){var i=document.createElement('i');i.className=k;sh.appendChild(i);});
+out.appendChild(sh);return c;}
 var cov=src.querySelector('.cover');
 if(cov){var cs=document.createElement('div');cs.className='sheet odd cov';cs.appendChild(cov);out.appendChild(cs);}
 function expand(list){var r=[];list.forEach(function(e){
@@ -4448,6 +4704,16 @@ if(lo<1)lo=1;
 var rest=a.cloneNode(false);rest.textContent=w.slice(lo).join(' ');a.textContent=w.slice(0,lo).join(' ');return rest;}
 function chapter(sec,noStart){
 var kind=sec.classList.contains('treepg')?'land':'';
+var hh=sec.querySelector('h2.ch');if(hh){var tx=hh.textContent,k=tx.indexOf('. ');curCh=(k>-1&&k<4)?tx.slice(k+2):tx;}
+if(sec.classList.contains('fit')){
+var kids=[].slice.call(sec.children),c0=sheet(kind),sh0=c0.parentNode;
+kids.forEach(function(e){c0.appendChild(e);});
+if(over(c0)){var base=parseFloat(getComputedStyle(c0).fontSize),lo=base*0.55,hi=base;
+for(var j=0;j<16;j++){var mid=(lo+hi)/2;c0.style.fontSize=mid+'px';if(over(c0))hi=mid;else lo=mid;}
+c0.style.fontSize=lo+'px';}
+if(!over(c0)){if(!noStart)starts.push(out.children.length);return;}
+c0.style.fontSize='';out.removeChild(sh0);kids.forEach(function(e){sec.appendChild(e);});
+}
 var q=expand([].slice.call(sec.children));
 var c=sheet(kind);if(!noStart)starts.push(out.children.length);
 var guard=0;
@@ -4491,11 +4757,12 @@ document.body.setAttribute('data-ready','1');
 }
 var done=false;function run(){if(done)return;done=true;try{go();}catch(e){console.error(e);}}
 var ps=[].slice.call(document.images).map(function(i){return i.complete?0:new Promise(function(r){i.onload=r;i.onerror=r;});});
+if(document.fonts&&document.fonts.load){['400 12pt "EB Garamond"','italic 400 12pt "EB Garamond"','600 12pt "EB Garamond"','400 12pt "GFS Didot"'].forEach(function(f){ps.push(document.fonts.load(f,'Αβγδ ώ Abc 123').catch(function(){}));});}
 if(document.fonts&&document.fonts.ready)ps.push(document.fonts.ready);
 Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).then(run);
 })();`;
-      return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(o.title)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Noto+Serif:ital,wght@0,500;0,600;0,700;1,400&display=swap"><style>${css}</style></head><body class="${A5 ? 'a5' : 'a4'}"><div id="src">
-        <section class="cover">${cover ? `<img src="${cover.src}" alt="">` : ''}<h1>${esc(o.title)}</h1><div class="sub">${esc(o.subtitle)}</div><div class="au">${esc(o.author)}${o.author ? ' · ' : ''}${new Date().getFullYear()}</div></section>
+      return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(o.title)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=GFS+Didot&display=swap"><style>${css}</style></head><body class="${A5 ? 'a5' : 'a4'}"><div id="src">
+        <section class="cover"><div class="cv1"></div><div class="cv2"></div><div class="cv-sp"></div><h1>${esc(o.title)}</h1><div class="sub">${esc(o.subtitle)}</div>${cover ? `<img src="${cover.src}" alt="">` : '<div class="cv-sun"></div>'}<div class="au">${esc(o.author)}${o.author ? ' · ' : ''}${new Date().getFullYear()}</div></section>
         <section class="toc"><h2 class="ch">Περιεχόμενα</h2><ol class="tocl">${ch.map((c, i) => `<li><a href="#c${i}">${esc(c[0])}</a></li>`).join('')}</ol></section>
         ${ch.map((c, i) => `<section class="c ${c[2] || ''}" id="c${i}"><h2 class="ch">${i + 1}. ${esc(c[0])}</h2>${c[1]}</section>`).join('')}</div><div id="wrap"><div id="out"></div></div><script>${PAG}<\/script></body></html>`;
     }
