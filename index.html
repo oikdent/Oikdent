@@ -3021,6 +3021,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       if (f.type === 'tip') return `<div class="text-sm rounded-xl bg-ochre/10 text-gray-700 px-3 py-2.5 leading-relaxed">${f.html}</div>`;
       if (f.type === 'detstart') return `<details class="rounded-xl border border-aegean/15 bg-white/60 px-3 py-2"${f.open ? ' open' : ''}><summary class="cursor-pointer text-sm font-semibold text-aegean min-h-[32px] flex items-center">${esc(f.label)}</summary><div class="space-y-3 pt-2 pb-1">`;
       if (f.type === 'detend') return '</div></details>';
+      if (f.type === 'raw') return f.html;
       if (f.type === 'heading') return `<p class="pt-3 text-xs font-semibold uppercase tracking-wide text-olive">${esc(f.label)}</p>`;
       const v = f.value == null ? '' : f.value;
       let input;
@@ -4411,8 +4412,12 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         { name: 'todo', label: 'Εκκρεμείς πληροφορίες προς έρευνα', type: 'textarea', value: p.todo, placeholder: 'π.χ. Ποιος ήταν ο πατέρας του;' },
         { name: 'unc', type: 'checkbox', label: 'Οι ημερομηνίες είναι κατά προσέγγιση / αβέβαιες', value: p.unc },
         { name: 'fav', type: 'checkbox', label: '★ Αγαπημένο πρόσωπο', value: p.fav },
+        { type: 'detend' },
+        { type: 'detstart', label: '📱 Social media', open: !!(p.social && hasSoc(p)) }
+      ].concat(SOC.map(n => ({ name: 's_' + n[0], label: n[2] + ' ' + n[1], value: (p.social || {})[n[0]] || '', cap: 'none', placeholder: (n[0] === 'wa' || n[0] === 'vb') ? 'αριθμός με κωδικό χώρας, π.χ. 306912345678' : 'όνομα χρήστη ή σύνδεσμος' })), [
+        { type: 'raw', html: socCustomHtml(p) },
         { type: 'detend' }
-      ];
+      ]);
     }
     function bindAlive() {
       const f = $('modal-form'), s = f.elements['alive']; if (!s) return;
@@ -4472,6 +4477,13 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       p.team = (d.team || '').trim(); p.nday = (d.nday || '').trim();
       p.sourceNote = (d.sourceNote || '').trim(); p.birthCertainty = d.birthCertainty || 'unknown'; p.deathCertainty = d.deathCertainty || 'unknown'; p.parentCertainty = d.parentCertainty || 'unknown';
       p.emoji = autoEmoji(p.sex, p.by, p.dy);
+      if (d.s_present) {
+        const old = p.social || {}, soc = {};
+        SOC.forEach(n => { const v = (d['s_' + n[0]] || '').trim(); if (v) soc[n[0]] = v; });
+        const cu = []; Object.keys(d).forEach(k => { const m = /^cn_(\d+)$/.exec(k); if (!m) return; const nm = (d[k] || '').trim(), u = (d['cu_' + m[1]] || '').trim(); if (nm || u) cu.push({ name: nm, url: u }); });
+        if (cu.length) soc.custom = cu; if (old.post) soc.post = old.post;
+        if (Object.keys(soc).length) p.social = soc; else delete p.social;
+      }
     }
 const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'father', l: 'Ο πατέρας του/της' }, { v: 'spouse', l: 'Ο/Η σύζυγος του/της' }, { v: 'child', l: 'Το παιδί του/της' }, { v: 'sibling', l: 'Ο αδελφός / Η αδελφή του/της' }, { v: 'halfsib_m', l: 'Ετεροθαλής αδελφός/ή — κοινός πατέρας' }, { v: 'halfsib_f', l: 'Ετεροθαλής αδελφός/ή — κοινή μητέρα' }, { v: 'adopt_parent', l: 'Ο θετός γονέας του/της' }, { v: 'adopted', l: 'Το θετό παιδί του/της' }, { v: 'ex_div', l: 'Ο/Η πρώην σύζυγος του/της (διαζύγιο)' }, { v: 'ex_wid', l: 'Ο/Η σύζυγος του/της που πέθανε (χηρεία)' }, { v: 'none', l: 'Χωρίς σύνδεση' }];
     const REL_WORD = { mother: 'μητέρα', father: 'πατέρας', spouse: 'σύζυγος', child: 'παιδί', sibling: 'αδελφός/ή', halfsib_m: 'ετεροθαλής αδελφός/ή (κοινός πατέρας)', halfsib_f: 'ετεροθαλής αδελφός/ή (κοινή μητέρα)', adopt_parent: 'θετός γονέας', adopted: 'θετό παιδί', ex_div: 'πρώην σύζυγος', ex_wid: 'σύζυγος (χηρεία)' };
@@ -4551,7 +4563,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         title: has ? 'Νέο μέλος' : 'Πρώτο μέλος της οικογένειας',
         submitText: 'Προσθήκη μέλους',
         fields: [{ type: 'tip', html: '<b>Γρήγορη συμπλήρωση:</b> αρκούν ' + (has ? '1) όνομα και επώνυμο, 2) σχέση με υπάρχον μέλος, 3) έτος γέννησης, 4) έτος θανάτου αν έχει πεθάνει' : '1) όνομα και επώνυμο, 2) έτος γέννησης, 3) έτος θανάτου αν έχει πεθάνει') + '. Όλα τα υπόλοιπα μπορείς να τα συμπληρώσεις αργότερα από την Επεξεργασία.' }].concat(relFields, personFields(null, true)),
-        onMount: () => { bindRel(); bindAlive(); bindSuggest(); },
+        onMount: () => { bindRel(); bindAlive(); bindSuggest(); bindSocial(); },
         onSubmit: d => {
           const other = has ? byId(+d.relTo) : null, r = d.relation || 'none', by = yearOfDate(d.bdate, d.by), isParent = r === 'mother' || r === 'father';
           if (!checkDates(d)) return false;
@@ -4733,7 +4745,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       openModal({
         title: 'Επεξεργασία',
         fields: parentFields(p).concat(personFields(p)),
-        onMount: () => { bindAlive(); bindSuggest(); bindParents(p); },
+        onMount: () => { bindAlive(); bindSuggest(); bindParents(p); bindSocial(); },
         onSubmit: d => { if (!checkDates(d)) return false; const pm = applyParents(p, d); if (pm === false) return false; applyPersonData(p, d); const hl = linkHeritage(p); save(); refresh(); showToast('Οι αλλαγές αποθηκεύτηκαν.' + (pm ? ' ' + pm : '') + (hl ? ' ' + hl : '')); },
         danger: { label: 'Διαγραφή', run: () => { deletePerson(id); return false; } }
       });
@@ -4767,6 +4779,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         c.innerHTML = `<div class="space-y-1 text-sm">
           ${row('Πλήρες όνομα', p.full)}${row('Πατρώνυμο', p.pat ? 'του ' + p.pat : '')}${row('Πατρικό επώνυμο', p.maiden)}${row('Παρατσούκλι', p.paratsouk)}${row('Γέννηση', p.born || p.by)}${row('Θάνατος', (p.dy || p.deceased) ? (p.died || p.dy || 'Έχει πεθάνει') : '')}
           ${row('Ημερομηνίες', p.unc ? 'κατά προσέγγιση / αβέβαιες' : '')}${row('Επάγγελμα', p.job)}${row('Ομάδα', p.team)}${row('Γιορτή', namedayText(p))}${row('Προς έρευνα', p.todo)}${row('Τόπος καταγωγής', p.origin)}${row('Τόπος διαμονής', p.place)}${p.story ? `<div class="py-2"><p class="text-gray-500 mb-1">Μικρή ιστορία</p><p class="whitespace-pre-line">${esc(p.story)}</p></div>` : ''}${p.notes ? `<div class="py-2"><p class="text-gray-500 mb-1">Σημειώσεις</p><p class="whitespace-pre-line">${esc(p.notes)}</p></div>` : ''}</div>
+          ${socChips(p) ? `<div class="mt-4"><p class="text-sm text-gray-500 mb-2">Social media</p><div class="flex flex-wrap gap-2">${socChips(p)}</div></div>` : ''}
           <div class="mt-6 flex gap-3">
             <button data-act="edit" class="flex-1 py-2.5 rounded-xl bg-aegean text-white text-sm font-medium">Επεξεργασία</button>
             <button data-act="rel" class="flex-1 py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">Προσθήκη συγγενή</button>
@@ -5111,16 +5124,34 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
     window.endMarriage = endMarriage;
 
     /* ---------- Social μελών ---------- */
-    const SOC = [['fb', 'Facebook', '📘', 'https://facebook.com/'], ['ig', 'Instagram', '📸', 'https://instagram.com/'], ['tt', 'TikTok', '🎵', 'https://tiktok.com/@'], ['x', 'X', '✖️', 'https://x.com/'], ['yt', 'YouTube', '▶️', 'https://youtube.com/@']];
+    const SOC = [['fb', 'Facebook', '📘', 'https://facebook.com/'], ['ig', 'Instagram', '📸', 'https://instagram.com/'], ['tt', 'TikTok', '🎵', 'https://tiktok.com/@'], ['x', 'X', '✖️', 'https://x.com/'], ['yt', 'YouTube', '▶️', 'https://youtube.com/@'], ['sn', 'Snapchat', '👻', 'https://snapchat.com/add/'], ['li', 'LinkedIn', '💼', 'https://linkedin.com/in/'], ['th', 'Threads', '🧵', 'https://threads.net/@'], ['pi', 'Pinterest', '📌', 'https://pinterest.com/'], ['tg', 'Telegram', '✈️', 'https://t.me/'], ['wa', 'WhatsApp', '💬', 'https://wa.me/'], ['vb', 'Viber', '📞', 'viber://']];
     const isUrl = v => /^https?:\/\//i.test(v || '');
-    const socUrl = (k, v) => { v = (v || '').trim(); if (!v) return ''; if (isUrl(v)) return v; if (/^[a-z]+:/i.test(v)) return ''; return SOC.find(s => s[0] === k)[3] + v.replace(/^@/, ''); };
-    const hasSoc = p => p.social && (SOC.some(s => socUrl(s[0], p.social[s[0]])) || isUrl((p.social.post || {}).url) || (p.social.post || {}).text);
+    const socUrl = (k, v) => { v = (v || '').trim(); if (!v) return ''; if (isUrl(v)) return v; if (/^[a-z]+:/i.test(v)) return ''; if (k === 'wa' || k === 'vb') { const dg = v.replace(/\D/g, ''); return dg ? (k === 'wa' ? 'https://wa.me/' + dg : 'viber://chat?number=%2B' + dg) : ''; } return SOC.find(s => s[0] === k)[3] + v.replace(/^@/, ''); };
+    const hasSoc = p => p.social && (SOC.some(s => socUrl(s[0], p.social[s[0]])) || (p.social.custom || []).some(c => c.name || c.url) || isUrl((p.social.post || {}).url) || (p.social.post || {}).text);
     const LNK = 'class="inline-block px-3 py-1.5 rounded-full bg-aegean/10 text-aegean text-sm hover:bg-aegean/20" target="_blank" rel="noopener noreferrer"';
+    const socCustomUrl = v => { v = (v || '').trim(); if (!v) return ''; if (isUrl(v)) return v; return /^[\w-]+(\.[\w-]+)+(\/\S*)?$/i.test(v) ? 'https://' + v : ''; };
+    const socChips = p => {
+      const s = p.social || {};
+      let h = SOC.map(n => { const u = socUrl(n[0], s[n[0]]); return u ? `<a href="${esc(u)}" ${LNK}>${n[2]} ${n[1]}</a>` : ''; }).join('');
+      h += (s.custom || []).map(c => {
+        if (!c.name && !c.url) return '';
+        const u = socCustomUrl(c.url);
+        return u ? `<a href="${esc(u)}" ${LNK}>🔗 ${esc(c.name || c.url)}</a>` : `<span class="inline-block px-3 py-1.5 rounded-full bg-aegean/10 text-aegean text-sm">🔗 ${esc(c.name)}${c.url ? ': ' + esc(c.url) : ''}</span>`;
+      }).join('');
+      return h;
+    };
+    const socRowHtml = (i, c) => { c = c || {}; return `<div class="flex gap-2 items-center soc-row"><input name="cn_${i}" type="text" value="${esc(c.name || '')}" placeholder="Όνομα (π.χ. Twitch)" autocapitalize="words" class="${INPUT}" style="flex:1 1 0;min-width:0;width:auto"><input name="cu_${i}" type="text" value="${esc(c.url || '')}" placeholder="Σύνδεσμος ή όνομα χρήστη" autocapitalize="none" autocorrect="off" spellcheck="false" class="${INPUT}" style="flex:1.3 1 0;min-width:0;width:auto"><button type="button" class="soc-del px-2 text-gray-400" aria-label="Αφαίρεση" style="min-height:40px">✕</button></div>`; };
+    const socCustomHtml = p => { const cs = ((p.social || {}).custom || []).filter(c => c.name || c.url), rows = cs.length ? cs : [{}]; return `<input type="hidden" name="s_present" value="1"><p class="text-xs text-gray-500">Άλλο social ή site που δεν υπάρχει στη λίστα:</p><div id="soc-custom" class="space-y-2" data-n="${rows.length}">${rows.map((c, i) => socRowHtml(i, c)).join('')}</div><button type="button" id="soc-add" class="text-sm text-aegean px-3 py-2 rounded-xl border border-aegean/30">➕ Προσθήκη άλλου social</button>`; };
+    function bindSocial() {
+      const box = $('soc-custom'), add = $('soc-add'); if (!box || !add) return;
+      add.onclick = () => { const i = +box.dataset.n; box.dataset.n = i + 1; box.insertAdjacentHTML('beforeend', socRowHtml(i)); const inp = box.lastElementChild.querySelector('input'); if (inp) inp.focus(); };
+      box.addEventListener('click', e => { const b = e.target.closest('.soc-del'); if (!b) return; const row = b.closest('.soc-row'); if (box.children.length > 1) row.remove(); else row.querySelectorAll('input').forEach(x => { x.value = ''; }); });
+    }
     function renderSocial() {
       const l = state.people.filter(hasSoc).sort((a, b) => ((b.social.post || {}).date || '').localeCompare((a.social.post || {}).date || ''));
       $('soc-list').innerHTML = l.length ? l.map(p => {
         const s = p.social, po = s.post || {}, pu = isUrl(po.url) ? po.url : '';
-        const links = SOC.map(n => { const u = socUrl(n[0], s[n[0]]); return u ? `<a href="${esc(u)}" ${LNK}>${n[2]} ${n[1]}</a>` : ''; }).join('');
+        const links = socChips(p);
         return `<div class="bg-white rounded-xl p-4 shadow-card"><button type="button" data-open="${p.id}" class="font-medium text-aegean">${esc(p.name)}</button><div class="flex flex-wrap gap-2 mt-2">${links}</div>`
           + ((po.text || pu) ? `<div class="mt-3 pt-3 border-t border-gray-100 text-sm"><p class="text-xs text-gray-500 mb-1">Τελευταίο ποστ${po.date ? ' · ' + esc(fmtIso(po.date)) : ''}</p>${po.text ? `<p class="whitespace-pre-line">${esc(po.text)}</p>` : ''}${pu ? `<a href="${esc(pu)}" ${LNK} style="margin-top:6px">Άνοιγμα ποστ ↗</a>` : ''}</div>` : '') + '</div>';
       }).join('') : '<p class="text-sm text-gray-500">Δεν έχουν οριστεί social. Πρόσθεσέ τα από τις Ρυθμίσεις → Social μελών.</p>';
@@ -5139,7 +5170,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           { name: 'pdate', type: 'date', label: 'Ημερομηνία ποστ', value: po.date || '' }
         ]),
         onSubmit: d => {
-          const soc = {}; SOC.forEach(n => { const v = (d[n[0]] || '').trim(); if (v) soc[n[0]] = v; });
+          const soc = {}; SOC.forEach(n => { const v = (d[n[0]] || '').trim(); if (v) soc[n[0]] = v; }); if (s.custom) soc.custom = s.custom;
           const purl = (d.purl || '').trim(); if (purl && !isUrl(purl)) { showToast('Ο σύνδεσμος ποστ πρέπει να αρχίζει με https://'); return false; }
           soc.post = { url: purl, text: (d.ptext || '').trim(), date: d.pdate || '' };
           p.social = soc; save(); refresh(); showToast('Τα social αποθηκεύτηκαν.');
@@ -5204,6 +5235,8 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       const md = iso => { const m = /^\d{4}-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? [+m[1], +m[2]] : [0, 0]; };
       const photos = state.photos.filter(x => x.src), A5 = o.size === 'A5';
       const row = (l, v) => v ? `<tr><th>${l}</th><td>${v}</td></tr>` : '';
+      const socBook = p => { const sc = p.social || {}, sh = v => esc(String(v).trim().replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, ''));
+        return SOC.filter(n => (sc[n[0]] || '').trim()).map(n => n[1] + ': ' + sh(sc[n[0]])).concat((sc.custom || []).filter(c => c.name || c.url).map(c => esc(c.name || '') + (c.name && c.url ? ': ' : '') + sh(c.url || ''))).join(' · '); };
       const bio = p => {
         const f = faceOf(p), pa = p.parents.map(byId).filter(Boolean), sp = byId(p.spouse), kids = childrenOf(p);
         const sibs = state.people.filter(x => x.id !== p.id && p.parents.length && x.parents.some(i => p.parents.includes(i)));
@@ -5212,7 +5245,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         const nkItem = p.paratsouk ? (state.heritage && state.heritage.nicks || []).find(h => nkey(h.title) === nkey(p.paratsouk) && h.story) : null;
         const ap = p.unc ? ' (περίπου)' : '';
         return `<article class="bio"><div class="bh"><div><h3>${esc(dispN(p))}${p.maiden ? ` <small>(το γένος ${esc(p.maiden)})</small>` : ''}</h3>${p.paratsouk ? `<p class="nk">«${esc(p.paratsouk)}»</p>` : ''}<p class="yrs">${esc(yearsOf(p))}${p.job ? ' · ' + esc(p.job) : ''}</p></div>${f ? `<img class="face" src="${f}" alt="">` : ''}</div>
-          <table>${row('Το παρατσούκλι', nkItem ? esc(nkItem.story) : '')}${row('Πατρώνυμο', esc(p.pat || ''))}${row('Γέννηση', (p.born || p.by) ? esc(p.born || p.by) + ap : '')}${row('Θάνατος', (p.dy || p.deceased) ? esc(p.died || p.dy || '') + ap : '')}${row('Γονείς', pa.map(x => esc(dispN(x)) + ((p.adoptive || []).includes(x.id) ? ' (θετός)' : '')).join(', '))}${row('Σύζυγος', sp ? esc(dispN(sp)) : '')}${row('Προηγούμενοι γάμοι', (p.spouses || []).map(m => { const q = byId(m.id); return q ? esc(dispN(q)) + ' (' + (m.type === 'widowed' ? 'χηρεία' : 'διαζύγιο') + ((m.from || m.to) ? ', ' + (m.from || '?') + '–' + (m.to || '') : '') + ')' : ''; }).filter(Boolean).join(', '))}${row('Παιδιά', list(kids))}${row('Αδέλφια', list(sibs))}${row('Καταγωγή', esc(p.origin || ''))}${row('Διαμονή', esc(p.place || ''))}${row('Ομάδα', esc(p.team || ''))}${row('Γιορτή', esc(namedayText(p)))}</table>
+          <table>${row('Το παρατσούκλι', nkItem ? esc(nkItem.story) : '')}${row('Πατρώνυμο', esc(p.pat || ''))}${row('Γέννηση', (p.born || p.by) ? esc(p.born || p.by) + ap : '')}${row('Θάνατος', (p.dy || p.deceased) ? esc(p.died || p.dy || '') + ap : '')}${row('Γονείς', pa.map(x => esc(dispN(x)) + ((p.adoptive || []).includes(x.id) ? ' (θετός)' : '')).join(', '))}${row('Σύζυγος', sp ? esc(dispN(sp)) : '')}${row('Προηγούμενοι γάμοι', (p.spouses || []).map(m => { const q = byId(m.id); return q ? esc(dispN(q)) + ' (' + (m.type === 'widowed' ? 'χηρεία' : 'διαζύγιο') + ((m.from || m.to) ? ', ' + (m.from || '?') + '–' + (m.to || '') : '') + ')' : ''; }).filter(Boolean).join(', '))}${row('Παιδιά', list(kids))}${row('Αδέλφια', list(sibs))}${row('Καταγωγή', esc(p.origin || ''))}${row('Διαμονή', esc(p.place || ''))}${row('Ομάδα', esc(p.team || ''))}${row('Γιορτή', esc(namedayText(p)))}${row('Social media', socBook(p))}</table>
           ${p.story ? `<p class="txt quote">${esc(p.story)}</p>` : ''}${notes ? `<p class="txt">${esc(notes)}</p>` : ''}${st.map(s => `<h4>${esc(s.title)}</h4><p class="txt">${esc(s.text)}</p>`).join('')}
           ${pe.length ? `<ul class="ev">${pe.map(e => `<li><b>${esc(fmtDate(e))}</b> — ${esc(e.title)}${e.place ? ' (' + esc(e.place) + ')' : ''}</li>`).join('')}</ul>` : ''}
           </article>`;
