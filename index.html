@@ -2488,38 +2488,6 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
 @media(prefers-reduced-motion:reduce){.museum-collection,.museum-btn{transition:none!important}}
 </style>
 
-<style id="stats-extra">
-#stats-body .st-seg-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-#stats-body .stat-seg{padding:8px 16px;border-radius:999px;border:1px solid rgba(189,154,97,.55);background:#fffdf8;color:#203b30;font-size:13px;font-weight:600;cursor:pointer}
-#stats-body .stat-seg.on{background:#203b30;color:#f5f1e9;border-color:#203b30}
-#stats-body .st-top{margin-bottom:22px}
-#stats-body .st-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-@media(max-width:800px){#stats-body .st-grid{grid-template-columns:1fr}#stats-body .st-top{grid-template-columns:repeat(2,1fr)}#stats-body .st-top .museum-stat{border-bottom:1px solid var(--museum-line)}}
-#stats-body .st-card{background:#fffdf8;border:1px solid rgba(43,61,49,.13);border-radius:18px;padding:20px 22px}
-#stats-body .st-card h3{font:500 19px 'Playfair Display',serif;color:#203b30;margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(189,154,97,.45)}
-#stats-body .st-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(43,61,49,.08);font-size:14px}
-#stats-body .st-l{color:#827f73}#stats-body .st-v{text-align:right}
-#stats-body .st-muted{color:#827f73}
-#stats-body .st-note{font-size:12px;color:#969287;margin-top:10px}
-#stats-body .st-bar{margin:9px 0}
-#stats-body .st-bar-top{display:flex;justify-content:space-between;font-size:14px;gap:10px}
-#stats-body .st-track{height:8px;border-radius:99px;background:rgba(189,154,97,.2);margin-top:5px;overflow:hidden}
-#stats-body .st-track i{display:block;height:100%;border-radius:99px;background:#6b8e23}
-#stats-body .st-track-lg{height:12px;margin:6px 0 14px}
-#stats-body .st-big{font:500 44px 'Playfair Display',serif;color:#203b30}
-#stats-body .st-mini{display:grid;grid-template-columns:110px 1fr 40px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
-#stats-body .st-mini .st-track{margin:0}
-#stats-body .st-mini b{text-align:right}
-#stats-body .st-duo{display:flex;height:16px;border-radius:99px;overflow:hidden;margin:6px 0 10px}
-#stats-body .st-duo i{display:block;height:100%}
-#stats-body .st-duo-l{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;font-size:13px}
-#stats-body .st-duo-l s{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;text-decoration:none}
-#stats-body .st-chips{display:flex;flex-wrap:wrap;gap:8px}
-#stats-body .stat-chip{padding:5px 13px;border-radius:999px;background:rgba(189,154,97,.16);color:#203b30;font-size:13px;border:1px solid transparent;cursor:pointer}
-#stats-body .stat-chip:hover{background:rgba(189,154,97,.32);border-color:#bd9a61}
-#stats-body .stat-link{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;text-align:inherit;cursor:pointer;text-decoration:underline dotted #bd9a61;text-underline-offset:3px}
-#stats-body .stat-link:hover{color:#8a6a2f}
-</style>
 </head>
 <body class="font-sans text-gray-800 antialiased">
   <!-- Η εφαρμογή ανοίγει απευθείας, χωρίς οθόνη σύνδεσης. -->
@@ -3487,7 +3455,10 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       clone.querySelectorAll('svg path').forEach(p=>{if(p.getAttribute('opacity')==='.15'||p.style.opacity==='.15')p.remove();});
       const title='Οικογενειακός κλάδος — '+anchor.name;
       const w=window.open('','_blank');if(!w){showToast('Επίτρεψε τα αναδυόμενα παράθυρα για εκτύπωση.');return;}
-      w.document.open();w.document.write('<!doctype html><html lang="el"><head><meta charset="utf-8"><title>'+title.replace(/</g,'&lt;')+'</title><style>@page{size:A3 landscape;margin:12mm}*{box-sizing:border-box}body{margin:0;background:#f7f1e5;color:#3b2f26;font-family:Georgia,serif}.head{text-align:center;padding:0 0 10mm}.head h1{font-size:25pt;margin:0;color:#4a5d3a}.head p{font-size:11pt;color:#8a7256;margin:5mm 0 0}.canvas{position:relative;overflow:visible;margin:auto;transform-origin:top center}.person-node{border:0!important;box-shadow:none!important;background:transparent!important;cursor:default!important}.person-node p{font-family:Arial,sans-serif!important;font-size:9pt!important;color:#3b2f26!important}.person-node div{border-color:#f7f1e5!important;box-shadow:0 2px 8px #88765a40!important}.tree-line,.tree-line-cross,.tree-line-marriage{stroke:#7c8b58!important;stroke-width:2!important}.tree-line-cross{stroke-dasharray:5 4!important}.legend{margin-top:8mm;text-align:center;font:10pt Arial;color:#7c8b58}</style></head><body><header class="head"><h1>'+title.replace(/</g,'&lt;')+'</h1><p>Οικογενειακό γενεαλογικό δέντρο</p></header><div id="canvas"></div><div class="legend">Εκτύπωση οικογενειακού κλάδου · '+new Date().getFullYear()+'</div></body></html>');w.document.close();
+      w.document.open();w.document.write('<!doctype html><html lang="el"><head><meta charset="utf-8"><title>'+title.replace(/</g,'&lt;')+'</title><style>@page{size:A3 landscape;margin:12mm}*{box-sizing:border-box}body{margin:0;background:#f7f1e5;color:#3b2f26;font-family:Georgia,serif}.head{text-align:center;padding:0 0 10mm}.head h1{font-size:25pt;margin:0;color:#4a5d3a}.head p{font-size:11pt;color:#8a7256;margin:5mm 0 0}.canvas{position:relative;overflow:visible;margin:auto;transform-origin:top center}.person-node{border:0!important;box-shadow:none!important;background:transparent!important;cursor:default!important}.person-node p{font-family:Arial,sans-serif!important;font-size:9pt!important;color:#3b2f26!important}.person-node div{border-color:#f7f1e5!important;box-shadow:0 2px 8px #88765a40!important}.tree-line,.tree-line-cross,.tree-line-marriage{stroke:#7c8b58!important;stroke-width:2!important}.tree-line-cross{stroke-dasharray:5 4!important}.legend{margin-top:8mm;text-align:center;font:10pt Arial;color:#7c8b58}</style></head><body><header class="head"><h1>'+title.replace(/</g,'&lt;')+'</h1><p>Οικογενειακό γενεαλογικό δέντρο</p></header><div id="canvas"></div><div class="legend">Εκτύπωση οικογενειακού κλάδου · '+new Date().getFullYear()+'</div>
+
+
+</body></html>');w.document.close();
       const c=w.document.getElementById('canvas');c.appendChild(clone);c.style.width=src.style.width;c.style.height=src.style.height;clone.style.margin='0 auto';clone.style.position='relative';
       const maxW=w.innerWidth-40,maxH=w.innerHeight-160,scale=Math.min(maxW/Math.max(clone.scrollWidth,1),maxH/Math.max(clone.scrollHeight,1),1);clone.style.transform='scale('+scale+')';clone.style.transformOrigin='top center';c.style.height=(clone.scrollHeight*scale)+'px';
       w.focus();setTimeout(()=>w.print(),500);
@@ -3728,123 +3699,47 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     }
 
     /* ---------- Στατιστικά ---------- */
-    let statsLine = 'all';
-    const normTxt = s => (s || '').toString().trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    function statsPeople() {
-      const all = state.people;
-      if (statsLine === 'all') return all;
-      const sd = sideSets(); if (!sd || !sd[statsLine]) return all;
-      const ids = new Set([sd.home, ...sd[statsLine]]);
-      const down = id => { const p = byId(id); if (!p) return; childrenOf(p).forEach(c => { if (!ids.has(c.id)) { ids.add(c.id); down(c.id); } }); };
-      down(sd.home);
-      return all.filter(p => ids.has(p.id));
-    }
     function renderStatsView() {
-      const box = $('stats-body');
-      if (!state.people.length) { box.innerHTML = '<p class="text-gray-500">Πρόσθεσε μέλη στο δέντρο για να εμφανιστούν στατιστικά.</p>'; return; }
-      const sd = sideSets();
-      if (!sd && statsLine !== 'all') statsLine = 'all';
-      const P = statsPeople();
-      const home = sd ? byId(sd.home) : null;
-      const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
-      const card = (t, inner) => inner ? `<div class="st-card"><h3>${t}</h3>${inner}</div>` : '';
-      const row = (l, v) => `<div class="st-row"><span class="st-l">${l}</span><span class="st-v">${v}</span></div>`;
-      const link = (txt, attr) => `<button type="button" class="stat-link" ${attr}>${txt}</button>`;
-      const nm = p => link(esc(p.name) + (p.by ? ' (' + p.by + ')' : ''), `data-open="${p.id}"`);
-      const bar = (l, n, mx, attr, suffix) => `<div class="st-bar"><div class="st-bar-top"><span>${attr ? link(esc(l), attr) : esc(l)}</span><span class="st-muted">${n}${suffix || ''}</span></div><div class="st-track"><i style="width:${Math.max(4, n / mx * 100)}%"></i></div></div>`;
-      const bars = (arr, mk, suffix) => { const mx = Math.max(1, ...arr.map(x => x[1])); return arr.map(x => bar(x[0], x[1], mx, mk && mk(x), suffix)).join(''); };
-      const chips = (a, key) => `<div class="st-chips">${a.map(x => `<button type="button" class="stat-chip" data-q="${esc(x[0])}">${esc(x[0])} <b>× ${x[1]}</b></button>`).join('')}</div>`;
-      const duo = (aN, aL, aC, bN, bL, bC) => { const t = aN + bN || 1; return `<div class="st-duo"><i style="width:${aN / t * 100}%;background:${aC}"></i><i style="width:${bN / t * 100}%;background:${bC}"></i></div><div class="st-duo-l"><span><s style="background:${aC}"></s>${aL}: <b>${aN}</b> (${pct(aN, t)}%)</span><span><s style="background:${bC}"></s>${bL}: <b>${bN}</b> (${pct(bN, t)}%)</span></div>`; };
-      const first = p => p.first || (p.name || '').split(' ')[0];
+      const P = state.people, box = $('stats-body');
+      if (!P.length) { box.innerHTML = '<p class="text-gray-500">Πρόσθεσε μέλη στο δέντρο για να εμφανιστούν στατιστικά.</p>'; return; }
+      const card = (t, inner) => inner ? `<div class="bg-white rounded-2xl p-5 shadow-card"><h3 class="font-medium text-aegean mb-3">${t}</h3>${inner}</div>` : '';
+      const row = (l, v) => `<div class="flex justify-between gap-3 py-2 border-b border-gray-100 text-sm"><span class="text-gray-500">${l}</span><span class="text-right">${v}</span></div>`;
+      const bar = (l, n, mx, sub) => `<div class="my-2"><div class="flex justify-between text-sm"><span>${esc(l)}</span><span class="text-gray-500">${n}</span></div><div class="h-2 rounded bg-aegean/10 mt-1"><i class="block h-2 rounded bg-olive" style="width:${Math.max(4, n / mx * 100)}%"></i></div>${sub ? `<p class="text-xs text-gray-400 mt-0.5">${esc(sub)}</p>` : ''}</div>`;
+      const bars = (arr, sub) => { const mx = Math.max(1, ...arr.map(x => x[1])); return arr.map(x => bar(x[0], x[1], mx, sub && sub[x[0]])).join(''); };
+      const tile = (v, l) => `<div class="bg-white rounded-2xl p-4 shadow-card text-center"><div class="text-2xl font-bold text-aegean">${v}</div><div class="text-sm text-gray-500">${l}</div></div>`;
       const men = P.filter(p => sexOf(p) === 'M').length, women = P.filter(p => sexOf(p) === 'F').length, dead = P.filter(goneP).length;
       const yr = new Date().getFullYear();
       const ages = P.filter(p => p.by && p.dy && p.dy >= p.by).map(p => ({ p, a: p.dy - p.by }));
       const liveAges = P.filter(p => p.by && !goneP(p)).map(p => yr - p.by);
       const avg = a => a.length ? Math.round(a.reduce((x, y) => x + y, 0) / a.length) : null;
       const byBirth = P.filter(p => p.by).sort((a, b) => a.by - b.by);
+      /* οικογένειες: Γιαννάκης και Γιαννάκη μετράνε μαζί */
       const fam = {};
       P.forEach(p => { const k = famKey(p.last); if (!k) return; (fam[k] = fam[k] || { forms: {}, n: 0 }); fam[k].n++; fam[k].forms[p.last] = (fam[k].forms[p.last] || 0) + 1; });
-      const famList = Object.values(fam).sort((a, b) => b.n - a.n).map(f => { const forms = Object.entries(f.forms).sort((a, b) => b[1] - a[1]).map(x => x[0]); return [forms.join(' / '), f.n, forms.slice().sort((a, b) => a.length - b.length)[0]]; });
+      const famList = Object.values(fam).sort((a, b) => b.n - a.n).map(f => { const forms = Object.entries(f.forms).sort((a, b) => b[1] - a[1]).map(x => x[0]); return [forms.join(' / '), f.n]; });
       const gens = {}; P.forEach(p => { gens[p.gen || 1] = (gens[p.gen || 1] || 0) + 1; });
-      const genKeys = Object.keys(gens).sort((a, b) => a - b);
-      const genList = genKeys.map(g => ['Γενιά ' + g, gens[g], g]);
+      const genList = Object.keys(gens).sort((a, b) => a - b).map(g => ['Γενιά ' + g, gens[g]]);
       const parents = P.map(p => ({ p, k: childrenOf(p).length })).filter(x => x.k > 0);
       const couples = P.filter(p => p.spouse && p.id < p.spouse).length;
       const maxKids = parents.slice().sort((a, b) => b.k - a.k)[0];
       const dec = {}; P.forEach(p => { if (p.by) { const k = Math.floor(p.by / 10) * 10; dec[k] = (dec[k] || 0) + 1; } });
       const decList = Object.keys(dec).sort().map(k => [k + '–' + (+k + 9), dec[k]]);
+      const chips = a => `<div class="flex flex-wrap gap-2">${a.map(x => `<span class="px-3 py-1 rounded-full bg-aegean/10 text-aegean text-sm">${esc(x[0])} × ${x[1]}</span>`).join('')}</div>`;
+      const nm = p => esc(p.name) + (p.by ? ' (' + p.by + ')' : '');
       const oldest = ages.slice().sort((a, b) => b.a - a.a)[0];
-
-      /* Ολοκλήρωση αρχείου */
-      const hasBy = P.filter(p => p.by).length, hasPl = P.filter(p => p.bplace || p.place).length, hasPh = P.filter(p => faceOf(p)).length;
-      const complete = pct(hasBy + hasPl + hasPh, P.length * 3);
-      const miss = (n, l) => `<div class="st-mini"><span>${l}</span><div class="st-track"><i style="width:${pct(n, P.length)}%"></i></div><b>${pct(n, P.length)}%</b></div>`;
-
-      /* Ονοματοδοσία παππού/εγγονού */
-      let gkids = 0, gmatch = [];
-      P.forEach(p => {
-        const gps = p.parents.map(byId).filter(Boolean).flatMap(x => x.parents.map(byId).filter(Boolean));
-        if (!gps.length) return; gkids++;
-        const me = normTxt(first(p)); if (me && gps.some(g => normTxt(first(g)) === me)) gmatch.push(p);
-      });
-
-      /* Ηλικία γονέα στη γέννηση παιδιού */
-      const pa = [], paF = [], paM = [], paDec = {};
-      P.forEach(c => { if (!c.by) return; c.parents.map(byId).filter(Boolean).forEach(pr => {
-        if (!pr.by) return; const d = c.by - pr.by; if (d < 12 || d > 70) return;
-        pa.push(d); if (sexOf(pr) === 'M') paF.push(d); else if (sexOf(pr) === 'F') paM.push(d);
-        const k = Math.floor(c.by / 10) * 10; (paDec[k] = paDec[k] || []).push(d);
-      }); });
-      const paDecList = Object.keys(paDec).sort().map(k => [k + 'ς', avg(paDec[k])]);
-
-      /* Εποχές γέννησης */
-      const seasons = { 'Άνοιξη': 0, 'Καλοκαίρι': 0, 'Φθινόπωρο': 0, 'Χειμώνας': 0 }; let sKnown = 0;
-      P.forEach(p => { const m = ISO.exec(p.bdate || ''); if (!m) return; const mo = +m[2]; sKnown++;
-        seasons[mo >= 3 && mo <= 5 ? 'Άνοιξη' : mo >= 6 && mo <= 8 ? 'Καλοκαίρι' : mo >= 9 && mo <= 11 ? 'Φθινόπωρο' : 'Χειμώνας']++; });
-      const seasonList = Object.entries(seasons);
-
-      /* Παραμονή / μετακίνηση */
-      const both = P.filter(p => p.bplace && p.place);
-      const stayed = both.filter(p => normTxt(p.bplace) === normTxt(p.place)).length, moved = both.length - stayed;
-
-      const lineBtn = (k, l) => `<button type="button" class="stat-seg${statsLine === k ? ' on' : ''}" data-line="${k}">${l}</button>`;
-      const lineNote = statsLine === 'all' || !home ? '' : `<p class="st-note">${statsLine === 'P' ? 'Πατρική' : 'Μητρική'} γραμμή: οι πρόγονοι από την πλευρά ${statsLine === 'P' ? 'του πατέρα' : 'της μητέρας'} του/της ${nm(home)}, μαζί με το ίδιο το πρόσωπο και τους απογόνους του.</p>`;
-      const mstat = (ic, v, l) => `<article class="museum-stat"><span class="museum-stat-icon">${ic}</span><div class="museum-stat-value">${v}</div><div class="museum-stat-label">${l}</div></article>`;
-
-      box.innerHTML = `
-        ${sd ? `<div class="st-seg-wrap">${lineBtn('all', 'Όλο το δέντρο')}${lineBtn('P', 'Μόνο Πατρική γραμμή')}${lineBtn('M', 'Μόνο Μητρική γραμμή')}</div>${lineNote}` : ''}
-        ${P.length ? `<section class="museum-stat-grid st-top">${mstat('♧', P.length, 'Μέλη')}${mstat('⌘', genKeys.length, 'Γενιές')}${mstat('☀', P.length - dead, 'Εν ζωή')}${mstat('✦', dead, 'Αποβιώσαντες')}</section>` : '<p class="text-gray-500">Δεν υπάρχουν μέλη σε αυτή τη γραμμή.</p>'}
-        ${P.length ? `<div class="st-grid">
-        ${card('Ολοκλήρωση αρχείου', `<div class="st-big">${complete}%</div><div class="st-track st-track-lg"><i style="width:${complete}%"></i></div>${miss(hasBy, 'Έτος γέννησης')}${miss(hasPl, 'Τόπος')}${miss(hasPh, 'Φωτογραφία')}<p class="st-note">Όσο συμπληρώνεις τα κενά, τόσο πιο πλούσιο γίνεται το αρχείο.</p>`)}
-        ${card('Κατανομή φύλου', (men + women) ? duo(men, 'Άνδρες', '#6b8e23', women, 'Γυναίκες', '#c46a4a') + (P.length - men - women ? `<p class="st-note">${P.length - men - women} χωρίς καταχωρημένο φύλο.</p>` : '') : '')}
-        ${card('Οικογένειες (επώνυμα)', famList.length ? bars(famList, x => `data-q="${esc(x[2])}"`) + '<p class="st-note">Οι μορφές Παπαδόπουλος / Παπαδοπούλου μετράνε στην ίδια οικογένεια. Πάτησε ένα επώνυμο για να δεις τα μέλη.</p>' : '')}
-        ${card('Γενιές', bars(genList, x => `data-gen="${x[2]}"`))}
-        ${card('Ηλικίες', (ages.length ? row('Μέση διάρκεια ζωής', avg(ages.map(x => x.a)) + ' έτη (' + ages.length + ' άτομα)') : '') + (oldest ? row('Μακροβιότερος/η', nm(oldest.p) + ', ' + oldest.a + ' ετών') : '') + (liveAges.length ? row('Μέση ηλικία εν ζωή', avg(liveAges) + ' ετών') : '') + (byBirth.length ? row('Παλαιότερο μέλος', nm(byBirth[0])) + row('Νεότερο μέλος', nm(byBirth[byBirth.length - 1])) : ''))}
+      box.innerHTML = `<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">${tile(P.length, 'Μέλη')}${tile(layout.maxDepth + 1, 'Γενιές')}${tile(P.length - dead, 'Εν ζωή')}${tile(dead, 'Αποβιώσαντες')}</div>
+        <div class="grid md:grid-cols-2 gap-4">
+        ${card('Οικογένειες (επώνυμα)', famList.length ? bars(famList) + '<p class="text-xs text-gray-400 mt-3">Οι μορφές Παπαδόπουλος / Παπαδοπούλου μετράνε στην ίδια οικογένεια.</p>' : '')}
+        ${card('Γενιές', bars(genList))}
+        ${card('Ηλικίες', row('Άνδρες / Γυναίκες', men + ' / ' + women) + (ages.length ? row('Μέση διάρκεια ζωής', avg(ages.map(x => x.a)) + ' έτη (' + ages.length + ' άτομα)') : '') + (oldest ? row('Μακροβιότερος/η', nm(oldest.p) + ', ' + oldest.a + ' ετών') : '') + (liveAges.length ? row('Μέση ηλικία εν ζωή', avg(liveAges) + ' ετών') : '') + (byBirth.length ? row('Παλαιότερο μέλος', nm(byBirth[0])) + row('Νεότερο μέλος', nm(byBirth[byBirth.length - 1])) : ''))}
         ${card('Οικογένεια', row('Ζευγάρια', couples) + (parents.length ? row('Γονείς με παιδιά', parents.length) + row('Μέσος όρος παιδιών ανά γονέα', (parents.reduce((s, x) => s + x.k, 0) / parents.length).toFixed(1).replace('.', ',')) + row('Περισσότερα παιδιά', nm(maxKids.p) + ', ' + maxKids.k) : ''))}
-        ${card('Συχνότερα ονόματα', chips(topN(P.map(first), 8)))}
-        ${card('Όνομα παππού/γιαγιάς στα εγγόνια', gkids ? row('Εγγόνια με το όνομα παππού ή γιαγιάς', gmatch.length + ' από ' + gkids + ' (' + pct(gmatch.length, gkids) + '%)') + (gmatch.length ? `<div class="st-chips" style="margin-top:10px">${gmatch.slice(0, 8).map(p => `<button type="button" class="stat-chip" data-open="${p.id}">${esc(p.name)}</button>`).join('')}</div>` : '') + '<p class="st-note">Η παραδοσιακή ελληνική ονοματοδοσία.</p>' : '')}
-        ${card('Ηλικία γονέα στη γέννηση παιδιού', pa.length ? row('Μέση ηλικία', avg(pa) + ' ετών') + (paF.length ? row('Πατέρες', avg(paF) + ' ετών') : '') + (paM.length ? row('Μητέρες', avg(paM) + ' ετών') : '') + (paDecList.length > 1 ? '<div style="margin-top:10px">' + bars(paDecList, null, ' ετών') + '</div><p class="st-note">Μέση ηλικία γονέα, ανά δεκαετία γέννησης του παιδιού.</p>' : '') : '')}
-        ${card('Εποχή γέννησης', sKnown ? bars(seasonList) + `<p class="st-note">Από ${sKnown} μέλη με πλήρη ημερομηνία γέννησης.</p>` : '')}
-        ${card('Έμειναν ή μετακινήθηκαν;', both.length ? duo(stayed, 'Στον τόπο γέννησης', '#6b8e23', moved, 'Αλλού', '#bd9a61') + `<p class="st-note">Από ${both.length} μέλη με γνωστό τόπο γέννησης και διαμονής.</p>` : '')}
+        ${card('Συχνότερα ονόματα', chips(topN(P.map(p => p.first || (p.name || '').split(' ')[0]), 8)))}
         ${card('Τόποι γέννησης', P.some(p => p.bplace) ? chips(topN(P.map(p => p.bplace), 8)) : '')}
         ${card('Πόλεις διαμονής', P.some(p => p.place) ? chips(topN(P.map(p => p.place), 8)) : '')}
         ${card('Επαγγέλματα', P.some(p => p.job) ? chips(topN(P.map(p => p.job), 8)) : '')}
         ${card('Γεννήσεις ανά δεκαετία', decList.length ? bars(decList) : '')}
-        </div>` : ''}`;
+        </div>`;
     }
-    function goPeople(o) {
-      renderPeople();
-      $('people-search').value = o.q || ''; $('people-sex').value = ''; $('people-sort').value = ''; $('people-show').value = '';
-      $('people-filter').value = o.gen ? String(o.gen) : 'all';
-      switchView('people');
-    }
-    $('stats-body').addEventListener('click', e => {
-      const t = e.target.closest('[data-open],[data-q],[data-gen],[data-line]'); if (!t) return;
-      if (t.dataset.open) openPerson(+t.dataset.open);
-      else if (t.dataset.gen) goPeople({ gen: +t.dataset.gen });
-      else if (t.dataset.q != null) goPeople({ q: t.dataset.q });
-      else if (t.dataset.line) { statsLine = t.dataset.line; renderStatsView(); }
-    });
 
     /* ---------- Πρόσωπα ---------- */
     function renderPeople() {
