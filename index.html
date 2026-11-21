@@ -2662,7 +2662,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
           </section>
 
           <section class="museum-lower-grid">
-            <div class="museum-panel museum-updates"><div class="museum-panel-head"><div><div class="museum-section-kicker">ΑΠΟ ΤΟ ΑΡΧΕΙΟ</div><h2>Πρόσφατες καταγραφές</h2></div><span id="updates-date" class="museum-date"></span></div><div id="updates-list"></div></div>
+            <div class="museum-panel museum-updates"><div class="museum-panel-head"><div><div class="museum-section-kicker">ΑΠΟ ΤΟ ΑΡΧΕΙΟ</div><h2>Πρόσφατες καταγραφές</h2></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px"><span id="updates-date" class="museum-date"></span><button type="button" id="updates-set" class="app-mini-btn"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .6 1-1.7 1.7-1-.6a6 6 0 0 1-1.5.6l-.3 1.2h-2.4l-.3-1.2a6 6 0 0 1-1.5-.6l-1 .6L8.6 16.1l.6-1a6 6 0 0 1-.6-1.5l-1.2-.3v-2.4l1.2-.3a6 6 0 0 1 .6-1.5l-.6-1L8.3 4.4l1.7-1.7 1 .6a6 6 0 0 1 1.5-.6l.3-1.2h2.4l.3 1.2a6 6 0 0 1 1.5.6l1-.6 1.7 1.7-.6 1a6 6 0 0 1 .6 1.5l1.2.3v2.4l-1.2.3a6 6 0 0 1-.6 1.5Z"/></svg> Ποιους να δείχνει</button></div></div><div id="updates-list"></div></div>
             <aside class="museum-panel museum-quote-panel"><div class="museum-quote-mark">“</div><blockquote>Κάθε οικογένεια είναι ένα βιβλίο. Κάθε πρόσωπο, μια σελίδα που δεν πρέπει να χαθεί.</blockquote><div class="museum-quote-rule"></div><span>Η ΑΞΙΑ ΤΗΣ ΜΝΗΜΗΣ</span></aside>
           </section>
 
@@ -2889,7 +2889,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
           </div>
         </div>
       </div>
-      <div id="site-credit" style="text-align:center;padding:22px 16px calc(96px + env(safe-area-inset-bottom,0px));font-size:11px;letter-spacing:.14em;color:#999487;border-top:1px solid rgba(153,148,135,.25);margin:24px 18px 0">© 2026 · Δημιουργήθηκε από <b style="font-weight:600;color:#BD9A61">SKP Studios</b></div>
+      <div id="site-credit" class="museum-credit">© 2026 · Δημιουργήθηκε από <b>SKP Studios</b></div>
     </main>
 
     <!-- Generic modal -->
@@ -3726,7 +3726,9 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       const when = (m, d) => { let t = new Date(t0.getFullYear(), m - 1, d); if (t < t0) t = new Date(t0.getFullYear() + 1, m - 1, d); return t; };
       const days = t => Math.round((t - t0) / 864e5);
       const yrs = n => n + (n === 1 ? ' χρόνος' : ' χρόνια');
+      const hid = new Set((state.hideUpdates || []).map(Number));
       state.people.forEach(p => {
+        if (hid.has(p.id)) return;
         let m = ISO.exec(p.bdate || '');
         if (m) {
           const t = when(+m[2], +m[3]), n = days(t), age = t.getFullYear() - (+m[1]);
@@ -3740,6 +3742,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       });
       state.events.forEach(e => {
         if (!e.m || !e.d) return;
+        const ep = (e.people || []).filter(byId); if (ep.length && ep.every(i => hid.has(i))) return;
         const t = when(e.m, e.d), n = days(t); if (n > 45) return;
         const k = t.getFullYear() - e.y;
         out.push({ n, id: (e.people || []).find(byId) || null, icon: '📅', title: (n === 0 ? 'Σαν σήμερα: ' : '') + e.title, sub: k > 0 ? yrs(k) + ' από το ' + e.y : String(e.y) });
@@ -3753,7 +3756,30 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       };
       const today = out.filter(u => u.n === 0), soon = out.filter(u => u.n > 0);
       box.innerHTML = (today.length ? `<div class="space-y-2">${today.map(item).join('')}</div>` : '<p class="text-sm text-gray-500 mb-1">Σήμερα δεν υπάρχει κάτι ιδιαίτερο στην οικογένεια.</p>')
-        + (soon.length ? `<p class="text-xs text-olive font-semibold uppercase tracking-wide mt-5 mb-2">Τις επόμενες 45 ημέρες</p><div class="space-y-2">${soon.map(item).join('')}</div>` : (today.length ? '' : '<p class="text-sm text-gray-500">Τίποτα προγραμματισμένο τις επόμενες 45 ημέρες. Πρόσθεσε πλήρεις ημερομηνίες γέννησης για να εμφανίζονται εδώ τα γενέθλια.</p>'));
+        + (soon.length ? `<p class="text-xs text-olive font-semibold uppercase tracking-wide mt-5 mb-2">Τις επόμενες 45 ημέρες</p><div class="space-y-2">${soon.map(item).join('')}</div>` : (today.length ? '' : '<p class="text-sm text-gray-500">Τίποτα προγραμματισμένο τις επόμενες 45 ημέρες. Πρόσθεσε πλήρεις ημερομηνίες γέννησης για να εμφανίζονται εδώ τα γενέθλια.</p>'))
+        + (state.people.some(q => hid.has(q.id)) ? `<p class="text-xs text-gray-400 mt-4">Έχεις αποκλείσει ${state.people.filter(q => hid.has(q.id)).length} ${state.people.filter(q => hid.has(q.id)).length === 1 ? 'άτομο' : 'άτομα'} από αυτή τη λίστα.</p>` : '');
+    }
+    function openUpdatesSettings() {
+      const hid = new Set((state.hideUpdates || []).map(Number));
+      const pl = state.people.slice().sort((a, b) => (a.full || a.name).localeCompare(b.full || b.name, 'el'));
+            const body = `<div class="space-y-3"><p class="text-sm text-gray-500" style="line-height:1.55">Τσέκαρε όσους θέλεις να βλέπεις στα γενέθλια, τις γιορτές και τις επετείους της αρχικής. Όσους ξετσεκάρεις δεν θα εμφανίζονται εκεί.</p><input type="search" id="up-q" placeholder="Αναζήτηση ονόματος…" autocomplete="off" class="${INPUT}"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" id="up-all" class="app-mini-btn">Όλοι</button><button type="button" id="up-none" class="app-mini-btn">Κανένας</button><span id="up-cnt" class="app-count"></span></div><div id="up-list" class="app-checklist">${pl.map(p => `<label class="app-check-row" data-n="${esc(nkey(p.full || p.name))}"><input type="checkbox" name="upp" value="${p.id}"${hid.has(p.id) ? '' : ' checked'}> <span>${esc(p.full || p.name)}${yearsOf(p) ? ' <small>' + esc(yearsOf(p)) + '</small>' : ''}</span></label>`).join('')}</div></div>`;
+      openModal({
+        title: 'Ποιους να δείχνει η αρχική', submitText: 'Αποθήκευση', noFocus: true, body,
+        onMount: () => {
+          const boxes = () => [...document.querySelectorAll('#up-list input[name="upp"]')];
+          const cnt = () => { const b = boxes(); $('up-cnt').textContent = 'Εμφανίζονται: ' + b.filter(i => i.checked).length + ' από ' + b.length; };
+          $('up-list').addEventListener('change', cnt);
+          $('up-all').onclick = () => { boxes().forEach(i => { if (!i.closest('label').hidden) i.checked = true; }); cnt(); };
+          $('up-none').onclick = () => { boxes().forEach(i => { if (!i.closest('label').hidden) i.checked = false; }); cnt(); };
+          $('up-q').addEventListener('input', e => { const q = nkey(e.target.value); document.querySelectorAll('#up-list label').forEach(l => { l.hidden = !!q && !l.dataset.n.includes(q); l.style.display = l.hidden ? 'none' : 'flex'; }); });
+          cnt();
+        },
+        onSubmit: () => {
+          const off = [...document.querySelectorAll('#up-list input[name="upp"]')].filter(i => !i.checked).map(i => +i.value);
+          if (off.length) state.hideUpdates = off; else delete state.hideUpdates;
+          save(); renderUpdates(); showToast(off.length ? 'Αποθηκεύτηκε. Αποκλείστηκαν ' + off.length + ' άτομα.' : 'Θα εμφανίζονται όλοι.');
+        }
+      });
     }
     /* ---------- Έξυπνος βοηθός ----------
        Όλα υπολογίζονται εδώ, στη συσκευή, από τα δεδομένα που ήδη υπάρχουν. Δεν στέλνεται τίποτα πουθενά.
@@ -4414,8 +4440,8 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         { name: 'fav', type: 'checkbox', label: '★ Αγαπημένο πρόσωπο', value: p.fav },
         { type: 'detend' },
         { type: 'detstart', label: '📱 Social media', open: !!(p.social && hasSoc(p)) }
-      ].concat(SOC.map(n => ({ name: 's_' + n[0], label: n[2] + ' ' + n[1], value: (p.social || {})[n[0]] || '', cap: 'none', placeholder: (n[0] === 'wa' || n[0] === 'vb') ? 'αριθμός με κωδικό χώρας, π.χ. 306912345678' : 'όνομα χρήστη ή σύνδεσμος' })), [
-        { type: 'raw', html: socCustomHtml(p) },
+      ].concat([
+        { type: 'raw', html: socFormHtml(p) },
         { type: 'detend' }
       ]);
     }
@@ -5141,7 +5167,8 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       return h;
     };
     const socRowHtml = (i, c) => { c = c || {}; return `<div class="flex gap-2 items-center soc-row"><input name="cn_${i}" type="text" value="${esc(c.name || '')}" placeholder="Όνομα (π.χ. Twitch)" autocapitalize="words" class="${INPUT}" style="flex:1 1 0;min-width:0;width:auto"><input name="cu_${i}" type="text" value="${esc(c.url || '')}" placeholder="Σύνδεσμος ή όνομα χρήστη" autocapitalize="none" autocorrect="off" spellcheck="false" class="${INPUT}" style="flex:1.3 1 0;min-width:0;width:auto"><button type="button" class="soc-del px-2 text-gray-400" aria-label="Αφαίρεση" style="min-height:40px">✕</button></div>`; };
-    const socCustomHtml = p => { const cs = ((p.social || {}).custom || []).filter(c => c.name || c.url), rows = cs.length ? cs : [{}]; return `<input type="hidden" name="s_present" value="1"><p class="text-xs text-gray-500">Άλλο social ή site που δεν υπάρχει στη λίστα:</p><div id="soc-custom" class="space-y-2" data-n="${rows.length}">${rows.map((c, i) => socRowHtml(i, c)).join('')}</div><button type="button" id="soc-add" class="text-sm text-aegean px-3 py-2 rounded-xl border border-aegean/30">➕ Προσθήκη άλλου social</button>`; };
+    const socCustomHtml = p => { const cs = ((p.social || {}).custom || []).filter(c => c.name || c.url), rows = cs.length ? cs : [{}]; return `<input type="hidden" name="s_present" value="1"><div id="soc-custom" class="space-y-2" data-n="${rows.length}">${rows.map((c, i) => socRowHtml(i, c)).join('')}</div><button type="button" id="soc-add" class="app-mini-btn" style="margin-top:12px">+ Προσθήκη άλλου</button>`; };
+    const socFormHtml = p => { const sc = p.social || {}; return `<div class="soc-grid">${SOC.map(n => `<label class="soc-field"><span class="soc-name"><i>${n[2]}</i>${n[1]}</span><input name="s_${n[0]}" type="text" value="${esc(sc[n[0]] || '')}" placeholder="${(n[0] === 'wa' || n[0] === 'vb') ? 'αριθμός, π.χ. 306912345678' : 'χρήστης ή σύνδεσμος'}" autocapitalize="none" autocorrect="off" spellcheck="false" class="${INPUT}"></label>`).join('')}</div><p class="soc-sub">Άλλο social ή σύνδεσμος</p>` + socCustomHtml(p); };
     function bindSocial() {
       const box = $('soc-custom'), add = $('soc-add'); if (!box || !add) return;
       add.onclick = () => { const i = +box.dataset.n; box.dataset.n = i + 1; box.insertAdjacentHTML('beforeend', socRowHtml(i)); const inp = box.lastElementChild.querySelector('input'); if (inp) inp.focus(); };
@@ -5177,6 +5204,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         }
       });
     }
+    $('updates-set').addEventListener('click', openUpdatesSettings);
     $('soc-list').addEventListener('click', e => { const o = e.target.closest('[data-open]'); if (o) openPerson(+o.dataset.open); });
     $('soc-set-list').addEventListener('click', e => { const o = e.target.closest('[data-soc]'); if (o) editSocial(+o.dataset.soc); });
 
@@ -5833,4 +5861,34 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
   #modal-form :is(input,select,textarea,button):focus-visible, #sidebar :is(button,a,summary):focus-visible { outline:3px solid #bd9a61 !important; outline-offset:2px !important; }
   #toast[role="status"] { max-width:min(92vw,38rem); }
   @media(prefers-reduced-motion:reduce){ *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
+</style>
+
+<style id="skp-additions-style">
+/* ===== Συμπληρώσεις: social, ρύθμιση αρχικής, υπογραφή — στο ίδιο στυλ με το Μουσείο ===== */
+.app-mini-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;padding:8px 16px;border:1px solid rgba(189,154,97,.6);border-radius:999px;background:transparent!important;color:#6f5a30!important;font:700 10.5px/1 'DM Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s,border-color .2s;box-shadow:none!important}
+.app-mini-btn:hover{background:rgba(189,154,97,.14)!important;border-color:#bd9a61}
+.app-mini-btn .ui-icon{width:15px;height:15px;flex:none}
+html.dark .app-mini-btn{color:#e3c58f!important}
+.app-count{font:600 10.5px/1 'DM Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--museum-muted,#827f73);margin-left:auto}
+.app-checklist{max-height:50vh;overflow-y:auto;border:1px solid var(--museum-line,rgba(43,61,49,.13));border-radius:16px;background:rgba(255,253,248,.75);padding:2px 16px;-webkit-overflow-scrolling:touch}
+html.dark .app-checklist{background:rgba(255,255,255,.04)}
+.app-check-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--museum-line,rgba(43,61,49,.1));font-size:.93rem;cursor:pointer}
+.app-check-row:last-child{border-bottom:0}
+.app-check-row input{width:20px;height:20px;flex:none;accent-color:#4f5e36}
+.app-check-row small{margin-left:6px;color:var(--museum-muted,#827f73);font-size:.78rem}
+.soc-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:560px){.soc-grid{grid-template-columns:1fr 1fr}}
+.soc-field{display:block;min-width:0}
+.soc-name{display:flex;align-items:center;gap:8px;margin-bottom:6px;font:700 10px/1 'DM Sans',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#8a7442}
+.soc-name i{font-style:normal;font-size:14px;letter-spacing:0}
+html.dark .soc-name,html.dark .soc-sub{color:#cfb17c}
+.soc-sub{display:flex;align-items:center;gap:12px;margin:22px 0 10px;font:700 10px/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#8a7442}
+.soc-sub:after{content:'';flex:1;height:1px;background:rgba(189,154,97,.4)}
+.soc-row input{flex:1 1 0;min-width:0;width:auto}
+.soc-del{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--museum-line,rgba(43,61,49,.18))!important;background:transparent!important;color:var(--museum-muted,#827f73)!important;font-size:13px;padding:0!important}
+.soc-del:hover{background:rgba(189,154,97,.14)!important;color:#6f5a30!important}
+.museum-credit{max-width:1120px;margin:28px auto 0;padding:22px 24px calc(104px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--museum-line,rgba(43,61,49,.13));text-align:center;font:500 9px/1.7 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--museum-muted,#827f73)}
+.museum-credit b{font-weight:700;color:#bd9a61;letter-spacing:.22em}
+@media(min-width:768px){.museum-credit{padding-bottom:40px}}
+@media print{.museum-credit{display:none!important}}
 </style>
