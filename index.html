@@ -4461,24 +4461,68 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       }
 
       if (listEl) {
+        const missing = places.filter(pl => !mapMarkers[pl]);
         listEl.innerHTML = places.map(pl => {
           const has = !!mapMarkers[pl];
-          return `<button type="button" class="map-place-btn" data-place="${esc(pl)}">
-            <span class="font-medium">${esc(pl)}</span>
-            <span class="text-xs text-gray-500" style="display:block;margin-top:2px">${cnt[pl]} · ${has ? 'στον χάρτη' : 'δεν βρέθηκε'}</span>
-          </button>`;
-        }).join('');
+          return `<div class="map-place-row" data-place="${esc(pl)}">
+            <button type="button" class="map-place-btn" data-place="${esc(pl)}">
+              <span class="font-medium">${esc(pl)}</span>
+              <span class="text-xs text-gray-500" style="display:block;margin-top:2px">${cnt[pl]} · ${has ? 'στον χάρτη' : 'δεν βρέθηκε'}</span>
+            </button>
+            ${has ? '' : `<button type="button" class="map-edit-btn" data-edit-place="${esc(pl)}" title="Διόρθωση ονόματος">✏️ Διόρθωση</button>`}
+          </div>`;
+        }).join('') + (missing.length ? `<p class="text-xs text-gray-500 mt-3">Οι τόποι που δεν βρέθηκαν μπορούν να διορθωθούν. Η αλλαγή ενημερώνει όλα τα μέλη και γεγονότα που έχουν αυτόν τον τόπο.</p>` : '');
       }
 
       if (status) {
         status.textContent = ok
           ? `${ok} τόποι στον χάρτη${fail ? ' · ' + fail + ' δεν εντοπίστηκαν' : ''}. Κάνε κλικ σε πινέζα ή στη λίστα.`
-          : 'Δεν εντοπίστηκαν συντεταγμένες. Δοκίμασε πιο συγκεκριμένα ονόματα τόπων (π.χ. «Ηράκλειο, Κρήτη»).';
+          : 'Δεν εντοπίστηκαν συντεταγμένες. Διορθώσε τα ονόματα παρακάτω (π.χ. «Ηράκλειο, Κρήτη»).';
       }
     }
 
-    // side list click
+    function renamePlaceEverywhere(oldName, newName) {
+      oldName = (oldName || '').trim();
+      newName = (newName || '').trim();
+      if (!oldName || !newName || oldName === newName) return 0;
+      let n = 0;
+      const fields = ['place', 'bplace', 'origin', 'dplace'];
+      state.people.forEach(p => {
+        fields.forEach(f => {
+          if ((p[f] || '').trim() === oldName) { p[f] = newName; n++; }
+        });
+      });
+      (state.events || []).forEach(e => {
+        if ((e.place || '').trim() === oldName) { e.place = newName; n++; }
+      });
+      // clear geo cache entries for both names so re-geocode runs
+      const cache = loadGeoCache();
+      delete cache[oldName.toLowerCase()];
+      delete cache[newName.toLowerCase()];
+      saveGeoCache(cache);
+      if (n && typeof save === 'function') save();
+      return n;
+    }
+
+    function openEditPlace(pl) {
+      const neu = prompt('Νέο όνομα τόπου (θα αλλάξει παντού):', pl);
+      if (neu == null) return;
+      const cleaned = neu.trim();
+      if (!cleaned || cleaned === pl) return;
+      const n = renamePlaceEverywhere(pl, cleaned);
+      if (typeof showToast === 'function') showToast(n ? ('Ενημερώθηκαν ' + n + ' εγγραφές → «' + cleaned + '»') : 'Δεν βρέθηκαν εγγραφές για αλλαγή.');
+      renderMap();
+    }
+
+    // side list click + edit unresolved places
     document.addEventListener('click', e => {
+      const editBtn = e.target.closest('.map-edit-btn');
+      if (editBtn && editBtn.closest('#view-map')) {
+        e.preventDefault();
+        e.stopPropagation();
+        openEditPlace(editBtn.dataset.editPlace);
+        return;
+      }
       const btn = e.target.closest('.map-place-btn');
       if (!btn || !btn.closest('#view-map')) return;
       const pl = btn.dataset.place;
