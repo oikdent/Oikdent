@@ -4,6 +4,8 @@
 <script>window.addEventListener('error',function(e){try{if(!e||!e.message)return;var d=document.getElementById('err-banner');if(!d){d=document.createElement('div');d.id='err-banner';d.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#7b1e1e;color:#fff;font:12px/1.4 sans-serif;padding:8px 12px;white-space:pre-wrap;max-height:40vh;overflow:auto';(document.body||document.documentElement).appendChild(d);}d.textContent+='Σφάλμα: '+e.message+(e.lineno?' (γραμμή '+e.lineno+')':'')+'\n';}catch(x){}});</script>
 
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Κληρονομιά — Ψηφιακό Μουσείο Οικογένειας</title>
   <style>
@@ -17,6 +19,10 @@
                   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='20' cy='20' r='2' fill='%23ffffff' opacity='0.1'/%3E%3Ccircle cx='70' cy='40' r='1.5' fill='%23ffffff' opacity='0.08'/%3E%3Ccircle cx='40' cy='70' r='1' fill='%23ffffff' opacity='0.1'/%3E%3C/svg%3E");
       background-size: cover;
     }
+    #family-map { width:100%; height: min(62vh, 560px); min-height:340px; border-radius:16px; z-index:1; background:#e8e5dc; }
+    .map-status { font-size:12px; color:#6b7280; margin-top:8px; }
+    .leaflet-popup-content { font-family:system-ui,sans-serif; line-height:1.5; }
+    .leaflet-popup-content button { color:#1B4F72; text-decoration:underline; cursor:pointer; }
     .polaroid {
       background: white;
       padding: 10px 10px 28px;
@@ -2759,11 +2765,14 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
 
       <!-- MAP -->
       <div id="view-map" class="view hidden fade-in">
-        <div class="max-w-3xl mx-auto px-6 py-8">
-          <h2 class="font-serif text-2xl text-aegean mb-6">Τόποι καταγωγής</h2>
-          <label class="block text-sm"><span class="text-gray-500 block mb-1">Διάλεξε πόλη ή χωριό</span>
+        <div class="max-w-5xl mx-auto px-6 py-8">
+          <h2 class="font-serif text-2xl text-aegean mb-2">Χάρτης οικογενειακών τόπων</h2>
+          <p class="text-sm text-gray-500 mb-4">Οι καταγεγραμμένοι τόποι εμφανίζονται ως σημεία στις πραγματικές γεωγραφικές τους θέσεις. Επίλεξε μια καρφίτσα για να δεις τα σχετικά μέλη.</p>
+          <div id="family-map" role="application" aria-label="Χάρτης οικογενειακών τοποθεσιών"></div>
+          <p id="map-status" class="map-status">Εντοπισμός των καταγεγραμμένων τόπων στον χάρτη…</p>
+          <label class="block text-sm mt-5"><span class="text-gray-500 block mb-1">Διάλεξε πόλη ή χωριό</span>
             <select id="place-select" class="w-full px-3 py-2 rounded-xl border border-aegean/20 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-aegean/30"></select></label>
-          <div class="mt-6" id="map-detail"></div>
+          <div class="mt-4" id="map-detail"></div>
         </div>
       </div>
 
@@ -4269,22 +4278,96 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       });
     });
 
-    /* ---------- Τοποθεσίες ---------- */
-    function placesOf(p) { return [...new Set([p.place, p.bplace, p.origin].map(x => (x || '').trim()).filter(Boolean))]; }
+    /* ---------- Τοποθεσίες και πραγματικός χάρτης ---------- */
+    function placesOf(p) { return [...new Set([p.place, p.bplace, p.origin, p.dplace].map(x => (x || '').trim()).filter(Boolean))]; }
+    let familyLeafletMap = null, familyMapMarkers = {}, familyMapStarted = false;
+    const placeGeoCacheKey = 'klironomia_place_geocache_v1';
+    function readPlaceGeoCache() { try { return JSON.parse(localStorage.getItem(placeGeoCacheKey) || '{}'); } catch (_) { return {}; } }
+    function writePlaceGeoCache(c) { try { localStorage.setItem(placeGeoCacheKey, JSON.stringify(c)); } catch (_) {} }
+    function ensureFamilyMap() {
+      if (familyLeafletMap || !window.L || !$('family-map')) return;
+      familyLeafletMap = L.map('family-map', { scrollWheelZoom: false }).setView([38.2, 23.7], 6);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+      }).addTo(familyLeafletMap);
+      setTimeout(() => familyLeafletMap && familyLeafletMap.invalidateSize(), 150);
+    }
+    function mapPlacePopup(pl) {
+      const P = state.people;
+      const born = P.filter(p => p.bplace === pl), orig = P.filter(p => p.origin === pl && p.bplace !== pl);
+      const live = P.filter(p => p.place === pl), died = P.filter(p => p.dplace === pl);
+      const rows = [['Γεννήθηκαν εδώ', born], ['Καταγωγή από εδώ', orig], ['Μένουν εδώ', live], ['Απεβίωσαν εδώ', died]].filter(x => x[1].length);
+      return '<b>' + esc(pl) + '</b><br>' + rows.map(x => esc(x[0]) + ': ' + x[1].length).join('<br>') +
+        '<br><button type="button" onclick="window.selectFamilyMapPlace(' + JSON.stringify(pl).replace(/</g,'\\u003c') + ')">Προβολή στοιχείων</button>';
+    }
+    window.selectFamilyMapPlace = function(pl) {
+      const sel = $('place-select'); if (sel) { sel.value = pl; showPlace(pl); }
+    };
+    async function geocodeFamilyPlaces(places) {
+      ensureFamilyMap();
+      if (!familyLeafletMap) { $('map-status').textContent = 'Ο διαδραστικός χάρτης δεν μπόρεσε να φορτώσει. Έλεγξε τη σύνδεση στο διαδίκτυο.'; return; }
+      const cache = readPlaceGeoCache(), bounds = [];
+      let located = 0, failed = 0, done = 0;
+      const status = $('map-status');
+      for (const pl of places) {
+        let point = cache[pl];
+        if (point === undefined) {
+          try {
+            const query = pl + ', Ελλάδα';
+            const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=gr&q=' + encodeURIComponent(query);
+            const response = await fetch(url, { headers: { 'Accept':'application/json' } });
+            if (!response.ok) throw new Error('geocoding');
+            const data = await response.json();
+            point = data && data.length ? { lat:+data[0].lat, lon:+data[0].lon, label:data[0].display_name } : null;
+            cache[pl] = point;
+            writePlaceGeoCache(cache);
+          } catch (_) { point = null; }
+          // Nominatim usage policy: keep requests sequential and spaced.
+          await new Promise(resolve => setTimeout(resolve, 1100));
+        }
+        done++;
+        if (point && Number.isFinite(point.lat) && Number.isFinite(point.lon)) {
+          located++;
+          if (!familyMapMarkers[pl]) {
+            const marker = L.marker([point.lat, point.lon]).addTo(familyLeafletMap);
+            marker.bindPopup(mapPlacePopup(pl));
+            marker.on('click', () => window.selectFamilyMapPlace(pl));
+            familyMapMarkers[pl] = marker;
+          } else {
+            familyMapMarkers[pl].setPopupContent(mapPlacePopup(pl));
+          }
+          bounds.push([point.lat, point.lon]);
+        } else failed++;
+        status.textContent = 'Εντοπίστηκαν ' + located + ' από ' + places.length + ' τοποθεσίες' + (failed ? ' · ' + failed + ' χρειάζονται ακριβέστερη ονομασία' : '') + '.';
+      }
+      if (bounds.length) {
+        if (bounds.length === 1) familyLeafletMap.setView(bounds[0], 11);
+        else familyLeafletMap.fitBounds(bounds, { padding:[28,28], maxZoom:10 });
+      }
+      if (!places.length) status.textContent = 'Πρόσθεσε τόπους γέννησης, διαμονής, καταγωγής ή θανάτου στα στοιχεία των μελών.';
+    }
     function renderMap() {
       const sel = $('place-select'), prev = sel.value, cnt = {};
       state.people.forEach(p => placesOf(p).forEach(pl => { cnt[pl] = (cnt[pl] || 0) + 1; }));
       const places = Object.keys(cnt).sort((a, b) => a.localeCompare(b, 'el'));
       sel.innerHTML = '<option value="">— Επίλεξε τόπο —</option>' + places.map(pl => `<option value="${esc(pl)}">${esc(pl)} (${cnt[pl]})</option>`).join('');
       if (places.includes(prev)) sel.value = prev;
-      if (!places.length) { $('map-detail').innerHTML = '<p class="text-gray-500">Όταν προσθέσεις μέλη με τόπο διαμονής, γέννησης ή καταγωγής, θα εμφανιστούν εδώ.</p>'; return; }
-      showPlace(sel.value);
+      if (!places.length) { $('map-detail').innerHTML = '<p class="text-gray-500">Όταν προσθέσεις μέλη με τόπο διαμονής, γέννησης, καταγωγής ή θανάτου, θα εμφανιστούν εδώ.</p>'; }
+      else showPlace(sel.value);
+      const changed = places.filter(pl => !familyMapMarkers[pl]);
+      if (!familyMapStarted || changed.length) {
+        familyMapStarted = true;
+        geocodeFamilyPlaces(changed.length ? changed : places);
+      } else {
+        Object.keys(familyMapMarkers).forEach(pl => familyMapMarkers[pl].setPopupContent(mapPlacePopup(pl)));
+      }
     }
     function showPlace(pl) {
-      const d = $('map-detail'); if (!pl) { d.innerHTML = '<p class="text-gray-500 text-sm">Διάλεξε έναν τόπο για να δεις ποια άτομα είναι από εκεί.</p>'; return; }
+      const d = $('map-detail'); if (!pl) { d.innerHTML = '<p class="text-gray-500 text-sm">Διάλεξε τόπο ή καρφίτσα στον χάρτη για να δεις ποια άτομα συνδέονται με αυτόν.</p>'; return; }
       const grp = (t, list) => list.length ? `<p class="text-xs text-olive font-semibold uppercase tracking-wide mt-4 mb-2">${t} (${list.length})</p><div class="flex flex-wrap gap-2">${list.map(p => `<button type="button" data-open="${p.id}" class="px-3 py-1.5 rounded-full bg-white shadow-card text-aegean text-sm hover:bg-aegean/10">${esc(p.emoji)} ${esc(p.name)}${p.by ? ' (' + p.by + ')' : ''}</button>`).join('')}</div>` : '';
-      const P = state.people, born = P.filter(p => p.bplace === pl), orig = P.filter(p => p.origin === pl && p.bplace !== pl), live = P.filter(p => p.place === pl);
-      d.innerHTML = `<div class="bg-white rounded-2xl p-5 shadow-card"><h3 class="font-serif text-xl text-aegean">${esc(pl)}</h3>${grp('Γεννήθηκαν εδώ', born)}${grp('Καταγωγή από εδώ', orig)}${grp('Μένουν εδώ', live)}</div>`;
+      const P = state.people, born = P.filter(p => p.bplace === pl), orig = P.filter(p => p.origin === pl && p.bplace !== pl), live = P.filter(p => p.place === pl), died = P.filter(p => p.dplace === pl);
+      d.innerHTML = `<div class="bg-white rounded-2xl p-5 shadow-card"><h3 class="font-serif text-xl text-aegean">${esc(pl)}</h3>${grp('Γεννήθηκαν εδώ', born)}${grp('Καταγωγή από εδώ', orig)}${grp('Μένουν εδώ', live)}${grp('Απεβίωσαν εδώ', died)}</div>`;
+      if (familyMapMarkers[pl]) familyMapMarkers[pl].openPopup();
     }
     $('place-select').addEventListener('change', e => showPlace(e.target.value));
     $('view-map').addEventListener('click', e => { const o = e.target.closest('[data-open]'); if (o) openPerson(+o.dataset.open); });
