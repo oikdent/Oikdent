@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
+<script>window.addEventListener('error',function(e){try{if(!e||!e.message)return;var d=document.getElementById('err-banner');if(!d){d=document.createElement('div');d.id='err-banner';d.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#7b1e1e;color:#fff;font:12px/1.4 sans-serif;padding:8px 12px;white-space:pre-wrap;max-height:40vh;overflow:auto';(document.body||document.documentElement).appendChild(d);}d.textContent+='Σφάλμα: '+e.message+(e.lineno?' (γραμμή '+e.lineno+')':'')+'\n';}catch(x){}});</script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Κληρονομιά — Ψηφιακό Μουσείο Οικογένειας</title>
@@ -1985,7 +1987,7 @@ html.dark .bn-item.bn-on { background: linear-gradient(135deg, rgba(127,179,213,
 @media (prefers-reduced-motion: reduce) { button:not(.person-node):not(.map-pin) { transition: none; } button:active { transform: none !important; } }
 @media print { body::before { display: none; } }
   </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,500;0,600;0,700;1,500&display=swap&subset=greek">
+  
   <style id="med-theme">
 /* ===== Μεσογειακός ανασχεδιασμός ===== */
 :root{--font-sans:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-serif:'Noto Serif',Georgia,Cambria,serif;
@@ -2450,7 +2452,6 @@ html.dark .bn-item.bn-on { color: var(--olive) !important; }
 
 
 <style id="premium-museum-redesign">
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
 :root{--museum-ink:#18251f;--museum-green:#203b30;--museum-green2:#2d4b3d;--museum-gold:#bd9a61;--museum-gold2:#dfc89f;--museum-paper:#f5f1e9;--museum-card:#fffdf8;--museum-muted:#827f73;--museum-line:rgba(43,61,49,.13)}
 html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!important;font-family:'DM Sans',sans-serif!important}
 #app{background:var(--museum-paper)!important}
@@ -2488,6 +2489,64 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
 @media(prefers-reduced-motion:reduce){.museum-collection,.museum-btn{transition:none!important}}
 </style>
 
+<style id="stats-extra">
+#stats-body .st-seg-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+#stats-body .stat-seg{padding:8px 16px;border-radius:999px;border:1px solid rgba(189,154,97,.55);background:#fffdf8;color:#203b30;font-size:13px;font-weight:600;cursor:pointer}
+#stats-body .stat-seg.on{background:#203b30;color:#f5f1e9;border-color:#203b30}
+#stats-body .st-top{margin-bottom:22px}
+#stats-body .st-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:800px){#stats-body .st-grid{grid-template-columns:1fr}#stats-body .st-top{grid-template-columns:repeat(2,1fr)}#stats-body .st-top .museum-stat{border-bottom:1px solid var(--museum-line)}}
+#stats-body .st-card{background:#fffdf8;border:1px solid rgba(43,61,49,.13);border-radius:18px;padding:20px 22px}
+#stats-body .st-card h3{font:500 19px 'Playfair Display',serif;color:#203b30;margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(189,154,97,.45)}
+#stats-body .st-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(43,61,49,.08);font-size:14px}
+#stats-body .st-l{color:#827f73}#stats-body .st-v{text-align:right}
+#stats-body .st-muted{color:#827f73}
+#stats-body .st-note{font-size:12px;color:#969287;margin-top:10px}
+#stats-body .st-bar{margin:9px 0}
+#stats-body .st-bar-top{display:flex;justify-content:space-between;font-size:14px;gap:10px}
+#stats-body .st-track{height:8px;border-radius:99px;background:rgba(189,154,97,.2);margin-top:5px;overflow:hidden}
+#stats-body .st-track i{display:block;height:100%;border-radius:99px;background:#6b8e23}
+#stats-body .st-track-lg{height:12px;margin:6px 0 14px}
+#stats-body .st-big{font:500 44px 'Playfair Display',serif;color:#203b30}
+#stats-body .st-mini{display:grid;grid-template-columns:110px 1fr 40px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+#stats-body .st-mini .st-track{margin:0}
+#stats-body .st-mini b{text-align:right}
+#stats-body .st-duo{display:flex;height:16px;border-radius:99px;overflow:hidden;margin:6px 0 10px}
+#stats-body .st-duo i{display:block;height:100%}
+#stats-body .st-duo-l{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;font-size:13px}
+#stats-body .st-duo-l s{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;text-decoration:none}
+#stats-body .st-chips{display:flex;flex-wrap:wrap;gap:8px}
+#stats-body .stat-chip{padding:5px 13px;border-radius:999px;background:rgba(189,154,97,.16);color:#203b30;font-size:13px;border:1px solid transparent;cursor:pointer}
+#stats-body .stat-chip:hover{background:rgba(189,154,97,.32);border-color:#bd9a61}
+#stats-body .stat-link{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;text-align:inherit;cursor:pointer;text-decoration:underline dotted #bd9a61;text-underline-offset:3px}
+#stats-body .stat-link:hover{color:#8a6a2f}
+#stats-body .st-h{font:500 24px 'Playfair Display',serif;margin:34px 0 14px;color:inherit}
+#stats-body .st-wide{grid-column:1/-1}
+#stats-body .st-donut{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+#stats-body .st-donut svg{width:150px;height:150px;flex:none;transform:rotate(0deg)}
+#stats-body .st-dn{font:600 7px 'Playfair Display',serif;fill:#203b30}
+#stats-body .st-leg{list-style:none;margin:0;padding:0;flex:1;min-width:170px;font-size:13px;color:#203b30}
+#stats-body .st-leg li{display:flex;align-items:center;gap:8px;padding:4px 0}
+#stats-body .st-leg li span{flex:1}
+#stats-body .st-leg li em{font-style:normal;color:#827f73;min-width:38px;text-align:right}
+#stats-body .st-leg s{display:inline-block;width:10px;height:10px;border-radius:3px;flex:none;text-decoration:none}
+#stats-body .st-leg-row{display:flex;flex-wrap:wrap;gap:4px 16px;margin-bottom:8px}
+#stats-body .st-leg-row li{padding:0}#stats-body .st-leg-row li span{flex:none}
+#stats-body .st-cols{display:flex;align-items:flex-end;gap:6px;height:170px;padding-top:6px}
+#stats-body .st-col{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;height:100%}
+#stats-body .st-col i{display:block;width:100%;max-width:38px;background:#2a78d6;border-radius:4px 4px 0 0}
+#stats-body .st-col-v{font-size:12px;color:#203b30}
+#stats-body .st-col-l{font-size:11px;color:#827f73;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#stats-body .st-stack{display:flex;gap:2px;height:12px;margin-top:5px}
+#stats-body .st-stack i{display:block;border-radius:3px}
+#stats-body .st-mini-w{grid-template-columns:200px 1fr 44px}
+@media(max-width:600px){#stats-body .st-mini-w{grid-template-columns:120px 1fr 40px}}
+#stats-body .st-tscroll{overflow-x:auto}
+#stats-body .st-table{width:100%;border-collapse:collapse;font-size:14px;color:#203b30}
+#stats-body .st-table th,#stats-body .st-table td{padding:9px 10px;border-bottom:1px solid rgba(43,61,49,.1);text-align:right;white-space:nowrap}
+#stats-body .st-table th:first-child,#stats-body .st-table tbody th{text-align:left;font-weight:600}
+#stats-body .st-table thead th{font-size:12px;color:#827f73;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+</style>
 </head>
 <body class="font-sans text-gray-800 antialiased">
   <!-- Η εφαρμογή ανοίγει απευθείας, χωρίς οθόνη σύνδεσης. -->
@@ -2509,8 +2568,22 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         </div>
         <span class="font-serif font-bold text-aegean" id="app-title-m">Οικογενειακό Δέντρο</span>
       </div>
+      <button type="button" id="smart-btn-m" onclick="openSmart()" class="w-10 h-10 rounded-xl bg-aegean/10 text-aegean flex items-center justify-center relative" style="margin-left:auto;font-size:20px" aria-label="Έξυπνος βοηθός">🧠<span class="smart-badge hidden"></span></button>
     </header>
 
+    <style id="smart-ui">
+#smart-btn-d{display:none;position:fixed;top:14px;right:18px;z-index:30;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;border:1px solid #bd9a61;background:#203b30;color:#f1d7a5;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+@media (min-width:768px){#smart-btn-d{display:flex}}
+.smart-badge{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:99px;background:#c0392b;color:#fff;font-size:12px;line-height:20px;text-align:center;font-weight:700}
+@media print{#smart-btn-d,#smart-btn-m,#smart-ov{display:none!important}}
+</style>
+<button type="button" id="smart-btn-d" onclick="openSmart()" aria-label="Έξυπνος βοηθός">🧠 Βοηθός<span class="smart-badge hidden"></span></button>
+<div id="smart-ov" class="hidden" style="position:fixed;inset:0;z-index:75;background:rgba(15,25,20,.55);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(env(safe-area-inset-top,0px) + 1rem) 1rem 2rem">
+  <div id="smart-section" class="bg-white" style="max-width:40rem;margin:0 auto;border-radius:1.2rem;padding:1rem 1rem 1.2rem;box-shadow:0 20px 50px rgba(0,0,0,.35)">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.8rem"><h2 class="font-serif text-2xl text-aegean">🧠 Έξυπνος βοηθός</h2><button type="button" id="smart-close" aria-label="Κλείσιμο" class="text-aegean" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(27,79,114,.3);font-size:18px">✕</button></div>
+    <div class="space-y-2" id="smart-body"></div>
+  </div>
+</div>
     <!-- Overlay when sidebar open on mobile -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden" onclick="closeSidebar()"></div>
 
@@ -2819,7 +2892,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     </main>
 
     <!-- Generic modal -->
-    <div id="modal" class="hidden fixed inset-0 z-[70] bg-black/50 flex items-end sm:items-center justify-center sm:p-4" onclick="if(event.target===this)closeModal()">
+    <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" class="hidden fixed inset-0 z-[70] bg-black/50 flex items-end sm:items-center justify-center sm:p-4" onclick="if(event.target===this)closeModal()">
       <form id="modal-form" class="bg-limewash rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-md p-5 flex flex-col" style="max-height:92vh;max-height:92dvh">
         <div class="flex justify-between items-center mb-3 shrink-0">
           <h3 id="modal-title" class="font-serif text-xl text-aegean"></h3>
@@ -2838,7 +2911,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       <button type="button" onclick="toggleSidebar()" class="bn-item"><span>☰</span><small>Περισσότερα</small></button>
     </nav>
     <!-- Toast -->
-    <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] bg-aegean text-white text-sm px-4 py-2.5 rounded-xl shadow-lg max-w-[90vw] text-center"></div>
+    <div id="toast" role="status" aria-live="polite" aria-atomic="true" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] bg-aegean text-white text-sm px-4 py-2.5 rounded-xl shadow-lg max-w-[90vw] text-center"></div>
     <input type="file" id="photo-input" accept="image/*" class="hidden" />
     <input type="file" id="restore-input" accept="application/json,.json" class="hidden" />
   </div>
@@ -2913,8 +2986,9 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         }
         lastSnap = cur;
       } catch (e) {}
-      try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* ο χώρος αποθήκευσης δεν είναι διαθέσιμος */ }
+      try { localStorage.setItem(STORE, JSON.stringify(state)); window.__familySaveError = ''; } catch (e) { window.__familySaveError = e && e.name === 'QuotaExceededError' ? 'Ο χώρος αποθήκευσης γέμισε. Τα τελευταία δεδομένα ίσως δεν αποθηκεύτηκαν· κάνε άμεσα εξαγωγή αντιγράφου.' : 'Η αποθήκευση απέτυχε. Κάνε άμεσα εξαγωγή αντιγράφου.'; console.error('Family tree save failed', e); try { showToast(window.__familySaveError); } catch (_) {} }
       try { updateUndoUi(); } catch (e) {}
+      try { updateSmartBadge(); } catch (e) {}
     }
 
     const byId = id => state.people.find(p => p.id === id);
@@ -3455,10 +3529,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       clone.querySelectorAll('svg path').forEach(p=>{if(p.getAttribute('opacity')==='.15'||p.style.opacity==='.15')p.remove();});
       const title='Οικογενειακός κλάδος — '+anchor.name;
       const w=window.open('','_blank');if(!w){showToast('Επίτρεψε τα αναδυόμενα παράθυρα για εκτύπωση.');return;}
-      w.document.open();w.document.write('<!doctype html><html lang="el"><head><meta charset="utf-8"><title>'+title.replace(/</g,'&lt;')+'</title><style>@page{size:A3 landscape;margin:12mm}*{box-sizing:border-box}body{margin:0;background:#f7f1e5;color:#3b2f26;font-family:Georgia,serif}.head{text-align:center;padding:0 0 10mm}.head h1{font-size:25pt;margin:0;color:#4a5d3a}.head p{font-size:11pt;color:#8a7256;margin:5mm 0 0}.canvas{position:relative;overflow:visible;margin:auto;transform-origin:top center}.person-node{border:0!important;box-shadow:none!important;background:transparent!important;cursor:default!important}.person-node p{font-family:Arial,sans-serif!important;font-size:9pt!important;color:#3b2f26!important}.person-node div{border-color:#f7f1e5!important;box-shadow:0 2px 8px #88765a40!important}.tree-line,.tree-line-cross,.tree-line-marriage{stroke:#7c8b58!important;stroke-width:2!important}.tree-line-cross{stroke-dasharray:5 4!important}.legend{margin-top:8mm;text-align:center;font:10pt Arial;color:#7c8b58}</style></head><body><header class="head"><h1>'+title.replace(/</g,'&lt;')+'</h1><p>Οικογενειακό γενεαλογικό δέντρο</p></header><div id="canvas"></div><div class="legend">Εκτύπωση οικογενειακού κλάδου · '+new Date().getFullYear()+'</div>
-
-
-</body></html>');w.document.close();
+      w.document.open();w.document.write('<!doctype html><html lang="el"><head><meta charset="utf-8"><title>'+title.replace(/</g,'&lt;')+'</title><style>@page{size:A3 landscape;margin:12mm}*{box-sizing:border-box}body{margin:0;background:#f7f1e5;color:#3b2f26;font-family:Georgia,serif}.head{text-align:center;padding:0 0 10mm}.head h1{font-size:25pt;margin:0;color:#4a5d3a}.head p{font-size:11pt;color:#8a7256;margin:5mm 0 0}.canvas{position:relative;overflow:visible;margin:auto;transform-origin:top center}.person-node{border:0!important;box-shadow:none!important;background:transparent!important;cursor:default!important}.person-node p{font-family:Arial,sans-serif!important;font-size:9pt!important;color:#3b2f26!important}.person-node div{border-color:#f7f1e5!important;box-shadow:0 2px 8px #88765a40!important}.tree-line,.tree-line-cross,.tree-line-marriage{stroke:#7c8b58!important;stroke-width:2!important}.tree-line-cross{stroke-dasharray:5 4!important}.legend{margin-top:8mm;text-align:center;font:10pt Arial;color:#7c8b58}</style></head><body><header class="head"><h1>'+title.replace(/</g,'&lt;')+'</h1><p>Οικογενειακό γενεαλογικό δέντρο</p></header><div id="canvas"></div><div class="legend">Εκτύπωση οικογενειακού κλάδου · '+new Date().getFullYear()+'</div></body></html>');w.document.close();
       const c=w.document.getElementById('canvas');c.appendChild(clone);c.style.width=src.style.width;c.style.height=src.style.height;clone.style.margin='0 auto';clone.style.position='relative';
       const maxW=w.innerWidth-40,maxH=w.innerHeight-160,scale=Math.min(maxW/Math.max(clone.scrollWidth,1),maxH/Math.max(clone.scrollHeight,1),1);clone.style.transform='scale('+scale+')';clone.style.transformOrigin='top center';c.style.height=(clone.scrollHeight*scale)+'px';
       w.focus();setTimeout(()=>w.print(),500);
@@ -3660,6 +3731,8 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
           if (!goneP(p) && n <= 45) out.push({ n, id: p.id, icon: '🎂', title: 'Γενέθλια: ' + p.name, sub: 'γίνεται ' + age + ' ετών' + (p.unc ? ' (περ.)' : '') });
           else if (goneP(p) && n === 0) out.push({ n, id: p.id, icon: '🕯️', title: 'Σήμερα θα γινόταν ' + age + ' ετών: ' + p.name, sub: 'Στη μνήμη του/της' });
         }
+        const nd = goneP(p) ? null : namedayOf(p);
+        if (nd) { const n = days(when(nd[0], nd[1])); if (n <= 45) out.push({ n, id: p.id, icon: '🎉', title: 'Γιορτή: ' + p.name, sub: nd[1] + ' ' + MONTHS[nd[0] - 1] }); }
         m = ISO.exec(p.ddate || '');
         if (m) { const t = when(+m[2], +m[3]), n = days(t); if (n <= 45) out.push({ n, id: p.id, icon: '🕯️', title: 'Επέτειος θανάτου: ' + p.name, sub: yrs(t.getFullYear() - (+m[1])) + ' από τον θάνατο' }); }
       });
@@ -3680,8 +3753,184 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       box.innerHTML = (today.length ? `<div class="space-y-2">${today.map(item).join('')}</div>` : '<p class="text-sm text-gray-500 mb-1">Σήμερα δεν υπάρχει κάτι ιδιαίτερο στην οικογένεια.</p>')
         + (soon.length ? `<p class="text-xs text-olive font-semibold uppercase tracking-wide mt-5 mb-2">Τις επόμενες 45 ημέρες</p><div class="space-y-2">${soon.map(item).join('')}</div>` : (today.length ? '' : '<p class="text-sm text-gray-500">Τίποτα προγραμματισμένο τις επόμενες 45 ημέρες. Πρόσθεσε πλήρεις ημερομηνίες γέννησης για να εμφανίζονται εδώ τα γενέθλια.</p>'));
     }
+    /* ---------- Έξυπνος βοηθός ----------
+       Όλα υπολογίζονται εδώ, στη συσκευή, από τα δεδομένα που ήδη υπάρχουν. Δεν στέλνεται τίποτα πουθενά.
+       Αποθηκεύεται μόνο η λίστα «αγνόησε» (state.ignore), ώστε να μην ξαναεμφανίζονται λάθος συναγερμοί. */
+    const smartOpen = {}, smartSel = { name: null, a: null, b: null };
+    const smartYear = p => p.bdate ? +p.bdate.slice(0, 4) : (p.by ? +p.by : null);
+    const smartDeath = p => p.ddate ? +p.ddate.slice(0, 4) : (p.dy ? +p.dy : null);
+    const firstOf = p => (p.first || (p.name || '').trim().split(/\s+/)[0] || '').trim();
+    const gk = x => (x || '').toString().trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ς/g, 'σ');
+    const FIRST_GROUPS = [
+      ['ιωαννης', 'γιαννης', 'γιαννακης', 'γιαννος'], ['ιωαννα', 'γιαννα', 'γιαννουλα'],
+      ['κωνσταντινος', 'κωστας', 'κωστης', 'κωνσταντης', 'ντινος'], ['κωνσταντινα', 'κωστουλα', 'ντινα'],
+      ['δημητριος', 'δημητρης', 'μητσος', 'μιμης'], ['δημητρα', 'μητσα'],
+      ['νικολαος', 'νικος', 'νικολης'], ['γεωργιος', 'γιωργος', 'γιωργης', 'γεωργης'], ['γεωργια', 'γιωργια'],
+      ['αθανασιος', 'θανασης', 'θανος'], ['χρηστος', 'χριστος'], ['μαρια', 'μαιρη', 'μαριτσα'],
+      ['αικατερινη', 'κατερινα', 'ρινα'], ['ελενη', 'λενα', 'ελενιτσα'], ['βασιλειος', 'βασιλης', 'βασος'],
+      ['βασιλικη', 'βασω', 'βικη'], ['σπυριδων', 'σπυρος', 'σπυρης'], ['αντωνιος', 'αντωνης', 'αντωνακης'],
+      ['ευαγγελος', 'βαγγελης', 'βαγγελος'], ['ευαγγελια', 'βαγγελιω', 'βαγγελια'], ['θεοδωρος', 'θοδωρης'],
+      ['ανδρεας', 'αντρεας'], ['ευστρατιος', 'στρατος', 'στρατης'], ['στυλιανος', 'στελιος'], ['κυριακος', 'κυριακης']
+    ].map(g => g.map(gk));
+    const lev = (a, b) => {
+      const m = a.length, n = b.length; if (!m || !n) return Math.max(m, n);
+      let prev = Array.from({ length: n + 1 }, (_, i) => i);
+      for (let i = 1; i <= m; i++) { const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+      return prev[n];
+    };
+    const firstKey = p => gk(firstOf(p));
+    function sameFirst(a, b) {
+      const x = firstKey(a), y = firstKey(b); if (!x || !y) return false;
+      if (x === y) return true;
+      if (FIRST_GROUPS.some(g => g.includes(x) && g.includes(y))) return true;
+      return x.length >= 5 && y.length >= 5 && lev(x, y) <= 1;
+    }
+    function smartIssues() {
+      const out = [], now = new Date().getFullYear(), seen = new Set();
+      const add = (key, ids, sev, text) => { if (!seen.has(key)) { seen.add(key); out.push({ key, ids, sev, text }); } };
+      state.people.forEach(p => {
+        const by = smartYear(p), dy = smartDeath(p);
+        if (by && dy && dy - by > 110) add('long:' + p.id, [p.id], 'warn', p.name + ': διάρκεια ζωής ' + (dy - by) + ' χρόνια (' + by + '–' + dy + '). Σωστές οι χρονιές;');
+        if (by && !goneP(p) && now - by > 110) add('old:' + p.id, [p.id], 'warn', p.name + ' καταγράφεται ως ζωντανός/ή αλλά θα ήταν ' + (now - by) + ' ετών. Λείπει η χρονιά θανάτου;');
+        p.parents.forEach(pid => {
+          const q = byId(pid); if (!q) return;
+          const qb = smartYear(q), qd = smartDeath(q), qs = sexOf(q);
+          if (by && qb) {
+            const gap = by - qb, k = 'par:' + p.id + ':' + q.id;
+            if (gap < 0) add(k, [p.id, q.id], 'err', p.name + ' γεννήθηκε το ' + by + ', πριν από τον/την γονέα ' + q.name + ' (' + qb + ').');
+            else if (!p.unc && !q.unc) {
+              if (gap < 15) add(k, [p.id, q.id], 'warn', 'Ο/Η ' + q.name + ' θα ήταν μόλις ' + gap + ' ετών όταν γεννήθηκε ο/η ' + p.name + '.');
+              else if (qs === 'F' && gap > 52) add(k, [p.id, q.id], 'warn', 'Η ' + q.name + ' θα ήταν ' + gap + ' ετών στη γέννηση του/της ' + p.name + '.');
+              else if (qs === 'M' && gap > 75) add(k, [p.id, q.id], 'warn', 'Ο ' + q.name + ' θα ήταν ' + gap + ' ετών στη γέννηση του/της ' + p.name + '.');
+            }
+          }
+          if (by && qd && (qs === 'F' ? by > qd : by > qd + 1)) add('post:' + p.id + ':' + q.id, [p.id, q.id], 'err', p.name + ' γεννήθηκε το ' + by + ', μετά τον θάνατο του/της γονέα ' + q.name + ' (' + qd + ').');
+        });
+        if (p.spouse) {
+          const s = byId(p.spouse);
+          if (s && s.spouse !== p.id) add('sp:' + [p.id, s.id].sort().join('-'), [p.id, s.id], 'info', p.name + ' έχει σύζυγο τον/την ' + s.name + ', αλλά όχι αντίστροφα.');
+        }
+        const seenUp = new Set();
+        const up = id => { if (seenUp.has(id)) return false; seenUp.add(id); const x = byId(id); return !!x && x.parents.some(pp => pp === p.id || up(pp)); };
+        if (up(p.id)) add('cyc:' + p.id, [p.id], 'err', p.name + ' εμφανίζεται ως πρόγονος του εαυτού του/της. Κάποια σύνδεση γονέα είναι λάθος.');
+      });
+      return out;
+    }
+    function smartDups() {
+      const P = state.people, out = [];
+      for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
+        const a = P[i], b = P[j];
+        if (!a.last || !b.last || /^άγνωστ/i.test(firstOf(a)) || /^άγνωστ/i.test(firstOf(b))) continue;
+        const sameLast = famKey(a.last) === famKey(b.last) || (a.maiden && famKey(a.maiden) === famKey(b.last)) || (b.maiden && famKey(b.maiden) === famKey(a.last));
+        if (!sameLast || !sameFirst(a, b)) continue;
+        const ya = smartYear(a), yb = smartYear(b);
+        if (ya && yb && Math.abs(ya - yb) > 1) continue;
+        if (a.bdate && b.bdate && a.bdate !== b.bdate) continue;
+        const sa = sexOf(a), sb = sexOf(b); if (sa && sb && sa !== sb) continue;
+        if (a.parents.some(x => b.parents.includes(x))) continue;
+        if (relatives(a.id).has(b.id)) continue;
+        const strong = (a.bdate && a.bdate === b.bdate) || (ya && yb && ya === yb && firstKey(a) === firstKey(b));
+        out.push({ key: 'dup:' + [a.id, b.id].sort().join('-'), a, b, strong });
+      }
+      return out.sort((x, y) => (y.strong ? 1 : 0) - (x.strong ? 1 : 0));
+    }
+    function smartGaps() {
+      const now = new Date().getFullYear(), rows = [];
+      state.people.forEach(p => {
+        if (/^άγνωστ/i.test(firstOf(p))) return;
+        const gone = goneP(p), miss = [];
+        if (!(p.bdate || p.by)) miss.push('χρονιά γέννησης');
+        if (!(p.bplace || p.place)) miss.push('τόπος');
+        if (!sexOf(p)) miss.push('φύλο');
+        if (gone && !(p.ddate || p.dy)) miss.push('χρονιά θανάτου');
+        if (!(p.story || p.notes)) miss.push('ιστορία');
+        if (!faceOf(p)) miss.push('φωτογραφία');
+        const total = gone ? 6 : 5, by = smartYear(p), age = by ? now - by : null;
+        rows.push({ p, miss, pct: (total - miss.length) / total, age, urgency: !gone && age ? (age >= 70 ? 2 : age >= 55 ? 1 : 0) : 0 });
+      });
+      return rows;
+    }
+    function smartNameTool() {
+      const people = state.people.filter(p => sexOf(p) && !/^άγνωστ/i.test(firstOf(p))).sort((a, b) => a.name.localeCompare(b.name, 'el'));
+      const sel = `<select data-sel="name" class="${INPUT}"><option value="">— διάλεξε γονέα —</option>${people.map(p => `<option value="${p.id}"${p.id === smartSel.name ? ' selected' : ''}>${esc(p.name)}${p.by ? ' (' + p.by + ')' : ''}</option>`).join('')}</select>`;
+      const P = byId(smartSel.name);
+      if (!P) return '<p class="text-sm text-gray-500 mb-2">Η συνήθης παράδοση: το πρώτο αγόρι παίρνει το όνομα του παππού από τον πατέρα, το δεύτερο του παππού από τη μητέρα, το πρώτο κορίτσι της γιαγιάς από τον πατέρα, το δεύτερο της γιαγιάς από τη μητέρα. Διάλεξε έναν γονέα να δεις τι προκύπτει από το δέντρο σου.</p>' + sel;
+      const sp = byId(P.spouse), F = sexOf(P) === 'M' ? P : sp, M = sexOf(P) === 'F' ? P : sp;
+      const par = (x, s) => x ? x.parents.map(byId).find(q => q && sexOf(q) === s) : null;
+      const kids = childrenOf(P).filter(c => !sp || c.parents.includes(sp.id)), used = new Set(kids.map(firstKey));
+      const sons = [[par(F, 'M'), 'παππούς από τον πατέρα'], [par(M, 'M'), 'παππούς από τη μητέρα']];
+      const dau = [[par(F, 'F'), 'γιαγιά από τον πατέρα'], [par(M, 'F'), 'γιαγιά από τη μητέρα']];
+      const line = (c, w, pre) => {
+        const nxt = c.find(([q]) => q && !used.has(firstKey(q)));
+        const all = c.map(([q, why]) => q ? `<span style="display:inline-block;margin:.15rem .3rem .15rem 0;padding:.15rem .55rem;border-radius:999px;border:1px solid rgba(107,142,35,.4);font-size:.82rem">${esc(firstOf(q))} · ${why}${used.has(firstKey(q)) ? ' ✓ ήδη στο δέντρο' : ''}</span>` : `<span class="text-sm text-gray-500" style="margin-right:.5rem">(${why}: άγνωστος στο δέντρο)</span>`).join('');
+        return `<p class="text-sm" style="margin:.6rem 0 .1rem"><b>${pre} ${w}:</b> ${nxt ? esc(firstOf(nxt[0])) + ' (' + nxt[1] + ')' : 'δεν υπάρχει διαθέσιμο όνομα από τους παππούδες του δέντρου'}</p><div>${all}</div>`;
+      };
+      const ns = kids.filter(c => sexOf(c) === 'M').length, nd = kids.filter(c => sexOf(c) === 'F').length;
+      return sel + `<p class="text-sm text-gray-500" style="margin-top:.6rem">Παιδιά στο δέντρο: ${ns} ${ns === 1 ? 'γιος' : 'γιοι'}, ${nd} ${nd === 1 ? 'κόρη' : 'κόρες'}${sp ? ' (με ' + esc(sp.name) + ')' : ''}.</p>` + line(sons, 'γιος', 'Επόμενος') + line(dau, 'κόρη', 'Επόμενη') + '<p class="text-xs text-gray-500" style="margin-top:.6rem">Είναι συνήθεια, όχι κανόνας. Η εφαρμογή μόνο προτείνει.</p>';
+    }
+    function smartRelTool() {
+      const people = state.people.slice().sort((a, b) => a.name.localeCompare(b.name, 'el'));
+      const opts = id => '<option value="">— διάλεξε —</option>' + people.map(p => `<option value="${p.id}"${p.id === id ? ' selected' : ''}>${esc(p.name)}${p.by ? ' (' + p.by + ')' : ''}</option>`).join('');
+      const a = byId(smartSel.a), b = byId(smartSel.b);
+      let res = '';
+      if (a && b) {
+        if (a.id === b.id) res = 'Είναι το ίδιο πρόσωπο.';
+        else { const r = relText(a, b); res = r ? '«' + esc(b.name) + '» είναι ' + esc(r) + ' του/της «' + esc(a.name) + '».' : 'Δεν βρέθηκε σύνδεση στο δέντρο.'; }
+      }
+      return `<div style="display:grid;gap:.5rem"><select data-sel="a" class="${INPUT}">${opts(smartSel.a)}</select><select data-sel="b" class="${INPUT}">${opts(smartSel.b)}</select></div>` + (res ? `<p class="text-sm" style="margin-top:.6rem"><b>${res}</b></p>` : '<p class="text-sm text-gray-500" style="margin-top:.6rem">Διάλεξε δύο πρόσωπα και δες τι σχέση έχουν (θείος, δεύτερος ξάδελφος, πεθερός κ.ά.).</p>');
+    }
+    function setSmartBadge(n) { document.querySelectorAll('.smart-badge').forEach(b => { b.textContent = n > 99 ? '99+' : String(n); b.classList.toggle('hidden', !n); }); }
+    let smartBadgeTimer;
+    function updateSmartBadge() {
+      clearTimeout(smartBadgeTimer);
+      smartBadgeTimer = setTimeout(() => {
+        try {
+          if (state.people.length < 3) { setSmartBadge(0); return; }
+          const ign = new Set(state.ignore || []);
+          setSmartBadge(smartIssues().filter(x => !ign.has(x.key)).length + smartDups().filter(x => !ign.has(x.key)).length);
+        } catch (e) { setSmartBadge(0); }
+      }, 400);
+    }
+    function openSmart() { try { closeSidebar(); } catch (e) {} $('smart-ov').classList.remove('hidden'); document.body.style.overflow = 'hidden'; $('smart-ov').scrollTop = 0; renderSmart(); }
+    function closeSmart() { $('smart-ov').classList.add('hidden'); document.body.style.overflow = ''; }
+    window.openSmart = openSmart; window.closeSmart = closeSmart;
+    try {
+      $('smart-close').addEventListener('click', closeSmart);
+      $('smart-ov').addEventListener('click', e => { if (e.target === $('smart-ov')) closeSmart(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('smart-ov').classList.contains('hidden')) closeSmart(); });
+    } catch (err) { console.error(err); }
+    function renderSmart() {
+      try {
+        if (state.people.length < 3) { $('smart-body').innerHTML = '<p class="text-sm text-gray-500">Πρόσθεσε τουλάχιστον 3 άτομα στο δέντρο για να λειτουργήσει ο βοηθός.</p>'; setSmartBadge(0); return; }
+        const ign = new Set(state.ignore || []);
+        const issues = smartIssues().filter(x => !ign.has(x.key)), dups = smartDups().filter(x => !ign.has(x.key)), rows = smartGaps();
+        const pct = rows.length ? Math.round(rows.reduce((s, r) => s + r.pct, 0) / rows.length * 100) : 0;
+        setSmartBadge(issues.length + dups.length);
+        const card = (k, title, badge, inner) => `<details data-k="${k}"${smartOpen[k] ? ' open' : ''} class="bg-white rounded-xl shadow-card"><summary style="cursor:pointer;padding:.85rem 1rem;display:flex;justify-content:space-between;gap:.75rem;align-items:center"><b>${title}</b><span class="text-sm text-gray-500">${badge}</span></summary><div style="padding:0 1rem 1rem">${inner}</div></details>`;
+        const btn = (attr, txt) => `<button type="button" ${attr} class="text-aegean" style="padding:.3rem .65rem;border-radius:.6rem;border:1px solid rgba(27,79,114,.3);font-size:.82rem;margin:.2rem .3rem 0 0">${txt}</button>`;
+        const gaps = rows.filter(r => r.miss.length >= 2 || (r.urgency && r.miss.length)).sort((x, y) => y.urgency - x.urgency || y.miss.length - x.miss.length).slice(0, 6);
+        const gapHtml = `<div style="height:8px;border-radius:99px;background:rgba(27,79,114,.15);overflow:hidden;margin:.2rem 0 .8rem"><div style="height:100%;width:${pct}%;background:#6B8E23"></div></div>`
+          + (gaps.length ? '<p class="text-xs text-gray-500" style="margin-bottom:.4rem">ΤΙ ΑΞΙΖΕΙ ΝΑ ΚΑΤΑΓΡΑΨΕΙΣ ΠΡΩΤΑ</p>' + gaps.map(r => `<div style="padding:.5rem 0;border-top:1px solid rgba(0,0,0,.07)"><button type="button" data-open="${r.p.id}" class="text-aegean" style="font-weight:600;text-align:left">${esc(r.p.name)}</button>${r.age ? ` <span class="text-sm text-gray-500">(${goneP(r.p) ? 'γεν. ' + smartYear(r.p) : (r.urgency ? 'ζει, ' : '') + r.age + ' ετών'})</span>` : ''}<div class="text-sm text-gray-500">Λείπουν: ${r.miss.join(', ')}${r.urgency === 2 ? '. Καλύτερα τώρα, όσο μπορεί να τα πει ο ίδιος/η ίδια.' : ''}</div></div>`).join('') : '<p class="text-sm text-gray-500">Τα στοιχεία των προσώπων είναι αρκετά πλήρη. Μπράβο!</p>');
+        const ICON = { err: '⛔', warn: '⚠️', info: 'ℹ️' };
+        const issHtml = issues.length ? issues.map(x => `<div style="padding:.6rem 0;border-top:1px solid rgba(0,0,0,.07)"><div class="text-sm">${ICON[x.sev]} ${esc(x.text)}</div>${x.ids.map(id => byId(id) ? btn('data-open="' + id + '"', 'Άνοιγμα: ' + esc(byId(id).name)) : '').join('')}${btn('data-ign="' + esc(x.key) + '"', 'Αγνόησε')}</div>`).join('') : '<p class="text-sm text-gray-500">Δεν βρέθηκε κάτι περίεργο στις ημερομηνίες και τις συνδέσεις.</p>';
+        const dupHtml = dups.length ? dups.map(x => `<div style="padding:.6rem 0;border-top:1px solid rgba(0,0,0,.07)"><div class="text-sm">👥 <b>${esc(x.a.name)}</b>${x.a.by ? ' (' + x.a.by + ')' : ''} και <b>${esc(x.b.name)}</b>${x.b.by ? ' (' + x.b.by + ')' : ''} <span class="text-gray-500">· ${x.strong ? 'πολύ πιθανό' : 'πιθανό'} να είναι το ίδιο πρόσωπο</span></div>${btn('data-open="' + x.a.id + '"', 'Άνοιγμα 1ου')}${btn('data-open="' + x.b.id + '"', 'Άνοιγμα 2ου')}${btn('data-ign="' + esc(x.key) + '"', 'Είναι διαφορετικοί')}</div>`).join('') : '<p class="text-sm text-gray-500">Δεν βρέθηκαν πιθανές διπλοεγγραφές.</p>';
+        $('smart-body').innerHTML = card('gaps', '📋 Πληρότητα δέντρου', pct + '%', gapHtml)
+          + card('issues', '🔎 Έλεγχος συνέπειας', issues.length ? issues.length + (issues.length === 1 ? ' εύρημα' : ' ευρήματα') : '✓ εντάξει', issHtml)
+          + card('dups', '👥 Πιθανές διπλοεγγραφές', dups.length ? String(dups.length) : '✓ καμία', dupHtml)
+          + card('names', '🏷️ Ονοματοδοσία (παράδοση)', '', smartNameTool())
+          + card('rel', '🧭 Τι μας είναι;', '', smartRelTool())
+          + `<p class="text-xs text-gray-500" style="padding:.2rem .3rem">Όλα υπολογίζονται στη συσκευή σου και δεν στέλνεται τίποτα πουθενά.${ign.size ? ' <button type="button" data-resetign class="text-aegean" style="text-decoration:underline">Δείξε ξανά ' + ign.size + ' αγνοημένα</button>' : ''}</p>`;
+      } catch (e) { $('smart-body').innerHTML = '<p class="text-sm text-gray-500">Δεν ήταν δυνατός ο υπολογισμός.</p>'; }
+    }
+    try { $('smart-body').addEventListener('click', e => {
+      const o = e.target.closest('[data-open]'); if (o) { closeSmart(); openPerson(+o.dataset.open); return; }
+      const g = e.target.closest('[data-ign]'); if (g) { (state.ignore = state.ignore || []).push(g.dataset.ign); save(); renderSmart(); return; }
+      if (e.target.closest('[data-resetign]')) { state.ignore = []; save(); renderSmart(); }
+    });
+    $('smart-body').addEventListener('change', e => { const k = e.target.dataset && e.target.dataset.sel; if (!k) return; smartSel[k] = +e.target.value || null; renderSmart(); });
+    $('smart-body').addEventListener('toggle', e => { const d = e.target; if (d && d.dataset && d.dataset.k) smartOpen[d.dataset.k] = d.open; }, true); } catch (err) { console.error(err); }
     function renderExtras() {
-      renderUpdates(); renderSocial();
+      renderUpdates(); renderSocial(); updateSmartBadge();
       const td = state.people.filter(p => p.todo);
       $('todo-section').classList.toggle('hidden', !td.length);
       $('todo-list').innerHTML = td.map(p => `<button type="button" data-open="${p.id}" class="w-full text-left bg-white rounded-xl p-3 shadow-card"><b>${esc(p.name)}</b><span class="block text-sm text-gray-500 whitespace-pre-line">${esc(p.todo)}</span></button>`).join('');
@@ -3699,54 +3948,207 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     }
 
     /* ---------- Στατιστικά ---------- */
+    let statsLine = 'all';
+    const normTxt = s => (s || '').toString().trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    function statsPeople() {
+      const all = state.people;
+      if (statsLine === 'all') return all;
+      const sd = sideSets(); if (!sd || !sd[statsLine]) return all;
+      const ids = new Set([sd.home, ...sd[statsLine]]);
+      const down = id => { const p = byId(id); if (!p) return; childrenOf(p).forEach(c => { if (!ids.has(c.id)) { ids.add(c.id); down(c.id); } }); };
+      down(sd.home);
+      return all.filter(p => ids.has(p.id));
+    }
     function renderStatsView() {
-      const P = state.people, box = $('stats-body');
-      if (!P.length) { box.innerHTML = '<p class="text-gray-500">Πρόσθεσε μέλη στο δέντρο για να εμφανιστούν στατιστικά.</p>'; return; }
-      const card = (t, inner) => inner ? `<div class="bg-white rounded-2xl p-5 shadow-card"><h3 class="font-medium text-aegean mb-3">${t}</h3>${inner}</div>` : '';
-      const row = (l, v) => `<div class="flex justify-between gap-3 py-2 border-b border-gray-100 text-sm"><span class="text-gray-500">${l}</span><span class="text-right">${v}</span></div>`;
-      const bar = (l, n, mx, sub) => `<div class="my-2"><div class="flex justify-between text-sm"><span>${esc(l)}</span><span class="text-gray-500">${n}</span></div><div class="h-2 rounded bg-aegean/10 mt-1"><i class="block h-2 rounded bg-olive" style="width:${Math.max(4, n / mx * 100)}%"></i></div>${sub ? `<p class="text-xs text-gray-400 mt-0.5">${esc(sub)}</p>` : ''}</div>`;
-      const bars = (arr, sub) => { const mx = Math.max(1, ...arr.map(x => x[1])); return arr.map(x => bar(x[0], x[1], mx, sub && sub[x[0]])).join(''); };
-      const tile = (v, l) => `<div class="bg-white rounded-2xl p-4 shadow-card text-center"><div class="text-2xl font-bold text-aegean">${v}</div><div class="text-sm text-gray-500">${l}</div></div>`;
+      const box = $('stats-body');
+      if (!state.people.length) { box.innerHTML = '<p class="text-gray-500">Πρόσθεσε μέλη στο δέντρο για να εμφανιστούν στατιστικά.</p>'; return; }
+      const sd = sideSets();
+      if (!sd && statsLine !== 'all') statsLine = 'all';
+      const P = statsPeople();
+      const home = sd ? byId(sd.home) : null;
+      const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+      const card = (t, inner) => inner ? `<div class="st-card"><h3>${t}</h3>${inner}</div>` : '';
+      const row = (l, v) => `<div class="st-row"><span class="st-l">${l}</span><span class="st-v">${v}</span></div>`;
+      const link = (txt, attr) => `<button type="button" class="stat-link" ${attr}>${txt}</button>`;
+      const nm = p => link(esc(p.name) + (p.by ? ' (' + p.by + ')' : ''), `data-open="${p.id}"`);
+      const bar = (l, n, mx, attr, suffix) => `<div class="st-bar"><div class="st-bar-top"><span>${attr ? link(esc(l), attr) : esc(l)}</span><span class="st-muted">${n}${suffix || ''}</span></div><div class="st-track"><i style="width:${Math.max(4, n / mx * 100)}%"></i></div></div>`;
+      const bars = (arr, mk, suffix) => { const mx = Math.max(1, ...arr.map(x => x[1])); return arr.map(x => bar(x[0], x[1], mx, mk && mk(x), suffix)).join(''); };
+      const chips = (a, key) => `<div class="st-chips">${a.map(x => `<button type="button" class="stat-chip" data-q="${esc(x[0])}">${esc(x[0])} <b>× ${x[1]}</b></button>`).join('')}</div>`;
+      const duo = (aN, aL, aC, bN, bL, bC) => { const t = aN + bN || 1; return `<div class="st-duo"><i style="width:${aN / t * 100}%;background:${aC}"></i><i style="width:${bN / t * 100}%;background:${bC}"></i></div><div class="st-duo-l"><span><s style="background:${aC}"></s>${aL}: <b>${aN}</b> (${pct(aN, t)}%)</span><span><s style="background:${bC}"></s>${bL}: <b>${bN}</b> (${pct(bN, t)}%)</span></div>`; };
+      const first = p => p.first || (p.name || '').split(' ')[0];
       const men = P.filter(p => sexOf(p) === 'M').length, women = P.filter(p => sexOf(p) === 'F').length, dead = P.filter(goneP).length;
       const yr = new Date().getFullYear();
       const ages = P.filter(p => p.by && p.dy && p.dy >= p.by).map(p => ({ p, a: p.dy - p.by }));
       const liveAges = P.filter(p => p.by && !goneP(p)).map(p => yr - p.by);
       const avg = a => a.length ? Math.round(a.reduce((x, y) => x + y, 0) / a.length) : null;
       const byBirth = P.filter(p => p.by).sort((a, b) => a.by - b.by);
-      /* οικογένειες: Γιαννάκης και Γιαννάκη μετράνε μαζί */
       const fam = {};
       P.forEach(p => { const k = famKey(p.last); if (!k) return; (fam[k] = fam[k] || { forms: {}, n: 0 }); fam[k].n++; fam[k].forms[p.last] = (fam[k].forms[p.last] || 0) + 1; });
-      const famList = Object.values(fam).sort((a, b) => b.n - a.n).map(f => { const forms = Object.entries(f.forms).sort((a, b) => b[1] - a[1]).map(x => x[0]); return [forms.join(' / '), f.n]; });
+      const famList = Object.values(fam).sort((a, b) => b.n - a.n).map(f => { const forms = Object.entries(f.forms).sort((a, b) => b[1] - a[1]).map(x => x[0]); return [forms.join(' / '), f.n, forms.slice().sort((a, b) => a.length - b.length)[0]]; });
       const gens = {}; P.forEach(p => { gens[p.gen || 1] = (gens[p.gen || 1] || 0) + 1; });
-      const genList = Object.keys(gens).sort((a, b) => a - b).map(g => ['Γενιά ' + g, gens[g]]);
+      const genKeys = Object.keys(gens).sort((a, b) => a - b);
+      const genList = genKeys.map(g => ['Γενιά ' + g, gens[g], g]);
       const parents = P.map(p => ({ p, k: childrenOf(p).length })).filter(x => x.k > 0);
       const couples = P.filter(p => p.spouse && p.id < p.spouse).length;
       const maxKids = parents.slice().sort((a, b) => b.k - a.k)[0];
       const dec = {}; P.forEach(p => { if (p.by) { const k = Math.floor(p.by / 10) * 10; dec[k] = (dec[k] || 0) + 1; } });
       const decList = Object.keys(dec).sort().map(k => [k + '–' + (+k + 9), dec[k]]);
-      const chips = a => `<div class="flex flex-wrap gap-2">${a.map(x => `<span class="px-3 py-1 rounded-full bg-aegean/10 text-aegean text-sm">${esc(x[0])} × ${x[1]}</span>`).join('')}</div>`;
-      const nm = p => esc(p.name) + (p.by ? ' (' + p.by + ')' : '');
       const oldest = ages.slice().sort((a, b) => b.a - a.a)[0];
-      box.innerHTML = `<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">${tile(P.length, 'Μέλη')}${tile(layout.maxDepth + 1, 'Γενιές')}${tile(P.length - dead, 'Εν ζωή')}${tile(dead, 'Αποβιώσαντες')}</div>
-        <div class="grid md:grid-cols-2 gap-4">
-        ${card('Οικογένειες (επώνυμα)', famList.length ? bars(famList) + '<p class="text-xs text-gray-400 mt-3">Οι μορφές Παπαδόπουλος / Παπαδοπούλου μετράνε στην ίδια οικογένεια.</p>' : '')}
-        ${card('Γενιές', bars(genList))}
-        ${card('Ηλικίες', row('Άνδρες / Γυναίκες', men + ' / ' + women) + (ages.length ? row('Μέση διάρκεια ζωής', avg(ages.map(x => x.a)) + ' έτη (' + ages.length + ' άτομα)') : '') + (oldest ? row('Μακροβιότερος/η', nm(oldest.p) + ', ' + oldest.a + ' ετών') : '') + (liveAges.length ? row('Μέση ηλικία εν ζωή', avg(liveAges) + ' ετών') : '') + (byBirth.length ? row('Παλαιότερο μέλος', nm(byBirth[0])) + row('Νεότερο μέλος', nm(byBirth[byBirth.length - 1])) : ''))}
+
+      /* Ολοκλήρωση αρχείου */
+      const hasBy = P.filter(p => p.by).length, hasPl = P.filter(p => p.bplace || p.place).length, hasPh = P.filter(p => faceOf(p)).length;
+      const complete = pct(hasBy + hasPl + hasPh, P.length * 3);
+      const miss = (n, l) => `<div class="st-mini"><span>${l}</span><div class="st-track"><i style="width:${pct(n, P.length)}%"></i></div><b>${pct(n, P.length)}%</b></div>`;
+
+      /* Ονοματοδοσία παππού/εγγονού */
+      let gkids = 0, gmatch = [];
+      P.forEach(p => {
+        const gps = p.parents.map(byId).filter(Boolean).flatMap(x => x.parents.map(byId).filter(Boolean));
+        if (!gps.length) return; gkids++;
+        const me = normTxt(first(p)); if (me && gps.some(g => normTxt(first(g)) === me)) gmatch.push(p);
+      });
+
+      /* Ηλικία γονέα στη γέννηση παιδιού */
+      const pa = [], paF = [], paM = [], paDec = {};
+      P.forEach(c => { if (!c.by) return; c.parents.map(byId).filter(Boolean).forEach(pr => {
+        if (!pr.by) return; const d = c.by - pr.by; if (d < 12 || d > 70) return;
+        pa.push(d); if (sexOf(pr) === 'M') paF.push(d); else if (sexOf(pr) === 'F') paM.push(d);
+        const k = Math.floor(c.by / 10) * 10; (paDec[k] = paDec[k] || []).push(d);
+      }); });
+      const paDecList = Object.keys(paDec).sort().map(k => [k + 'ς', avg(paDec[k])]);
+
+      /* Εποχές γέννησης */
+      const seasons = { 'Άνοιξη': 0, 'Καλοκαίρι': 0, 'Φθινόπωρο': 0, 'Χειμώνας': 0 }; let sKnown = 0;
+      P.forEach(p => { const m = ISO.exec(p.bdate || ''); if (!m) return; const mo = +m[2]; sKnown++;
+        seasons[mo >= 3 && mo <= 5 ? 'Άνοιξη' : mo >= 6 && mo <= 8 ? 'Καλοκαίρι' : mo >= 9 && mo <= 11 ? 'Φθινόπωρο' : 'Χειμώνας']++; });
+      const seasonList = Object.entries(seasons);
+
+      /* Παραμονή / μετακίνηση */
+      const both = P.filter(p => p.bplace && p.place);
+      const stayed = both.filter(p => normTxt(p.bplace) === normTxt(p.place)).length, moved = both.length - stayed;
+
+      const teamKnown = P.filter(p => p.team && !/^δεν υποστηρ/i.test(p.team));
+
+      /* ===== Διαγράμματα και συγκρίσεις (πίτες, στήλες, στοιβαγμένες μπάρες, πίνακες) ===== */
+      const PAL = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#6250d6', '#e34948'], GRY = '#a8a79f';
+      const colOf = (x, i) => x[2] || PAL[i % PAL.length];
+      const fold = (items, k) => { if (items.length <= k) return items; return items.slice(0, k - 1).concat([['Άλλες', items.slice(k - 1).reduce((s, x) => s + x[1], 0), GRY]]); };
+      const donut = (items, note) => {
+        items = items.filter(x => x[1] > 0); const tot = items.reduce((s, x) => s + x[1], 0); if (!tot) return '';
+        let off = 0;
+        const segs = items.map((x, i) => { const v = x[1] / tot * 100, len = items.length > 1 ? Math.max(v - 1, 0.1) : 99.99; const s = `<circle cx="21" cy="21" r="15.915" fill="none" stroke="${colOf(x, i)}" stroke-width="6" stroke-dasharray="${len} ${100 - len}" stroke-dashoffset="${25 - off}"><title>${esc(x[0])}: ${x[1]} (${pct(x[1], tot)}%)</title></circle>`; off += v; return s; }).join('');
+        const leg = items.map((x, i) => `<li><s style="background:${colOf(x, i)}"></s><span>${esc(x[0])}</span><b>${x[1]}</b><em>${pct(x[1], tot)}%</em></li>`).join('');
+        return `<div class="st-donut"><svg viewBox="0 0 42 42" role="img" aria-label="Διάγραμμα πίτας"><circle cx="21" cy="21" r="15.915" fill="none" stroke="rgba(189,154,97,.15)" stroke-width="6"/>${segs}<text x="21" y="23" text-anchor="middle" class="st-dn">${tot}</text></svg><ul class="st-leg">${leg}</ul></div>${note ? `<p class="st-note">${note}</p>` : ''}`;
+      };
+      const cols = (items, unit) => {
+        items = items.filter(x => x[1] != null && !isNaN(x[1])); if (!items.length) return '';
+        const mx = Math.max(1, ...items.map(x => x[1]));
+        return `<div class="st-cols">${items.map(x => `<div class="st-col" title="${esc(x[0])}: ${x[1]}${unit || ''}"><span class="st-col-v">${x[1]}</span><i style="height:${Math.max(3, Math.round(x[1] / mx * 110))}px"></i><span class="st-col-l">${esc(x[0])}</span></div>`).join('')}</div>`;
+      };
+      const stack = (label, parts, scale) => { const tot = parts.reduce((s, x) => s + x[1], 0); return `<div class="st-bar"><div class="st-bar-top"><span>${esc(label)}</span><span class="st-muted">${tot}</span></div><div class="st-stack" style="width:${Math.max(6, tot / scale * 100)}%">${parts.filter(x => x[1] > 0).map(x => `<i style="flex:${x[1]};background:${x[2]}" title="${esc(x[0])}: ${x[1]}"></i>`).join('')}</div></div>`; };
+      const legendRow = items => `<ul class="st-leg st-leg-row">${items.map(x => `<li><s style="background:${x[1]}"></s><span>${esc(x[0])}</span></li>`).join('')}</ul>`;
+      const hasBio = p => !!((p.story || '').trim() || ((p.notes || '').trim() && !/^(Πρότυπο μέλος|Δημιουργήθηκε αυτόματα)/.test(p.notes)));
+      const hasRel = p => !!(p.parents.length || p.spouse || childrenOf(p).length);
+      const score = p => [!!faceOf(p), !!(p.bdate || p.by), !!(p.bplace || p.place), hasBio(p), hasRel(p)].filter(Boolean).length;
+      const cFull = P.filter(p => score(p) === 5).length, cPart = P.filter(p => score(p) >= 3 && score(p) < 5).length, cGap = P.length - cFull - cPart;
+      const metrics = arr => ({ n: arr.length, alive: arr.filter(p => !goneP(p)).length, ph: arr.filter(p => faceOf(p)).length, cp: arr.length ? Math.round(arr.reduce((s, p) => s + score(p), 0) / (arr.length * 5) * 100) : 0, life: avg(arr.filter(p => p.by && p.dy && p.dy >= p.by).map(p => p.dy - p.by)) });
+      const teamGroups = {}; teamKnown.forEach(p => { const t = p.team.trim(); (teamGroups[t] = teamGroups[t] || []).push(p); });
+      const teamArr = Object.entries(teamGroups).sort((a, b) => b[1].length - a[1].length);
+      const genArr = genKeys.map(g => ['Γενιά ' + g, P.filter(p => (p.gen || 1) == g)]);
+      const lineArr = k => { if (!sd || !sd[k]) return []; const ids = new Set([sd.home, ...sd[k]]); const down = id => { const q = byId(id); if (!q) return; childrenOf(q).forEach(c => { if (!ids.has(c.id)) { ids.add(c.id); down(c.id); } }); }; down(sd.home); return state.people.filter(p => ids.has(p.id)); };
+      let brItems = null;
+      if (sd) {
+        const dset = new Set([sd.home]); const dn = id => { const q = byId(id); if (!q) return; childrenOf(q).forEach(c => { if (!dset.has(c.id)) { dset.add(c.id); dn(c.id); } }); }; dn(sd.home);
+        const a1 = [...sd.P].filter(i => !dset.has(i)), a2 = [...sd.M].filter(i => !dset.has(i) && !sd.P.has(i)), used = new Set([...a1, ...a2, ...dset]);
+        brItems = [['Πατρική πλευρά', a1.length], ['Μητρική πλευρά', a2.length], ['Εγώ και απόγονοι', dset.size], ['Λοιποί (αδέλφια, εξ αγχιστείας)', state.people.filter(p => !used.has(p.id)).length, GRY]];
+      }
+      const ageGroups = [['0–17', 0, 17], ['18–39', 18, 39], ['40–59', 40, 59], ['60–79', 60, 79], ['80+', 80, 200]].map(g => [g[0], liveAges.filter(a => a >= g[1] && a <= g[2]).length]);
+      const lifeGen = genKeys.map(g => { const a = avg(P.filter(p => (p.gen || 1) == g && p.by && p.dy && p.dy >= p.by).map(p => p.dy - p.by)); return a == null ? null : ['Γ' + g, a]; }).filter(Boolean);
+      const decCols = Object.keys(dec).sort().map(k => [k, dec[k]]);
+      const plAll = {}; const addPl = (k, nm) => { nm = (nm || '').trim(); if (!nm) return; (plAll[nm] = plAll[nm] || [0, 0, 0, 0])[k]++; };
+      P.forEach(p => { addPl(0, p.bplace); addPl(1, p.place); addPl(2, p.origin); addPl(3, p.dplace); });
+      const plSum = v => v.reduce((s, x) => s + x, 0), plTop = Object.entries(plAll).sort((a, b) => plSum(b[1]) - plSum(a[1])).slice(0, 7), plMax = Math.max(1, ...plTop.map(x => plSum(x[1])));
+      const missL = [['Χωρίς φωτογραφία', P.filter(p => !faceOf(p)).length], ['Χωρίς ημερομηνία γέννησης', P.filter(p => !p.bdate).length], ['Χωρίς τόπο', P.filter(p => !(p.bplace || p.place)).length], ['Χωρίς βιογραφικό / ιστορία', P.filter(p => !hasBio(p)).length], ['Χωρίς επάγγελμα', P.filter(p => !p.job).length], ['Χωρίς σύνδεση (ορφανά)', P.filter(p => !hasRel(p)).length]].sort((a, b) => b[1] - a[1]);
+      const missBars = missL.map(x => `<div class="st-mini st-mini-w"><span>${x[0]}</span><div class="st-track"><i style="width:${pct(x[1], P.length)}%"></i></div><b>${pct(x[1], P.length)}%</b></div>`).join('');
+      const nickTop = topN(P.map(p => p.paratsouk), 8);
+      const table = (title, head, rows, denom) => rows.length ? `<div class="st-card st-wide"><h3>${title}</h3><div class="st-tscroll"><table class="st-table"><thead><tr><th>${head}</th><th>Μέλη</th><th>% συνόλου</th><th>Εν ζωή</th><th>Με φωτογραφία</th><th>Πληρότητα</th><th>Μέσος βίος</th></tr></thead><tbody>${rows.map(r => { const m = metrics(r[1]); return `<tr><th>${esc(r[0])}</th><td>${m.n}</td><td>${pct(m.n, denom)}%</td><td>${m.alive}</td><td>${m.ph}</td><td>${m.cp}%</td><td>${m.life != null ? m.life + ' ετών' : '—'}</td></tr>`; }).join('')}</tbody></table></div></div>` : '';
+      const vc = (t, inner) => inner ? `<div class="st-card"><h3>${t}</h3>${inner}</div>` : '';
+      const teamScale = Math.max(1, ...teamArr.map(x => x[1].length));
+      const viz = P.length ? `
+        <h2 class="st-h">Διαγράμματα</h2>
+        <div class="st-grid">
+        ${vc('⚽ Ανά ομάδα', teamArr.length ? donut(fold(teamArr.map(x => [x[0], x[1].length]), 7), `Από ${teamKnown.length} μέλη με καταχωρημένη ομάδα (${P.length - teamKnown.length} χωρίς).`) : '')}
+        ${vc('Ανά φύλο', donut([['Άνδρες', men], ['Γυναίκες', women], ['Άγνωστο', P.length - men - women, GRY]]))}
+        ${vc('Εν ζωή και αποβιώσαντες', donut([['Εν ζωή', P.length - dead], ['Αποβιώσαντες', dead, GRY]]))}
+        ${vc('Πληρότητα προφίλ', donut([['Πλήρη (5/5)', cFull, PAL[2]], ['Μερικά (3–4)', cPart, PAL[3]], ['Με κενά (0–2)', cGap, PAL[1]]], 'Μετράνε: φωτογραφία, γέννηση, τόπος, βιογραφικό, σύνδεση με το δέντρο.'))}
+        ${vc('Ανά κλάδο της οικογένειας', brItems ? donut(brItems, 'Σε σχέση με το πρόσωπο «εγώ» του δέντρου, σε ολόκληρο το δέντρο.') : '')}
+        </div>
+        <h2 class="st-h">Συγκρίσεις</h2>
+        <div class="st-grid">
+        ${vc('Μέλη ανά γενιά', cols(genKeys.map(g => ['Γ' + g, gens[g]])))}
+        ${vc('Μέλη ανά δεκαετία γέννησης', cols(decCols))}
+        ${vc('Ηλικιακές ομάδες (εν ζωή)', liveAges.length ? cols(ageGroups) + '<p class="st-note">Ηλικία σήμερα, με βάση το έτος γέννησης.</p>' : '')}
+        ${vc('Διάρκεια ζωής ανά γενιά', lifeGen.length ? cols(lifeGen, ' ετών') + '<p class="st-note">Μέσος όρος ετών, από μέλη με γνωστή γέννηση και θάνατο.</p>' : '')}
+        ${vc('⚽ Σύγκριση ομάδων', teamArr.length ? legendRow([['Εν ζωή', PAL[0]], ['Αποβιώσαντες', GRY]]) + teamArr.slice(0, 7).map(x => stack(x[0], [['Εν ζωή', x[1].filter(p => !goneP(p)).length, PAL[0]], ['Αποβιώσαντες', x[1].filter(goneP).length, GRY]], teamScale)).join('') : '')}
+        ${vc('Σύγκριση τόπων', plTop.length ? legendRow([['Γέννηση', PAL[0]], ['Διαμονή', PAL[1]], ['Καταγωγή', PAL[2]], ['Θάνατος', PAL[3]]]) + plTop.map(x => stack(x[0], [['Γέννηση', x[1][0], PAL[0]], ['Διαμονή', x[1][1], PAL[1]], ['Καταγωγή', x[1][2], PAL[2]], ['Θάνατος', x[1][3], PAL[3]]], plMax)).join('') + '<p class="st-note">Αριθμός αναφορών κάθε τόπου.</p>' : '')}
+        ${vc('Παρατσούκλια', nickTop.length ? chips(nickTop) : '')}
+        ${vc('Τι λείπει περισσότερο από το αρχείο', missBars + '<p class="st-note">Ποσοστό μελών στα οποία λείπει το κάθε στοιχείο.</p>')}
+        </div>
+        <h2 class="st-h">Πίνακες σύγκρισης</h2>
+        <div class="st-grid">
+        ${table('Ομάδες', 'Ομάδα', teamArr, P.length)}
+        ${table('Γενιές', 'Γενιά', genArr, P.length)}
+        ${sd ? table('Κλάδοι', 'Κλάδος', [['Όλο το δέντρο', state.people], ['Πατρική γραμμή', lineArr('P')], ['Μητρική γραμμή', lineArr('M')]], state.people.length) : ''}
+        </div>` : '';
+      const nicksN = nickList().length, placesN = Object.keys(plAll).length;
+      const kpi2 = () => P.length ? `<section class="museum-stat-grid st-top" style="grid-template-columns:repeat(3,1fr)">${mstat('▣', state.photos.length, 'Φωτογραφίες')}${mstat('❖', state.events.length, 'Γεγονότα')}${mstat('⌖', placesN, 'Τόποι')}${mstat('❝', nicksN, 'Παρατσούκλια')}${mstat('⚽', teamArr.length, 'Ομάδες' + (teamArr.length ? ' · κορυφαία: ' + esc(teamArr[0][0]) : ''))}${mstat('?', P.filter(p => p.todo).length, 'Εκκρεμείς έρευνες')}</section>` : '';
+
+      const lineBtn = (k, l) => `<button type="button" class="stat-seg${statsLine === k ? ' on' : ''}" data-line="${k}">${l}</button>`;
+      const lineNote = statsLine === 'all' || !home ? '' : `<p class="st-note">${statsLine === 'P' ? 'Πατρική' : 'Μητρική'} γραμμή: οι πρόγονοι από την πλευρά ${statsLine === 'P' ? 'του πατέρα' : 'της μητέρας'} του/της ${nm(home)}, μαζί με το ίδιο το πρόσωπο και τους απογόνους του.</p>`;
+      const mstat = (ic, v, l) => `<article class="museum-stat"><span class="museum-stat-icon">${ic}</span><div class="museum-stat-value">${v}</div><div class="museum-stat-label">${l}</div></article>`;
+
+      box.innerHTML = `
+        ${sd ? `<div class="st-seg-wrap">${lineBtn('all', 'Όλο το δέντρο')}${lineBtn('P', 'Μόνο Πατρική γραμμή')}${lineBtn('M', 'Μόνο Μητρική γραμμή')}</div>${lineNote}` : ''}
+        ${P.length ? `<section class="museum-stat-grid st-top">${mstat('♧', P.length, 'Μέλη')}${mstat('⌘', genKeys.length, 'Γενιές')}${mstat('☀', P.length - dead, 'Εν ζωή')}${mstat('✦', dead, 'Αποβιώσαντες')}</section>${kpi2()}` : '<p class="text-gray-500">Δεν υπάρχουν μέλη σε αυτή τη γραμμή.</p>'}
+        ${P.length ? `<div class="st-grid">
+        ${card('Ολοκλήρωση αρχείου', `<div class="st-big">${complete}%</div><div class="st-track st-track-lg"><i style="width:${complete}%"></i></div>${miss(hasBy, 'Έτος γέννησης')}${miss(hasPl, 'Τόπος')}${miss(hasPh, 'Φωτογραφία')}<p class="st-note">Όσο συμπληρώνεις τα κενά, τόσο πιο πλούσιο γίνεται το αρχείο.</p>`)}
+        ${card('Κατανομή φύλου', (men + women) ? duo(men, 'Άνδρες', '#6b8e23', women, 'Γυναίκες', '#c46a4a') + (P.length - men - women ? `<p class="st-note">${P.length - men - women} χωρίς καταχωρημένο φύλο.</p>` : '') : '')}
+        ${card('Οικογένειες (επώνυμα)', famList.length ? bars(famList, x => `data-q="${esc(x[2])}"`) + '<p class="st-note">Οι μορφές Παπαδόπουλος / Παπαδοπούλου μετράνε στην ίδια οικογένεια. Πάτησε ένα επώνυμο για να δεις τα μέλη.</p>' : '')}
+        ${card('Γενιές', bars(genList, x => `data-gen="${x[2]}"`))}
+        ${card('Ηλικίες', (ages.length ? row('Μέση διάρκεια ζωής', avg(ages.map(x => x.a)) + ' έτη (' + ages.length + ' άτομα)') : '') + (oldest ? row('Μακροβιότερος/η', nm(oldest.p) + ', ' + oldest.a + ' ετών') : '') + (liveAges.length ? row('Μέση ηλικία εν ζωή', avg(liveAges) + ' ετών') : '') + (byBirth.length ? row('Παλαιότερο μέλος', nm(byBirth[0])) + row('Νεότερο μέλος', nm(byBirth[byBirth.length - 1])) : ''))}
         ${card('Οικογένεια', row('Ζευγάρια', couples) + (parents.length ? row('Γονείς με παιδιά', parents.length) + row('Μέσος όρος παιδιών ανά γονέα', (parents.reduce((s, x) => s + x.k, 0) / parents.length).toFixed(1).replace('.', ',')) + row('Περισσότερα παιδιά', nm(maxKids.p) + ', ' + maxKids.k) : ''))}
-        ${card('Συχνότερα ονόματα', chips(topN(P.map(p => p.first || (p.name || '').split(' ')[0]), 8)))}
+        ${card('Συχνότερα ονόματα', chips(topN(P.map(first), 8)))}
+        ${card('Όνομα παππού/γιαγιάς στα εγγόνια', gkids ? row('Εγγόνια με το όνομα παππού ή γιαγιάς', gmatch.length + ' από ' + gkids + ' (' + pct(gmatch.length, gkids) + '%)') + (gmatch.length ? `<div class="st-chips" style="margin-top:10px">${gmatch.slice(0, 8).map(p => `<button type="button" class="stat-chip" data-open="${p.id}">${esc(p.name)}</button>`).join('')}</div>` : '') + '<p class="st-note">Η παραδοσιακή ελληνική ονοματοδοσία.</p>' : '')}
+        ${card('Ηλικία γονέα στη γέννηση παιδιού', pa.length ? row('Μέση ηλικία', avg(pa) + ' ετών') + (paF.length ? row('Πατέρες', avg(paF) + ' ετών') : '') + (paM.length ? row('Μητέρες', avg(paM) + ' ετών') : '') + (paDecList.length > 1 ? '<div style="margin-top:10px">' + bars(paDecList, null, ' ετών') + '</div><p class="st-note">Μέση ηλικία γονέα, ανά δεκαετία γέννησης του παιδιού.</p>' : '') : '')}
+        ${card('Εποχή γέννησης', sKnown ? bars(seasonList) + `<p class="st-note">Από ${sKnown} μέλη με πλήρη ημερομηνία γέννησης.</p>` : '')}
+        ${card('Έμειναν ή μετακινήθηκαν;', both.length ? duo(stayed, 'Στον τόπο γέννησης', '#6b8e23', moved, 'Αλλού', '#bd9a61') + `<p class="st-note">Από ${both.length} μέλη με γνωστό τόπο γέννησης και διαμονής.</p>` : '')}
         ${card('Τόποι γέννησης', P.some(p => p.bplace) ? chips(topN(P.map(p => p.bplace), 8)) : '')}
         ${card('Πόλεις διαμονής', P.some(p => p.place) ? chips(topN(P.map(p => p.place), 8)) : '')}
         ${card('Επαγγέλματα', P.some(p => p.job) ? chips(topN(P.map(p => p.job), 8)) : '')}
+        ${card('⚽ Ομάδες', teamKnown.length ? chips(topN(teamKnown.map(p => p.team), 8)) + `<p class="st-note">Από ${teamKnown.length} μέλη. Πάτα μια ομάδα για να δεις ποιοι την υποστηρίζουν.</p>` : '')}
         ${card('Γεννήσεις ανά δεκαετία', decList.length ? bars(decList) : '')}
-        </div>`;
+        </div>${viz}` : ''}`;
     }
+    function goPeople(o) {
+      renderPeople();
+      $('people-search').value = o.q || ''; $('people-sex').value = ''; $('people-sort').value = ''; $('people-show').value = '';
+      $('people-filter').value = o.gen ? String(o.gen) : 'all';
+      switchView('people');
+    }
+    $('stats-body').addEventListener('click', e => {
+      const t = e.target.closest('[data-open],[data-q],[data-gen],[data-line]'); if (!t) return;
+      if (t.dataset.open) openPerson(+t.dataset.open);
+      else if (t.dataset.gen) goPeople({ gen: +t.dataset.gen });
+      else if (t.dataset.q != null) goPeople({ q: t.dataset.q });
+      else if (t.dataset.line) { statsLine = t.dataset.line; renderStatsView(); }
+    });
 
     /* ---------- Πρόσωπα ---------- */
     function renderPeople() {
       const sel = $('people-filter'), prev = sel.value || 'all', n = layout.maxDepth + 1;
       sel.innerHTML = '<option value="all">Όλες οι γενιές</option>' + Array.from({ length: n }, (_, i) => `<option value="${i + 1}">Γενιά ${i + 1}</option>`).join('');
       sel.value = (prev === 'all' || +prev <= n) ? prev : 'all';
-      const q = $('people-search').value.trim().toLowerCase(), g = sel.value;
+      const q = nkey($('people-search').value.trim()), g = sel.value;
       const fs = $('people-sort').value, fx = $('people-sex').value, fw = $('people-show').value;
       const gone = p => !!(p.deceased || p.dy || p.died);
       const nAdv = (g !== 'all') + !!fx + !!fs, bd = $('people-adv-badge'); bd.textContent = nAdv; bd.classList.toggle('hidden', !nAdv);
@@ -3754,7 +4156,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         (g === 'all' || p.gen === +g) &&
         (!fx || sexOf(p) === fx) &&
         (fw !== 'live' || !gone(p)) && (fw !== 'dead' || gone(p)) && (fw !== 'fav' || p.fav) &&
-        (!q || (p.name + ' ' + p.full + ' ' + p.place + ' ' + (p.pat || '') + ' ' + (p.paratsouk || '') + ' ' + (p.job || '') + ' ' + (p.bplace || '') + ' ' + (p.maiden || '')).toLowerCase().includes(q)))
+        (!q || nkey([p.name,p.full,p.place,p.pat,p.paratsouk,p.job,p.team,p.bplace,p.maiden,p.origin,p.sourceNote].filter(Boolean).join(' ')).includes(q)))
         .sort(fs === 'a' ? (a, b) => a.name.localeCompare(b.name, 'el') : fs === 'b' ? (a, b) => (a.by || 9999) - (b.by || 9999) : () => 0);
       $('people-grid').innerHTML = list.length ? list.map(p => `
         <div class="person-card bg-white rounded-2xl p-4 shadow-card cursor-pointer flex items-center gap-4" data-open="${p.id}" tabindex="0" role="button">
@@ -3939,6 +4341,34 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     const surnameList = () => [...new Set(state.people.flatMap(x => [x.last != null ? x.last : (x.full || x.name || '').trim().split(/\s+/).pop(), x.maiden]).concat(herList('surnames').map(h => h.title)).filter(Boolean))];
     const nickList = () => [...new Set(herList('nicks').map(h => (h.title || '').trim()).concat(state.people.map(x => x.paratsouk)).filter(Boolean))];
     const cityList = () => [...new Set(PLACE_HINTS.concat(state.people.map(x => x.place).filter(Boolean)))];
+    /* ---------- Επιπλέον στοιχεία: ομάδα, εκπαίδευση, γάμος, μετακίνηση, γιορτή (όλα προαιρετικά) ---------- */
+    const TEAM_HINTS = ['Ολυμπιακός', 'Παναθηναϊκός', 'ΑΕΚ', 'ΠΑΟΚ', 'Άρης', 'Αρης Θεσσαλονίκης', 'Ηρακλής', 'ΟΦΗ', 'Παναιτωλικός', 'Αστέρας Τρίπολης', 'Λαμία', 'Βόλος', 'Ατρόμητος', 'ΠΑΣ Γιάννινα', 'Πανιώνιος', 'Ξάνθη', 'Λάρισα', 'Καλαμάτα', 'Απόλλων Σμύρνης', 'Δεν υποστηρίζει ομάδα'];
+    const teamList = () => [...new Set(TEAM_HINTS.concat(state.people.map(x => (x.team || '').trim()).filter(Boolean)))];
+    /* Ονομαστικές γιορτές με σταθερή ημερομηνία (οι κινητές του Πάσχα δεν περιλαμβάνονται· για αυτές υπάρχει το πεδίο «Γιορτή») */
+    const NAMEDAY_SRC = {
+      '1/1': 'βασιλης βασιλειος βασω βασιλικη βασιλεια', '7/1': 'ιωαννης γιαννης γιαννακης γιαννος ιωαννα γιαννα γιαννουλα', '17/1': 'αντωνης αντωνιος αντωνια',
+      '18/1': 'αθανασιος θανασης θανασις αθανασια θανασια', '20/1': 'ευθυμιος ευθυμης', '8/2': 'θεοδωρος θοδωρης θεοδωρα', '10/2': 'χαραλαμπος χαραλαμπης',
+      '25/3': 'ευαγγελος ευαγγελια βαγγελης βαγγελιω', '23/4': 'γεωργιος γιωργος γιωργης γεωργια γιωργια γεωργος', '25/4': 'μαρκος', '5/5': 'ειρηνη ρηνα',
+      '21/5': 'κωνσταντινος κωστας κωστης κωνσταντης κωνσταντινα ελενη ελενα λενα ντινα κωστουλα', '29/6': 'πετρος παυλος παυλα παυλινα',
+      '7/7': 'κυριακη κυριακος', '17/7': 'μαρινα μαργαριτα', '20/7': 'ηλιας', '24/7': 'χριστινα', '25/7': 'αννα αννουλα', '26/7': 'παρασκευη βιβη',
+      '27/7': 'παντελεημων παντελης παντελεημονας', '6/8': 'σωτηρης σωτηριος σωτηρια', '15/8': 'μαρια μαιρη μαριαννα μαρω μαρικα δεσποινα παναγιωτης παναγιωτα παναγιω τακης',
+      '27/8': 'φανουριος φανης', '30/8': 'αλεξανδρος αλεξανδρα αλεξης', '1/9': 'συμεων', '14/9': 'σταυρος σταυρουλα σταυρινα', '17/9': 'σοφια πιστη ελπιδα αγαπη',
+      '20/9': 'ευσταθιος', '18/10': 'λουκας', '20/10': 'γερασιμος', '23/10': 'ιακωβος', '26/10': 'δημητριος δημητρης δημητρα μητσος μιμης',
+      '8/11': 'μιχαλης μιχαηλ μιχαηλα ταξιαρχης γαβριηλ γαβριλης αγγελος αγγελικη', '9/11': 'νεκταριος', '11/11': 'μηνας', '14/11': 'φιλιππος',
+      '25/11': 'κατερινα αικατερινη κατινα καιτη', '30/11': 'ανδρεας αντρεας', '4/12': 'βαρβαρα βαρβαρης', '5/12': 'σαββας', '6/12': 'νικολαος νικος νικολας νικολετα',
+      '12/12': 'σπυριδων σπυρος σπυριδουλα', '15/12': 'ελευθεριος λευτερης ελευθερια', '17/12': 'διονυσιος διονυσης', '22/12': 'αναστασια τασια νατασα',
+      '24/12': 'ευγενια', '25/12': 'χριστος χρηστος', '27/12': 'στεφανος στεφανια στεφανη'
+    };
+    let _ndMap = null;
+    const namedayOf = p => {
+      const o = /(\d{1,2})\s*[\/.\-]\s*(\d{1,2})/.exec(p.nday || '');
+      if (o && +o[1] >= 1 && +o[1] <= 31 && +o[2] >= 1 && +o[2] <= 12) return [+o[2], +o[1], true];
+      if (!_ndMap) { _ndMap = {}; Object.keys(NAMEDAY_SRC).forEach(k => NAMEDAY_SRC[k].split(' ').forEach(n => { if (!_ndMap[n]) _ndMap[n] = k; })); }
+      const toks = [p.first, (p.name || '').split(' ')[0]].join(' ').split(/\s+/).filter(Boolean);
+      for (const t of toks) { const k = _ndMap[normTxt(t).replace(/ς/g, 'σ')] || _ndMap[normTxt(t)]; if (k) { const q = k.split('/'); return [+q[1], +q[0], false]; } }
+      return null;
+    };
+    const namedayText = p => { const n = namedayOf(p); return n ? n[1] + ' ' + MONTHS[n[0] - 1] : ''; };
     function personFields(p, compact) {
       p = p || {};
       const fw = (p.full || p.name || '').trim().split(/\s+/), nw = (p.name || '').trim().split(/\s+/);
@@ -3952,7 +4382,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         { type: 'heading', label: 'Βασικά στοιχεία' },
         { name: 'first', label: 'Όνομα', required: true, value: first, placeholder: 'π.χ. Κωνσταντίνος' },
         { name: 'last', label: 'Επώνυμο', required: true, value: last, placeholder: 'π.χ. Παπαδόπουλος', suggest: true },
-        { name: 'pat', label: 'Πατρώνυμο (γενική)', value: p.pat, placeholder: 'π.χ. Νικολάου', hint: 'Αν ο πατέρας υπάρχει ήδη στο δέντρο θα συνδεθεί αυτόματα, αλλιώς θα δημιουργηθεί ένας νέος από πάνω.' },
+        { name: 'pat', label: 'Πατρώνυμο (γενική)', value: p.pat, placeholder: 'π.χ. Νικολάου', hint: 'Καταγράφεται ως πληροφορία. Δεν δημιουργεί ούτε συνδέει αυτόματα πατέρα· η σύνδεση γίνεται από την ενότητα Γονείς.' },
         { name: 'paratsouk', label: 'Παρατσούκλι (της οικογένειας / δικό του)', value: p.paratsouk, list: nickList(), placeholder: 'π.χ. Μπάρμπα-Γιώργος', hint: 'Συνδέεται με την Κληρονομιά → Παρατσούκλια. Αν δεν υπάρχει εκεί, προστίθεται αυτόματα.' },
         { name: 'sex', label: 'Φύλο', type: 'select', value: sexOf(p), options: [{ v: 'M', l: 'Άνδρας' }, { v: 'F', l: 'Γυναίκα' }, { v: '', l: 'Δεν ορίζεται' }] },
         { type: 'heading', label: 'Γέννηση' },
@@ -3969,8 +4399,14 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         { name: 'place', label: 'Πόλη διαμονής', value: p.place, list: cityList(), hint: 'Χρησιμοποιείται στις Τοποθεσίες' },
         { name: 'origin', label: 'Τόπος καταγωγής (χωριό / περιοχή)', value: p.origin },
         { name: 'job', label: 'Επάγγελμα', value: p.job },
+        { name: 'team', label: '⚽ Ομάδα που υποστηρίζει / υποστήριζε', value: p.team, list: teamList(), placeholder: 'Παναθηναϊκός (προαιρετικό)', hint: 'Εμφανίζεται στο βιβλίο και στα Στατιστικά.' },
+        { name: 'nday', label: 'Γιορτή (ΗΗ/ΜΜ)', value: p.nday, placeholder: 'π.χ. 23/4', hint: 'Προαιρετικό. Αν το αφήσεις κενό, βρίσκεται αυτόματα από το όνομα.' },
         { name: 'maiden', label: 'Πατρικό επώνυμο', value: p.maiden, list: surnameList(), hint: 'Μόνο αν διαφέρει, π.χ. για παντρεμένες γυναίκες' },
         { name: 'notes', label: 'Σημειώσεις', type: 'textarea', value: p.notes, placeholder: 'Ιστορίες, αναμνήσεις, ιδιαιτερότητες…' },
+        { name: 'sourceNote', label: 'Πηγές / τεκμηρίωση', type: 'textarea', value: p.sourceNote, placeholder: 'π.χ. ληξιαρχική πράξη, εκκλησιαστικό αρχείο, προφορική μαρτυρία, όνομα πληροφοριοδότη…', hint: 'Κατέγραψε από πού προέρχονται οι πληροφορίες αυτού του προσώπου.' },
+        { name: 'birthCertainty', label: 'Βεβαιότητα ημερομηνίας γέννησης', type: 'select', value: p.birthCertainty || 'unknown', options: [{v:'unknown',l:'Δεν έχει επιβεβαιωθεί'},{v:'oral',l:'Προφορική μαρτυρία'},{v:'probable',l:'Πιθανή'},{v:'documented',l:'Τεκμηριωμένη από έγγραφο'}] },
+        { name: 'deathCertainty', label: 'Βεβαιότητα ημερομηνίας θανάτου', type: 'select', value: p.deathCertainty || 'unknown', options: [{v:'unknown',l:'Δεν έχει επιβεβαιωθεί'},{v:'oral',l:'Προφορική μαρτυρία'},{v:'probable',l:'Πιθανή'},{v:'documented',l:'Τεκμηριωμένη από έγγραφο'}] },
+        { name: 'parentCertainty', label: 'Βεβαιότητα καταχωρισμένων γονέων', type: 'select', value: p.parentCertainty || 'unknown', options: [{v:'unknown',l:'Δεν έχει επιβεβαιωθεί'},{v:'oral',l:'Προφορική μαρτυρία'},{v:'probable',l:'Πιθανή'},{v:'documented',l:'Τεκμηριωμένη από έγγραφο'}] },
         { name: 'todo', label: 'Εκκρεμείς πληροφορίες προς έρευνα', type: 'textarea', value: p.todo, placeholder: 'π.χ. Ποιος ήταν ο πατέρας του;' },
         { name: 'unc', type: 'checkbox', label: 'Οι ημερομηνίες είναι κατά προσέγγιση / αβέβαιες', value: p.unc },
         { name: 'fav', type: 'checkbox', label: '★ Αγαπημένο πρόσωπο', value: p.fav },
@@ -3991,6 +4427,10 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     function checkDates(d) {
       const by = yearOfDate(d.bdate, d.by), dy = d.alive === 'no' ? yearOfDate(d.ddate, d.dy) : null;
       if (by && dy && dy < by) { showToast('Η χρονιά θανάτου δεν μπορεί να είναι πριν από τη γέννηση.'); return false; }
+      const thisYear = new Date().getFullYear();
+      if (by && by > thisYear) { showToast('Η ημερομηνία γέννησης βρίσκεται στο μέλλον. Έλεγξέ την.'); return false; }
+      if (dy && dy > thisYear) { showToast('Η ημερομηνία θανάτου βρίσκεται στο μέλλον. Έλεγξέ την.'); return false; }
+      if (d.bdate && d.ddate && d.alive === 'no' && d.ddate < d.bdate) { showToast('Η ημερομηνία θανάτου προηγείται της γέννησης.'); return false; }
       return true;
     }
     /* Σύνδεση με την Κληρονομιά: το επώνυμο (και το πατρικό) και το παρατσούκλι ενός μέλους βρίσκονται στις αντίστοιχες καρτέλες ή προστίθενται εκεί.
@@ -4028,6 +4468,8 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         p.deceased = true;
       } else { p.ddate = ''; p.dplace = ''; p.dy = null; p.died = ''; p.deceased = false; }
       p.place = (d.place || '').trim(); p.origin = (d.origin || '').trim(); p.job = (d.job || '').trim(); p.notes = (d.notes || '').trim(); p.story = (d.story || '').trim();
+      p.team = (d.team || '').trim(); p.nday = (d.nday || '').trim();
+      p.sourceNote = (d.sourceNote || '').trim(); p.birthCertainty = d.birthCertainty || 'unknown'; p.deathCertainty = d.deathCertainty || 'unknown'; p.parentCertainty = d.parentCertainty || 'unknown';
       p.emoji = autoEmoji(p.sex, p.by, p.dy);
     }
 const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'father', l: 'Ο πατέρας του/της' }, { v: 'spouse', l: 'Ο/Η σύζυγος του/της' }, { v: 'child', l: 'Το παιδί του/της' }, { v: 'sibling', l: 'Ο αδελφός / Η αδελφή του/της' }, { v: 'halfsib_m', l: 'Ετεροθαλής αδελφός/ή — κοινός πατέρας' }, { v: 'halfsib_f', l: 'Ετεροθαλής αδελφός/ή — κοινή μητέρα' }, { v: 'adopt_parent', l: 'Ο θετός γονέας του/της' }, { v: 'adopted', l: 'Το θετό παιδί του/της' }, { v: 'ex_div', l: 'Ο/Η πρώην σύζυγος του/της (διαζύγιο)' }, { v: 'ex_wid', l: 'Ο/Η σύζυγος του/της που πέθανε (χηρεία)' }, { v: 'none', l: 'Χωρίς σύνδεση' }];
@@ -4087,31 +4529,9 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
     /* Πατρώνυμο → ο πατέρας συνδέεται (αν υπάρχει) ή δημιουργείται αυτόματα από πάνω */
     const upIds = (id, set) => { const x = byId(id); if (!x || set.has(id)) return set; set.add(id); x.parents.forEach(i => upIds(i, set)); return set; };
     const nomOf = g => { g = (g || '').trim(); if (/ου$/i.test(g)) return g.replace(/ου$/i, 'ος'); if (/ά$/i.test(g)) return g.replace(/ά$/i, 'άς'); if (/[ηα]$/i.test(g)) return g + 'ς'; return g; };
-    function ensureFather(p) {
-      const pat = (p.pat || '').trim(); if (!pat) return '';
-      const pars = p.parents.map(byId).filter(Boolean);
-      if (pars.some(x => sexOf(x) === 'M')) return '';
-      const ph = pars.find(x => sexOf(x) === '' && x.first === 'Άγνωστος');
-      if (pars.length >= 2 && !ph) return '';
-      const fam = (p.maiden || p.last || '').trim(), mother = pars.find(x => sexOf(x) === 'F');
-      const sameFam = state.people.find(x => sexOf(x) === 'M' && famKey(x.last) === famKey(fam));
-      let last = fam; if (sameFam) last = sameFam.last; else if (sexOf(p) === 'F' && !p.maiden) last = /ου$/i.test(fam) ? fam.replace(/ου$/i, 'ος') : /[ηα]$/i.test(fam) ? fam + 'ς' : fam;
-      const key = famKey(pat), nom = nomOf(pat);
-      const ok = x => x.id !== p.id && sexOf(x) === 'M' && famKey(x.first) === key && famKey(x.last) === famKey(fam) && !upIds(x.id, new Set()).has(p.id) && !(x.by && p.by && x.by >= p.by);
-      const mate = f => { if (mother && !mother.spouse && !f.spouse) { f.spouse = mother.id; mother.spouse = f.id; } };
-      if (ph) {
-        applyPersonData(ph, { first: nom, last, alive: 'yes', sex: 'M' });
-        ph.notes = 'Δημιουργήθηκε αυτόματα από το πατρώνυμο «' + pat + '». Διόρθωσε το όνομα και συμπλήρωσε τα στοιχεία.';
-        return 'Ο πατέρας «' + ph.name + '» συμπληρώθηκε από το πατρώνυμο.';
-      }
-      const cand = state.people.find(ok);
-      if (cand) { p.parents.push(cand.id); mate(cand); return 'Συνδέθηκε με τον πατέρα «' + cand.name + '» που υπήρχε ήδη.'; }
-      const f = { id: state.nextId++, spouse: null, parents: [], gen: 1 };
-      applyPersonData(f, { first: nom, last, alive: 'yes', sex: 'M' });
-      f.notes = 'Δημιουργήθηκε αυτόματα από το πατρώνυμο «' + pat + '» του/της ' + p.name + '. Διόρθωσε το όνομα και συμπλήρωσε τα στοιχεία.';
-      state.people.push(f); p.parents.push(f.id); mate(f);
-      return 'Δημιουργήθηκε ο πατέρας «' + f.name + '» από πάνω. Μπορείς να τον επεξεργαστείς.';
-    }
+    /* Το πατρώνυμο είναι περιγραφικό στοιχείο και δεν αποτελεί απόδειξη συγγένειας.
+       Η σύνδεση γονέα γίνεται μόνο από ρητή επιλογή του χρήστη στην ενότητα Γονείς. */
+    function ensureFather(p) { return ''; }
     function addMember(rel, relTo) {
       const has = state.people.length > 0;
       const relFields = !has ? [] : [
@@ -4119,8 +4539,8 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         { name: 'relTo', label: 'Υπάρχον μέλος', type: 'select', value: relTo || selectedId, options: state.people.slice().sort((a, b) => a.name.localeCompare(b.name, 'el')).map(p => ({ v: p.id, l: p.name + ' (' + yearsOf(p) + ')' })) },
         { name: 'relation', label: 'Ο νέος συγγενής είναι…', type: 'select', value: rel === 'parent' ? 'mother' : (rel || 'child'), options: REL_OPTS, hint: 'Για γιαγιά ή παππού: διάλεξε πάνω τη μητέρα ή τον πατέρα σου. Για θείο ή θεία: διάλεξε πάνω τη μητέρα ή τον πατέρα σου και «αδελφός/ή».' },
         { type: 'info', name: 'rel-preview', label: '' },
-        { name: 'opar', label: 'Ο άλλος γονέας του παιδιού', type: 'select', value: '', options: [{ v: '', l: '— Ο/Η σύζυγος (προεπιλογή) —' }, { v: 'none', l: '— Κανένας / άγνωστος —' }].concat(state.people.slice().sort((a, b) => a.name.localeCompare(b.name, 'el')).map(p => ({ v: p.id, l: p.name }))), hint: 'Για δεύτερο γάμο: διάλεξε ποιος είναι ο άλλος γονέας του παιδιού.' },
-        { name: 'npFirst', label: 'Όνομα μητέρας', placeholder: 'π.χ. Μαρία', hint: 'Θα δημιουργηθεί αυτόματα και θα συνδεθεί με το παιδί (και ως σύζυγος, αν δεν έχει ήδη σύζυγο). Άφησέ το κενό για να μην προστεθεί.' },
+        { name: 'opar', label: 'Ο άλλος γονέας του παιδιού', type: 'select', value: '', options: [{ v: '', l: '— Δεν έχει οριστεί —' }, { v: 'none', l: '— Κανένας / άγνωστος —' }].concat(state.people.slice().sort((a, b) => a.name.localeCompare(b.name, 'el')).map(p => ({ v: p.id, l: p.name }))), hint: 'Για δεύτερο γάμο: διάλεξε ποιος είναι ο άλλος γονέας του παιδιού.' },
+        { name: 'npFirst', label: 'Όνομα μητέρας', placeholder: 'π.χ. Μαρία', hint: 'Θα δημιουργηθεί ως δεύτερος γονέας μόνο εφόσον το επιλέξεις. Δεν θα δημιουργηθεί αυτόματα συζυγική σχέση.' },
         { name: 'npLast', label: 'Επώνυμο μητέρας', placeholder: 'π.χ. Παπαδοπούλου', list: surnameList() },
         { name: 'npBy', label: 'Έτος γέννησης μητέρας (προαιρετικό)', type: 'number', min: 1500, max: 2100 },
         { name: 'mfrom', label: 'Έτος γάμου', type: 'number', min: 1500, max: 2100 },
@@ -4144,13 +4564,13 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           const p = { id: state.nextId++, spouse: null, parents: [], gen: 1 };
           applyPersonData(p, d);
           let msg = 'Το μέλος προστέθηκε.';
-          if (other && r === 'child') { const op = (d.opar === 'none' || d.opar === 'new') ? null : d.opar ? +d.opar : other.spouse; p.parents = [other.id].concat(op && op !== other.id ? [op] : []);
+          if (other && r === 'child') { const op = (d.opar === 'none' || d.opar === 'new' || !d.opar) ? null : +d.opar; p.parents = [other.id].concat(op && op !== other.id ? [op] : []);
             const nf = (d.npFirst || '').trim();
             if (d.opar === 'new' && nf) {
               const osx = sexOf(other), mp = { id: state.nextId++, spouse: null, parents: [], gen: 1 };
               applyPersonData(mp, { first: nf, last: (d.npLast || '').trim() || (osx === 'M' ? other.last : ''), by: d.npBy, alive: 'yes', sex: osx === 'M' ? 'F' : osx === 'F' ? 'M' : '' });
               state.people.push(mp); p.parents.push(mp.id); linkHeritage(mp);
-              if (!other.spouse && !mp.spouse) { other.spouse = mp.id; mp.spouse = other.id; }
+              /* Δεν δημιουργείται αυτόματα συζυγική σχέση για τον δεύτερο γονέα. */
               msg = 'Το μέλος προστέθηκε μαζί με ' + (osx === 'M' ? 'τη μητέρα «' : osx === 'F' ? 'τον πατέρα «' : 'τον γονέα «') + mp.name + '».';
             }
           }
@@ -4167,14 +4587,13 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           }
           if (other && /^halfsib_/.test(r)) { const sh = other.parents.map(byId).find(x => x && sexOf(x) === (r === 'halfsib_m' ? 'M' : 'F')); p.parents = [sh.id]; msg = 'Προστέθηκε ως ετεροθαλής αδελφός/ή, με κοινό γονέα τον/την «' + sh.name + '».'; }
           if (other && r === 'adopt_parent') { other.parents.push(p.id); other.adoptive = (other.adoptive || []).concat(p.id); }
-          if (other && r === 'adopted') { p.parents = [other.id].concat(other.spouse ? [other.spouse] : []); p.adoptive = p.parents.slice(); }
+          if (other && r === 'adopted') { p.parents = [other.id]; p.adoptive = [other.id]; }
           if (other && (r === 'ex_div' || r === 'ex_wid')) { const mk2 = i => ({ id: i, type: r === 'ex_div' ? 'divorced' : 'widowed', from: d.mfrom ? +d.mfrom : null, to: d.mto ? +d.mto : null }); other.spouses = (other.spouses || []).concat(mk2(p.id)); p.spouses = [mk2(other.id)]; }
           if (other && isParent) {
             const ex = byId(other.parents[0]); other.parents.push(p.id);
-            if (ex && !ex.spouse && !p.spouse) { ex.spouse = p.id; p.spouse = ex.id; }
+            /* Κοινό παιδί δεν σημαίνει αυτομάτως γάμο ή σχέση. */
           }
           state.people.push(p); selectedId = p.id;
-          const fm = ensureFather(p); if (fm) msg += ' ' + fm;
           const hl = linkHeritage(p); if (hl) msg += ' ' + hl;
           save(); refresh(); showToast(msg);
         }
@@ -4184,11 +4603,11 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
     function askConfirm(title, text, okLabel, onOk) {
       openModal({
         title,
-        body: `<p class="text-sm">${esc(text)}</p>` + fieldHtml({ name: 'code', label: 'Κωδικός διαγραφής', type: 'password', required: true, hint: 'Γράψε τον κωδικό για να συνεχίσεις.' }),
+        body: `<p class="text-sm">${esc(text)}</p>` + fieldHtml({ name: 'code', label: 'Πληκτρολόγησε ΔΙΑΓΡΑΦΗ για επιβεβαίωση', type: 'text', required: true, hint: 'Δεν υπάρχει ενσωματωμένος κοινός κωδικός. Η επιβεβαίωση αυτή αποτρέπει τυχαία διαγραφή.' }),
         submitText: okLabel, noFocus: false,
         onMount: () => { const b = $('modal-actions').querySelector('button[type=submit]'); if (b) b.className = 'flex-1 py-2.5 rounded-xl bg-terracotta text-white text-sm font-medium'; const i = $('modal-form').elements['code']; if (i) { i.setAttribute('inputmode', 'numeric'); i.setAttribute('autocomplete', 'off'); } },
         onSubmit: d => {
-          if ((d.code || '').trim() !== '0000') { showToast('Λάθος κωδικός.'); return false; }
+          if ((d.code || '').trim() !== 'ΔΙΑΓΡΑΦΗ') { showToast('Πληκτρολόγησε ακριβώς ΔΙΑΓΡΑΦΗ.'); return false; }
           onOk();
         }
       });
@@ -4305,7 +4724,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       if (fa && fa !== oldF) msgs.push((nF && fa !== exF ? 'Δημιουργήθηκε και συνδέθηκε ο πατέρας «' : 'Συνδέθηκε ο πατέρας «') + fa.name + '».');
       p.parents = others.map(x => x.id).concat([fa, m].filter(Boolean).map(x => x.id));
       p.adoptive = (p.adoptive || []).filter(i => p.parents.includes(i));
-      if (m && fa && !m.spouse && !fa.spouse) { m.spouse = fa.id; fa.spouse = m.id; }
+      /* Οι γονείς συνδέονται μόνο ως γονείς· η συζυγική σχέση καταχωρίζεται χωριστά. */
       return msgs.join(' ');
     }
     function editPerson(id) {
@@ -4314,7 +4733,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         title: 'Επεξεργασία',
         fields: parentFields(p).concat(personFields(p)),
         onMount: () => { bindAlive(); bindSuggest(); bindParents(p); },
-        onSubmit: d => { if (!checkDates(d)) return false; const pm = applyParents(p, d); if (pm === false) return false; applyPersonData(p, d); const fm = ensureFather(p); const hl = linkHeritage(p); save(); refresh(); showToast('Οι αλλαγές αποθηκεύτηκαν.' + (pm ? ' ' + pm : '') + (fm ? ' ' + fm : '') + (hl ? ' ' + hl : '')); },
+        onSubmit: d => { if (!checkDates(d)) return false; const pm = applyParents(p, d); if (pm === false) return false; applyPersonData(p, d); const hl = linkHeritage(p); save(); refresh(); showToast('Οι αλλαγές αποθηκεύτηκαν.' + (pm ? ' ' + pm : '') + (hl ? ' ' + hl : '')); },
         danger: { label: 'Διαγραφή', run: () => { deletePerson(id); return false; } }
       });
     }
@@ -4346,7 +4765,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         const row = (l, v) => v ? `<div class="flex justify-between gap-4 py-2 border-b border-gray-100"><span class="text-gray-500 shrink-0">${l}</span><span class="text-right">${esc(v)}</span></div>` : '';
         c.innerHTML = `<div class="space-y-1 text-sm">
           ${row('Πλήρες όνομα', p.full)}${row('Πατρώνυμο', p.pat ? 'του ' + p.pat : '')}${row('Πατρικό επώνυμο', p.maiden)}${row('Παρατσούκλι', p.paratsouk)}${row('Γέννηση', p.born || p.by)}${row('Θάνατος', (p.dy || p.deceased) ? (p.died || p.dy || 'Έχει πεθάνει') : '')}
-          ${row('Ημερομηνίες', p.unc ? 'κατά προσέγγιση / αβέβαιες' : '')}${row('Επάγγελμα', p.job)}${row('Προς έρευνα', p.todo)}${row('Τόπος καταγωγής', p.origin)}${row('Τόπος διαμονής', p.place)}${p.story ? `<div class="py-2"><p class="text-gray-500 mb-1">Μικρή ιστορία</p><p class="whitespace-pre-line">${esc(p.story)}</p></div>` : ''}${p.notes ? `<div class="py-2"><p class="text-gray-500 mb-1">Σημειώσεις</p><p class="whitespace-pre-line">${esc(p.notes)}</p></div>` : ''}</div>
+          ${row('Ημερομηνίες', p.unc ? 'κατά προσέγγιση / αβέβαιες' : '')}${row('Επάγγελμα', p.job)}${row('Ομάδα', p.team)}${row('Γιορτή', namedayText(p))}${row('Προς έρευνα', p.todo)}${row('Τόπος καταγωγής', p.origin)}${row('Τόπος διαμονής', p.place)}${p.story ? `<div class="py-2"><p class="text-gray-500 mb-1">Μικρή ιστορία</p><p class="whitespace-pre-line">${esc(p.story)}</p></div>` : ''}${p.notes ? `<div class="py-2"><p class="text-gray-500 mb-1">Σημειώσεις</p><p class="whitespace-pre-line">${esc(p.notes)}</p></div>` : ''}</div>
           <div class="mt-6 flex gap-3">
             <button data-act="edit" class="flex-1 py-2.5 rounded-xl bg-aegean text-white text-sm font-medium">Επεξεργασία</button>
             <button data-act="rel" class="flex-1 py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">Προσθήκη συγγενή</button>
@@ -4386,20 +4805,57 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           <button data-act="event" class="mt-6 w-full py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">Προσθήκη γεγονότος</button>`;
       }
     }
-    function relText(a, b) {
-      if (a.spouse === b.id) return 'σύζυγος';
+    function bloodPath(a, b) {
       const dist = (id, m, d) => { const x = byId(id); if (!x || (m[id] != null && m[id] <= d)) return; m[id] = d; x.parents.forEach(i => dist(i, m, d + 1)); };
       const A = {}, B = {}; dist(a.id, A, 0); dist(b.id, B, 0);
       let best = null; for (const k in A) if (B[k] != null) { const s = A[k] + B[k]; if (!best || s < best[0]) best = [s, A[k], B[k]]; }
-      if (!best) return null;
-      const x = best[1], y = best[2], sx = sexOf(b), g = (m, f, both) => sx === 'M' ? m : sx === 'F' ? f : both;
-      if (x === 0) return y === 1 ? g('γιος', 'κόρη', 'παιδί') : y === 2 ? g('εγγονός', 'εγγονή', 'εγγόνι') : 'απόγονος ' + y + 'ης γενιάς';
+      return best ? { x: best[1], y: best[2] } : null;
+    }
+    function bloodRel(a, b) {
+      const pth = bloodPath(a, b); if (!pth) return null;
+      const x = pth.x, y = pth.y, sx = sexOf(b), g = (m, f, both) => sx === 'M' ? m : sx === 'F' ? f : both;
+      const ord = ['πρώτος', 'δεύτερος', 'τρίτος', 'τέταρτος', 'πέμπτος', 'έκτος'], ordF = ['πρώτη', 'δεύτερη', 'τρίτη', 'τέταρτη', 'πέμπτη', 'έκτη'], ordG = ['πρώτου', 'δεύτερου', 'τρίτου', 'τέταρτου', 'πέμπτου', 'έκτου'];
+      const cz = n => sx === 'F' ? (ordF[n - 1] || n + 'η') + ' ξαδέλφη' : sx === 'M' ? (ord[n - 1] || n + 'ος') + ' ξάδελφος' : (ord[n - 1] || n + 'ος') + ' ξάδελφος/η';
+      if (x === 0) return y === 1 ? g('γιος', 'κόρη', 'παιδί') : y === 2 ? g('εγγονός', 'εγγονή', 'εγγόνι') : y === 3 ? g('δισέγγονος', 'δισεγγονή', 'δισέγγονο') : 'απόγονος ' + y + 'ης γενιάς';
       if (y === 0) return x === 1 ? g('πατέρας', 'μητέρα', 'γονέας') : x === 2 ? g('παππούς', 'γιαγιά', 'παππούς/γιαγιά') : x === 3 ? g('προπάππους', 'προγιαγιά', 'προπάππους/προγιαγιά') : 'πρόγονος ' + x + 'ης γενιάς';
-      if (x === 1 && y === 1) return g('αδελφός', 'αδελφή', 'αδελφός/ή');
+      if (x === 1 && y === 1) {
+        const shared = a.parents.filter(i => b.parents.includes(i)).length;
+        return (a.parents.length >= 2 && b.parents.length >= 2 && shared < 2) ? g('ετεροθαλής αδελφός', 'ετεροθαλής αδελφή', 'ετεροθαλές αδέλφι') : g('αδελφός', 'αδελφή', 'αδελφός/ή');
+      }
       if (x === 1 && y === 2) return g('ανιψιός', 'ανιψιά', 'ανιψιός/ά');
       if (x === 2 && y === 1) return g('θείος', 'θεία', 'θείος/θεία');
-      if (x === 2 && y === 2) return g('πρώτος ξάδελφος', 'πρώτη ξαδέλφη', 'πρώτος/η ξάδελφος/η');
+      if (x === 1 && y === 3) return g('εγγονός', 'εγγονή', 'εγγόνι') + ' του αδελφού/της αδελφής';
+      if (x === 3 && y === 1) return g('θείος', 'θεία', 'θείος/θεία') + ' του γονέα (αδελφός/ή του παππού ή της γιαγιάς)';
+      if (x === y) return cz(x - 1);
+      if (x > y && y >= 2) { const d = x - y; return cz(y - 1) + (d === 1 ? ' του πατέρα ή της μητέρας' : d === 2 ? ' του παππού ή της γιαγιάς' : ' ενός προγόνου ' + d + ' γενιές πάνω'); }
+      if (x < y && x >= 2) { const d = y - x; return (d === 1 ? g('γιος', 'κόρη', 'παιδί') : d === 2 ? g('εγγονός', 'εγγονή', 'εγγόνι') : 'απόγονος ' + d + 'ης γενιάς') + ' ' + (ordG[x - 2] || (x - 1) + 'ου') + ' ξαδέλφου'; }
       return 'συγγενής (κοινός πρόγονος ' + x + ' και ' + y + ' γενιές πάνω)';
+    }
+    function relText(a, b) {
+      if (a.spouse === b.id) return 'σύζυγος';
+      const r = bloodRel(a, b); if (r) return r;
+      const sx = sexOf(b), g = (m, f, both) => sx === 'M' ? m : sx === 'F' ? f : both;
+      const sa = byId(a.spouse), sb = byId(b.spouse);
+      if (sa) {
+        const q = bloodPath(sa, b);
+        if (q) {
+          if (q.x === 1 && q.y === 0) return g('πεθερός', 'πεθερά', 'πεθερικό');
+          if (q.x === 1 && q.y === 1) return g('κουνιάδος', 'κουνιάδα', 'αδελφός/ή του/της συζύγου');
+          if (q.x === 0 && q.y === 1) return g('προγονός', 'προγονή', 'παιδί του/της συζύγου');
+          return 'συγγενής εξ αγχιστείας (' + bloodRel(sa, b) + ' του/της συζύγου)';
+        }
+      }
+      if (sb) {
+        const q = bloodPath(a, sb);
+        if (q) {
+          if (q.x === 0 && q.y === 1) return g('γαμπρός', 'νύφη', 'σύζυγος του παιδιού');
+          if (q.x === 1 && q.y === 1) return g('γαμπρός', 'νύφη', 'σύζυγος αδελφού/ής');
+          if (q.x === 1 && q.y === 0) return g('πατριός', 'μητριά', 'θετός γονέας');
+          if (q.x === 2 && q.y === 1) return g('θείος', 'θεία', 'θείος/θεία') + ' (εξ αγχιστείας)';
+          return 'συγγενής εξ αγχιστείας (σύζυγος του/της ' + sb.name + ', ο/η οποίος/α είναι ' + bloodRel(a, sb) + ')';
+        }
+      }
+      return null;
     }
     $('person-tab-content').addEventListener('change', e => {
       if (e.target.id !== 'rel-calc') return;
@@ -4493,21 +4949,21 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       fams.forEach((f, k) => {
         out += `0 @F${famIdx[k]}@ FAM\n`;
         const ppl = f.ids.map(byId).filter(Boolean);
-        const h = ppl.find(p => isM(p)) || ppl[0], w = ppl.find(p => p !== h && isF(p)) || ppl.find(p => p !== h);
+        const h = ppl.find(p => isM(p)), w = ppl.find(p => isF(p));
         if (h) out += `1 HUSB @I${h.id}@\n`; if (w) out += `1 WIFE @I${w.id}@\n`;
         f.kids.forEach(i => { out += `1 CHIL @I${i}@\n`; });
       });
       out += '0 TRLR\n';
-      download('oikogeneiako-dentro-gedcom.txt', out, 'text/plain'); /* περιεχόμενο GEDCOM· μετονόμασέ το σε .ged αν το ζητά το πρόγραμμα */
+      download('oikogeneiako-dentro.ged', out, 'text/plain;charset=utf-8');
     }
     window.exportGedcom = exportGedcom;
     function exportPrintable() {
       const nm = id => { const x = byId(id); return x ? x.name : ''; };
       const rows = state.people.slice().sort((a, b) => (a.gen || 0) - (b.gen || 0) || (a.by || 9999) - (b.by || 9999)).map(p => {
         const dd = (iso, y) => iso || (y ? String(y) : '');
-        return `<tr><td>${esc(p.gen || '')}</td><td><b>${esc(p.full || p.name)}</b>${p.maiden ? ' (το γένος ' + esc(p.maiden) + ')' : ''}</td><td>${esc(dd(p.bdate, p.by))}</td><td>${esc(dd(p.ddate, p.dy))}</td><td>${esc(p.parents.map(nm).filter(Boolean).join(', '))}</td><td>${esc(nm(p.spouse))}</td><td>${esc([p.place, p.job].filter(Boolean).join(' · '))}</td></tr>`;
+        return `<tr><td>${esc(p.gen || '')}</td><td><b>${esc(p.full || p.name)}</b>${p.maiden ? ' (το γένος ' + esc(p.maiden) + ')' : ''}</td><td>${esc(dd(p.bdate, p.by))}</td><td>${esc(dd(p.ddate, p.dy))}</td><td>${esc(p.parents.map(nm).filter(Boolean).join(', '))}</td><td>${esc(nm(p.spouse))}</td><td>${esc([p.place, p.job, p.team].filter(Boolean).join(' · '))}</td></tr>`;
       }).join('');
-      const html = `<!doctype html><html lang="el"><head><meta charset="utf-8"><title>Οικογενειακό δέντρο</title><style>body{font-family:Georgia,serif;margin:24px;color:#222}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #bbb;padding:6px 8px;text-align:left;vertical-align:top}th{background:#eee}h1{font-size:22px}</style></head><body><h1>Οικογενειακό δέντρο — ${state.people.length} μέλη</h1><table><tr><th>Γενιά</th><th>Όνομα</th><th>Γέννηση</th><th>Θάνατος</th><th>Γονείς</th><th>Σύζυγος</th><th>Τόπος · Επάγγελμα</th></tr>${rows}</table><p style="font-size:12px;color:#777">Άνοιξέ το σε browser και πάτα Εκτύπωση → Αποθήκευση ως PDF.</p>
+      const html = `<!doctype html><html lang="el"><head><meta charset="utf-8"><title>Οικογενειακό δέντρο</title><style>body{font-family:Georgia,serif;margin:24px;color:#222}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #bbb;padding:6px 8px;text-align:left;vertical-align:top}th{background:#eee}h1{font-size:22px}</style></head><body><h1>Οικογενειακό δέντρο — ${state.people.length} μέλη</h1><table><tr><th>Γενιά</th><th>Όνομα</th><th>Γέννηση</th><th>Θάνατος</th><th>Γονείς</th><th>Σύζυγος</th><th>Τόπος · Επάγγελμα · Ομάδα</th></tr>${rows}</table><p style="font-size:12px;color:#777">Άνοιξέ το σε browser και πάτα Εκτύπωση → Αποθήκευση ως PDF.</p>
 
 
 </body></html>`;
@@ -4550,12 +5006,24 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       fr.onload = () => {
         try {
           const s = JSON.parse(fr.result);
-          if (!s || !Array.isArray(s.people)) throw new Error('bad');
-          const d = defaults();
-          state = Object.assign(d, s); state.events = s.events || []; state.photos = s.photos || []; state.stories = s.stories || {}; state.heritage = s.heritage || {};
-          state.people.forEach(p => { p.parents = p.parents || []; p.spouse = p.spouse || null; });
-          fixCounters(state);
-          selectedId = state.people[0] ? state.people[0].id : null; closeModal(); refresh(); showToast('Η επαναφορά ολοκληρώθηκε.');
+          if (!s || typeof s !== 'object' || !Array.isArray(s.people) || !Array.isArray(s.events || []) || !Array.isArray(s.photos || [])) throw new Error('bad-schema');
+          const ids = new Set();
+          for (const person of s.people) {
+            if (!person || !Number.isInteger(Number(person.id)) || Number(person.id) < 1 || ids.has(Number(person.id)) || typeof (person.name || person.first || '') !== 'string') throw new Error('bad-person');
+            ids.add(Number(person.id));
+            if (person.parents != null && (!Array.isArray(person.parents) || person.parents.some(x => !Number.isFinite(Number(x))))) throw new Error('bad-parents');
+          }
+          for (const person of s.people) if ((person.parents || []).some(id => !ids.has(Number(id)) || Number(id) === Number(person.id))) throw new Error('orphan-parent');
+          for (const photo of (s.photos || [])) if (!photo || typeof photo !== 'object' || (photo.src != null && typeof photo.src !== 'string')) throw new Error('bad-photo');
+          const staged = Object.assign(defaults(), s);
+          staged.events = Array.isArray(s.events) ? s.events : []; staged.photos = Array.isArray(s.photos) ? s.photos : []; staged.stories = s.stories && typeof s.stories === 'object' ? s.stories : {}; staged.heritage = s.heritage && typeof s.heritage === 'object' ? s.heritage : {};
+          staged.people.forEach(p => { p.parents = p.parents || []; p.spouse = p.spouse || null; });
+          fixCounters(staged);
+          /* Κρατάμε αυτόματο αντίγραφο της τρέχουσας κατάστασης πριν την αντικατάσταση. */
+          try { localStorage.setItem(STORE + '-pre-restore', JSON.stringify(state)); } catch (backupErr) { throw new Error('cannot-backup-current'); }
+          state = staged;
+          try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (saveErr) { throw new Error('cannot-save-restored'); }
+          selectedId = state.people[0] ? state.people[0].id : null; closeModal(); refresh(); showToast('Η επαναφορά ολοκληρώθηκε. Δημιουργήθηκε και αντίγραφο της προηγούμενης κατάστασης.');
         } catch (err) { showToast('Μη έγκυρο αρχείο αντιγράφου.'); }
       };
       fr.readAsText(f);
@@ -4567,16 +5035,28 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         noFocus: false,
         fields: [
           { type: 'info', name: 'wipe-info', label: 'Θα διαγραφούν όλα τα μέλη, οι φωτογραφίες και τα γεγονότα. Η ενέργεια δεν αναιρείται.' },
-          { name: 'code', label: 'Κωδικός διαγραφής', type: 'password', required: true, hint: 'Γράψε τον κωδικό για να συνεχίσεις.' }
+          { name: 'code', label: 'Πληκτρολόγησε ΔΙΑΓΡΑΦΗ για επιβεβαίωση', type: 'text', required: true, hint: 'Η επιβεβαίωση αυτή αποτρέπει τυχαία διαγραφή.' }
         ],
         onMount: () => { const b = $('modal-actions').querySelector('button[type=submit]'); if (b) b.className = 'flex-1 py-2.5 rounded-xl bg-terracotta text-white text-sm font-medium'; const i = $('modal-form').elements['code']; if (i) i.setAttribute('inputmode', 'numeric'); },
         onSubmit: d => {
-          if ((d.code || '').trim() !== '0000') { showToast('Λάθος κωδικός.'); return false; }
-          state = defaults(); selectedId = null; hiddenGens = new Set(); refresh(); showToast('Το δέντρο άδειασε.');
+          if ((d.code || '').trim() !== 'ΔΙΑΓΡΑΦΗ') { showToast('Πληκτρολόγησε ακριβώς ΔΙΑΓΡΑΦΗ.'); return false; }
+          state = defaults(); selectedId = null; hiddenGens = new Set(); save(); refresh(); showToast('Το δέντρο άδειασε.');
         }
       });
     }
     window.resetData = resetData;
+
+    document.addEventListener('keydown', e => {
+      const modal = $('modal');
+      if (!modal || modal.classList.contains('hidden')) return;
+      if (e.key === 'Escape') { e.preventDefault(); closeModal(); return; }
+      if (e.key !== 'Tab') return;
+      const items = [...modal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent !== null);
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
 
     /* ---------- Θέμα ---------- */
     function applyThemeButtons() {
@@ -4699,11 +5179,26 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       });
       return g;
     }
+    /* Βιβλίο: τα πρόσωπα που δεν επιλέχθηκαν (o.exclude) δεν εμφανίζονται πουθενά: ούτε ως γονείς, αδέλφια, σύζυγοι, ούτε στο ευρετήριο, τα γεγονότα και τις φωτογραφίες. */
     function buildBook(o) {
-      const g = genMap(), P = state.people.slice().sort((a, b) => g[a.id] - g[b.id] || (a.by || 9999) - (b.by || 9999) || a.id - b.id);
+      const ex = new Set((o.exclude || []).map(Number));
+      if (!ex.size) return buildBookAll(o);
+      const sp = state.people, se = state.events, sph = state.photos, sh = state.heritage;
+      const names = sp.filter(p => ex.has(p.id)).map(p => dispN(p)).filter(n => n && n.length > 3);
+      const G0 = genMap();
+      try {
+        state.people = sp.filter(p => !ex.has(p.id));
+        state.events = se.filter(e => !(e.people || []).some(i => ex.has(i)));
+        state.photos = sph.filter(x => !(x.people || []).some(i => ex.has(i)));
+        if (sh) { const h = {}; Object.keys(sh).forEach(k => { h[k] = Array.isArray(sh[k]) ? sh[k].filter(it => { const t = JSON.stringify(it); return !names.some(n => t.includes(n)); }) : sh[k]; }); state.heritage = h; }
+        return buildBookAll(Object.assign({}, o, { _g: G0 }));
+      } finally { state.people = sp; state.events = se; state.photos = sph; state.heritage = sh; }
+    }
+    function buildBookAll(o) {
+      const g = o._g || genMap(), P = state.people.slice().sort((a, b) => g[a.id] - g[b.id] || (a.by || 9999) - (b.by || 9999) || a.id - b.id);
       const GL = ['Α΄', 'Β΄', 'Γ΄', 'Δ΄', 'Ε΄', 'ΣΤ΄', 'Ζ΄', 'Η΄', 'Θ΄', 'Ι΄', 'ΙΑ΄', 'ΙΒ΄', 'ΙΓ΄', 'ΙΔ΄', 'ΙΕ΄'], gl = n => (GL[n - 1] || n + 'η') + ' Γενιά';
       const gy = m => { const ys = m.map(p => p.by).filter(Boolean); return ys.length ? `<small class="gy">γεννήσεις ${Math.min(...ys)}–${Math.max(...ys)}</small>` : ''; };
-      const list = a => a.map(x => esc(dispN(x))).join(', '), maxG = Math.max(1, ...Object.values(g));
+      const list = a => a.map(x => esc(dispN(x))).join(', '), maxG = Math.max(1, ...P.map(p => g[p.id] || 1));
       const yrs = state.people.flatMap(p => [p.by, p.dy]).filter(Boolean), pl = [...new Set(state.people.flatMap(placesOf))];
       const md = iso => { const m = /^\d{4}-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? [+m[1], +m[2]] : [0, 0]; };
       const photos = state.photos.filter(x => x.src), A5 = o.size === 'A5';
@@ -4716,7 +5211,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         const nkItem = p.paratsouk ? (state.heritage && state.heritage.nicks || []).find(h => nkey(h.title) === nkey(p.paratsouk) && h.story) : null;
         const ap = p.unc ? ' (περίπου)' : '';
         return `<article class="bio"><div class="bh"><div><h3>${esc(dispN(p))}${p.maiden ? ` <small>(το γένος ${esc(p.maiden)})</small>` : ''}</h3>${p.paratsouk ? `<p class="nk">«${esc(p.paratsouk)}»</p>` : ''}<p class="yrs">${esc(yearsOf(p))}${p.job ? ' · ' + esc(p.job) : ''}</p></div>${f ? `<img class="face" src="${f}" alt="">` : ''}</div>
-          <table>${row('Το παρατσούκλι', nkItem ? esc(nkItem.story) : '')}${row('Πατρώνυμο', esc(p.pat || ''))}${row('Γέννηση', (p.born || p.by) ? esc(p.born || p.by) + ap : '')}${row('Θάνατος', (p.dy || p.deceased) ? esc(p.died || p.dy || '') + ap : '')}${row('Γονείς', pa.map(x => esc(dispN(x)) + ((p.adoptive || []).includes(x.id) ? ' (θετός)' : '')).join(', '))}${row('Σύζυγος', sp ? esc(dispN(sp)) : '')}${row('Προηγούμενοι γάμοι', (p.spouses || []).map(m => { const q = byId(m.id); return q ? esc(dispN(q)) + ' (' + (m.type === 'widowed' ? 'χηρεία' : 'διαζύγιο') + ((m.from || m.to) ? ', ' + (m.from || '?') + '–' + (m.to || '') : '') + ')' : ''; }).filter(Boolean).join(', '))}${row('Παιδιά', list(kids))}${row('Αδέλφια', list(sibs))}${row('Καταγωγή', esc(p.origin || ''))}${row('Διαμονή', esc(p.place || ''))}</table>
+          <table>${row('Το παρατσούκλι', nkItem ? esc(nkItem.story) : '')}${row('Πατρώνυμο', esc(p.pat || ''))}${row('Γέννηση', (p.born || p.by) ? esc(p.born || p.by) + ap : '')}${row('Θάνατος', (p.dy || p.deceased) ? esc(p.died || p.dy || '') + ap : '')}${row('Γονείς', pa.map(x => esc(dispN(x)) + ((p.adoptive || []).includes(x.id) ? ' (θετός)' : '')).join(', '))}${row('Σύζυγος', sp ? esc(dispN(sp)) : '')}${row('Προηγούμενοι γάμοι', (p.spouses || []).map(m => { const q = byId(m.id); return q ? esc(dispN(q)) + ' (' + (m.type === 'widowed' ? 'χηρεία' : 'διαζύγιο') + ((m.from || m.to) ? ', ' + (m.from || '?') + '–' + (m.to || '') : '') + ')' : ''; }).filter(Boolean).join(', '))}${row('Παιδιά', list(kids))}${row('Αδέλφια', list(sibs))}${row('Καταγωγή', esc(p.origin || ''))}${row('Διαμονή', esc(p.place || ''))}${row('Ομάδα', esc(p.team || ''))}${row('Γιορτή', esc(namedayText(p)))}</table>
           ${p.story ? `<p class="txt quote">${esc(p.story)}</p>` : ''}${notes ? `<p class="txt">${esc(notes)}</p>` : ''}${st.map(s => `<h4>${esc(s.title)}</h4><p class="txt">${esc(s.text)}</p>`).join('')}
           ${pe.length ? `<ul class="ev">${pe.map(e => `<li><b>${esc(fmtDate(e))}</b> — ${esc(e.title)}${e.place ? ' (' + esc(e.place) + ')' : ''}</li>`).join('')}</ul>` : ''}
           </article>`;
@@ -4731,7 +5226,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       ch.push(['Η ιστορία της οικογένειας', hist]);
       ch.push(['Οι γενιές', Array.from({ length: maxG }, (_, i) => i + 1).map(n => { const m = P.filter(p => g[p.id] === n); return m.length ? `<h3>${gl(n)}${gy(m)}</h3><ul class="gen">${m.map(p => `<li><b>${esc(dispN(p))}</b> <span>${esc(yearsOf(p))}</span></li>`).join('')}</ul>` : ''; }).join('')]);
       // Separate family branches, derived only from parent relationships recorded in the tree.
-      const roots = P.filter(p => !p.parents.length);
+      const roots = P.filter(p => !p.parents.some(byId));
       const seenBranch = new Set();
       const branchHtml = roots.map(root => {
         const seen = new Set();
@@ -4798,6 +5293,48 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       const mDia = (a, b) => U(sv(36, 8, `<path d="M18 0L22 4L18 8L14 4Z" fill="${a}"/><path d="M6 1.5L9 4L6 6.5L3 4Z" fill="${b}"/><path d="M30 1.5L33 4L30 6.5L27 4Z" fill="${b}"/>`));
       const mLeaf = a => U(sv(20, 10, `<path d="M1 5Q10 -1.5 19 5Q10 11.5 1 5Z" fill="${a}"/>`));
       /* ---------- Παλέτες: μία για κάθε σχεδιασμό σελίδας ---------- */
+      /* ---------- Ζωγραφιές (SVG) για κενές σελίδες και πίσω εξώφυλλο ---------- */
+      const AG = '#bd9a61', AD = '#203b30', AT = '#D4927A';
+      const rnd = seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+      const lf = (x, y, r, rot, c) => `<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="${r}" ry="${f1(r * .34)}" transform="rotate(${f1(rot)} ${f1(x)} ${f1(y)})" fill="${c}"/>`;
+      const waves = (cx, y, w, c) => `<path d="M${cx - w / 2} ${y}q5 -4 10 0${' t10 0'.repeat(Math.round(w / 10) - 1)}" fill="none" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/>`;
+      const rays = (cx, cy, n, r1, r2, r3, c) => { let q = ''; for (let i = 1; i <= n; i++) { const t = Math.PI * (1 - i / (n + 1)), r = i % 2 ? r2 : r3; q += `<path d="M${f1(cx + Math.cos(t) * r1)} ${f1(cy - Math.sin(t) * r1)}L${f1(cx + Math.cos(t) * r)} ${f1(cy - Math.sin(t) * r)}" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>`; } return q; };
+      const ART = [
+        () => { /* ελιά με ήλιο και κύματα */
+          const R = rnd(7); let q = '';
+          for (let i = 0; i < 32; i++) { const a = i / 32 * Math.PI * 2; q += `<path d="M${f1(100 + Math.cos(a) * 68)} ${f1(86 + Math.sin(a) * 68)}L${f1(100 + Math.cos(a) * 76)} ${f1(86 + Math.sin(a) * 76)}" stroke="${AG}" stroke-width="1.1" stroke-linecap="round"/>`; }
+          q += `<circle cx="100" cy="86" r="62" fill="none" stroke="${AG}" stroke-width=".9"/>`;
+          q += `<path d="M100 178C99 162 97 150 92 136M100 178C101 162 104 148 111 132M100 178V128M100 152C92 148 86 144 80 136M100 148C108 144 114 140 120 132" fill="none" stroke="${AD}" stroke-width="3.2" stroke-linecap="round"/>`;
+          for (let i = 0; i < 130; i++) { const a = R() * Math.PI * 2, r = Math.sqrt(R()) * 46; q += lf(100 + Math.cos(a) * r, 78 + Math.sin(a) * r * .86, 7.5, R() * 180 - 90, i % 4 ? AD : AG); }
+          for (let i = 0; i < 9; i++) { const a = R() * Math.PI * 2, r = 12 + R() * 30; q += `<circle cx="${f1(100 + Math.cos(a) * r)}" cy="${f1(78 + Math.sin(a) * r * .86)}" r="2.3" fill="${AT}"/>`; }
+          q += waves(100, 184, 130, AD) + waves(100, 191, 100, AG);
+          return q;
+        },
+        () => { /* στεφάνι ελιάς με ήλιο */
+          let q = '';
+          for (const sd of [-1, 1]) {
+            const pt = d => [100 + Math.cos(d * Math.PI / 180) * 64, 100 + Math.sin(d * Math.PI / 180) * 64];
+            const a0 = 90 + sd * 16, a1 = 90 + sd * 168, p0 = pt(a0), p1 = pt(a1);
+            q += `<path d="M${f1(p0[0])} ${f1(p0[1])}A64 64 0 0 ${sd > 0 ? 1 : 0} ${f1(p1[0])} ${f1(p1[1])}" fill="none" stroke="${AD}" stroke-width="1.5" stroke-linecap="round"/>`;
+            for (let i = 0; i <= 12; i++) {
+              const t = i / 12, ang = 90 + sd * (16 + t * 152), p = pt(ang), tg = ang + sd * 90;
+              const ox = Math.cos(ang * Math.PI / 180), oy = Math.sin(ang * Math.PI / 180);
+              q += lf(p[0] + ox * 4.5, p[1] + oy * 4.5, 9, tg - 36, AD) + lf(p[0] - ox * 4.5, p[1] - oy * 4.5, 9, tg + 36, i % 2 ? AD : AG);
+              if (i % 3 === 1) q += `<circle cx="${f1(p[0] + ox * 10)}" cy="${f1(p[1] + oy * 10)}" r="2.4" fill="${AT}"/>`;
+            }
+          }
+          q += `<path d="M74 112A26 26 0 0 1 126 112Z" fill="${AG}"/>` + rays(100, 112, 11, 31, 38, 45, AG) + `<path d="M60 112H140" stroke="${AD}" stroke-width="1.2"/>` + waves(100, 121, 80, AD) + waves(100, 128, 60, AG) + waves(100, 135, 40, AD);
+          q += `<path d="M100 18L104 24L100 30L96 24Z" fill="${AG}"/>`;
+          return q;
+        },
+        () => { /* ήλιος, θάλασσα και καραβάκι */
+          let q = `<path d="M62 118A38 38 0 0 1 138 118Z" fill="${AG}"/>` + rays(100, 118, 13, 46, 60, 70, AG) + `<path d="M20 118H180" stroke="${AD}" stroke-width="1.3"/>`;
+          for (let k = 0; k < 5; k++) q += waves(100, 128 + k * 10, 150 - k * 22, k % 2 ? AG : AD);
+          q += `<path d="M81 146H119L111 157H89Z" fill="${AD}"/><path d="M100 146V110" stroke="${AD}" stroke-width="1.6"/><path d="M102 112L120 142H102Z" fill="#fbf8f0" stroke="${AD}" stroke-width="1.2"/><path d="M98 120L84 142H98Z" fill="${AT}"/><path d="M100 110L108 112L100 114Z" fill="${AT}"/>`;
+          return q;
+        }
+      ];
+      const av = k => sv(200, 200, ART[k]());
       const PAL = [
         { bg: '#F3EDE3', hc: '#4F5E36', ac: '#6B7F4A', c2: '#C9A86C', tn: 'rgba(107,127,74,.07)' },   // 0 Άμμος & ελιά
         { bg: '#F6EDE8', hc: '#B87A62', ac: '#D4927A', c2: '#C9A86C', tn: 'rgba(212,146,122,.08)' }, // 1 Ροδακινί wash
@@ -4820,7 +5357,8 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       ];
       const cornerRing = (a, b) => ['0 0|left top', '100% 0|right top', '0 100%|left bottom', '100% 100%|right bottom'].map(s => { const [at, pos] = s.split('|'); return `radial-gradient(circle at ${at},transparent 0 4mm,${a} 4mm 4.4mm,transparent 4.4mm 6mm,${b} 6mm 6.3mm,transparent 6.3mm) ${pos}/9mm 9mm no-repeat`; }).join(',');
       const BLUE = '#4F5E36', GOLD = '#C9A86C', TERRA = '#D4927A';
-      const css = `@page{size:${o.size};margin:0}@page tree{size:${o.size} landscape;margin:0}
+      const PS = o.size === 'A3' ? 'A3 landscape' : o.size;
+      const css = `@page{size:${PS};margin:0}@page tree{size:${o.size} landscape;margin:0}
         *{box-sizing:border-box}html{-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%}html,body{margin:0}
         body{font:${A5 ? 9.2 : 10.2}pt/1.55 'EB Garamond','Noto Serif',Georgia,serif;color:#3B2F26;-webkit-print-color-adjust:exact;print-color-adjust:exact}
         h1,h2{font-family:'GFS Didot','Noto Serif',Georgia,serif;font-weight:400}h3,h4{font-family:'EB Garamond','Noto Serif',Georgia,serif;font-weight:600}h1,h2,h3{color:var(--hc,${BLUE})}h4{color:var(--ac,${TERRA})}
@@ -4957,7 +5495,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         .cover .cv-sun{background:${mSun('#bd9a61','#203b30')} center bottom/contain no-repeat}
         .cover img{box-shadow:0 0 0 1.5mm #f2eadb,0 0 0 2mm #bd9a61,0 0 0 4mm #f2eadb,0 0 0 4.6mm #203b30}
         h2.ch{color:#203b30!important}.bio,.branch{border-color:#cdb98f}.branch{background:#f1ecdf}
-        .album figure{background:#fffdf8;border-color:#d4c29d;box-shadow:0 .6mm 2.5mm rgba(32,59,48,.12)}`;
+        .album figure{background:#fffdf8;border-color:#d4c29d;box-shadow:0 .6mm 2.5mm rgba(32,59,48,.12)}.backcover{justify-content:center}.backcover .bk-art{width:${A5 ? 60 : 84}mm;height:${A5 ? 60 : 84}mm;margin:0 0 ${A5 ? 5 : 8}mm}.backcover .bk-art svg{width:100%;height:100%;display:block}.backcover .bk-q{font:italic ${A5 ? 11 : 13.5}pt/1.5 'EB Garamond',Georgia,serif;color:#98794d;max-width:${A5 ? 70 : 100}mm;margin:0 0 ${A5 ? 6 : 8}mm}.backcover .cv-sp{margin:0 0 ${A5 ? 5 : 7}mm}.blk .pc{display:flex;align-items:center;justify-content:center}.blankart{width:74%}.blankart svg{width:100%;height:auto;display:block}${o.size === 'A3' ? '.spread{display:flex;width:420mm;height:296mm;overflow:hidden;page-break-after:always;break-after:page}.spread:last-child{page-break-after:auto;break-after:auto}.slot{width:210mm;height:296mm;position:relative;overflow:hidden;flex:none}.slot.blank{background:#fff}.slot .sheet{margin:0!important;box-shadow:none!important;page-break-after:auto;break-after:auto}@media print{.splabel,#rd,#a3bar{display:none!important}}@media screen{#rd{display:none}#rd .spread{box-shadow:none;overflow:visible}#rd .slot:not(.empty){box-shadow:0 1mm 4mm rgba(0,0,0,.55)}#rd .slot.empty{background:transparent}.imp .spread{margin:0 auto 6mm;box-shadow:0 1mm 4mm rgba(0,0,0,.55)}.splabel{color:#e9e1cc;font:600 10pt sans-serif;text-align:center;margin:4mm 0 1.5mm}.splabel.note{font-weight:400;font-size:9.5pt;line-height:1.45;opacity:.95;margin:3mm auto 2mm;max-width:400mm;padding:3mm 5mm;background:rgba(0,0,0,.35);border-radius:6px;color:#f5ecd7}#a3bar{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;padding:8px 12px;background:#203b30;color:#f5ecd7;font:600 13px/1.3 system-ui,sans-serif;box-shadow:0 2px 12px rgba(0,0,0,.4)}#a3bar button{padding:7px 14px;border-radius:8px;border:0;font:600 13px system-ui,sans-serif;cursor:pointer}#a3bar .on{background:#bd9a61;color:#1a2418}#a3bar .off{background:rgba(255,255,255,.12);color:#f5ecd7}body.a3-read #rd{display:block}body.a3-read .imp{display:none}body:not(.a3-read) .imp{display:block}body:not(.a3-read) #rd{display:none}body{padding-top:52px}}' : ''}`;
 
       const PAG = `(function(){
 function go(){
@@ -5029,6 +5567,10 @@ var toc=src.querySelector('.toc');if(toc)chapter(toc,true);
 [].slice.call(out.querySelectorAll('.tocl li')).forEach(function(li,i){
 var a=li.querySelector('a'),t=a?a.textContent:li.textContent;li.textContent='';
 var x=document.createElement('a');x.textContent=(i+1)+'. '+t;var p=document.createElement('span');p.textContent=starts[i]||'';li.appendChild(x);li.appendChild(p);});
+var bkc=src.querySelector('.backcover'),arts=[].slice.call(src.querySelectorAll('.art'));
+if(document.body.classList.contains('up')){var tot=out.children.length+(bkc?1:0),pad=(4-tot%4)%4;for(var b=0;b<pad;b++){var bp=sheet(''),bsh=bp.parentNode;bsh.classList.add('blk');[].forEach.call(bsh.querySelectorAll('.hd,.ft'),function(e){e.textContent='';});var aa=arts[b%arts.length];if(aa){var bw2=document.createElement('div');bw2.className='blankart';bw2.innerHTML=aa.innerHTML;bp.appendChild(bw2);}}}
+if(bkc){var bs=document.createElement('div');bs.className='sheet even cov bk';bs.appendChild(bkc);out.appendChild(bs);}
+if(document.body.classList.contains('up')){var ss=[].slice.call(out.children),N=Math.ceil(ss.length/4)*4,sl=[];for(var q=0;q<N;q++){var w=document.createElement('div');w.className='slot'+(ss[q]?'':' blank');if(ss[q])w.appendChild(ss[q]);sl.push(w);}function sp(h,x,y,t){var l=document.createElement('div');l.className='splabel';l.textContent=t;h.appendChild(l);var d=document.createElement('div');d.className='spread';d.appendChild(x);d.appendChild(y);h.appendChild(d);}function em(){var e=document.createElement('div');e.className='slot empty';return e;}var bar=document.createElement('div');bar.id='a3bar';bar.innerHTML='<span style="margin-right:8px">A3 Βιβλίο (δίπλωμα στη μέση)</span><button type="button" id="a3-imp" class="on">1. Φύλλα εκτύπωσης</button><button type="button" id="a3-read" class="off">2. Πώς ανοίγει το βιβλίο</button>';document.body.insertBefore(bar,document.body.firstChild);document.getElementById('a3-imp').onclick=function(){document.body.classList.remove('a3-read');this.className='on';document.getElementById('a3-read').className='off';};document.getElementById('a3-read').onclick=function(){document.body.classList.add('a3-read');this.className='on';document.getElementById('a3-imp').className='off';};var rd=document.createElement('div');rd.id='rd';var nt=document.createElement('div');nt.className='splabel note';nt.innerHTML='<b>Πώς θα φαίνεται το βιβλίο αφού το διπλώσεις</b><br>Οι μονές σελίδες είναι πάντα δεξιά. Αυτή η προβολή είναι μόνο για να καταλάβεις τη σειρά — <u>μην την τυπώσεις</u>.';rd.appendChild(nt);sp(rd,em(),sl[0].cloneNode(true),'Εξώφυλλο (μπροστινό)');if(N>1){  sp(rd,em(),sl[1].cloneNode(true),'Σελίδα 1');  for(var k=2;k+1<N;k+=2){    sp(rd,sl[k].cloneNode(true),sl[k+1].cloneNode(true),'Σελίδες '+k+'–'+(k+1));  }  if(N%2===0){sp(rd,sl[N-1].cloneNode(true),em(),'Τελευταία σελίδα');}}sp(rd,em(),em(),'Πίσω εξώφυλλο');var imp=document.createElement('div');imp.className='imp';var int=document.createElement('div');int.className='splabel note';int.innerHTML='<b>Αυτά τα φύλλα θα τυπώσεις</b><br>Χαρτί <b>A3 οριζόντια</b> · Διπλής όψης · Αναστροφή στη <b>μικρή πλευρά</b> (short edge) · Κλίμακα <b>100%</b>.<br>Μετά δίπλωσε <b>όλα τα φύλλα μαζί</b> στη μέση. Το πρώτο φύλλο γίνεται το εξώφυλλο.';imp.appendChild(int);for(var i=0;i<N/4;i++){sp(imp,sl[N-1-2*i],sl[2*i],'Φύλλο '+(i+1)+' — μπροστινή όψη')+' (αριστερά) + σελ. '+(2*i+1)+' (δεξιά)');sp(imp,sl[2*i+1],sl[N-2-2*i],'Φύλλο '+(i+1)+' — πίσω όψη')+' (αριστερά) + σελ. '+(N-2*i-1)+' (δεξιά)');}out.appendChild(rd);out.appendChild(imp);}
 if(src.parentNode)src.parentNode.removeChild(src);
 var mw=0;[].forEach.call(out.children,function(e){mw=Math.max(mw,e.getBoundingClientRect().width);});
 var z=Math.min(1,(window.innerWidth-8)/Math.max(mw,1)),hh=out.offsetHeight*z;document.documentElement.style.setProperty('--h',hh+'px');document.documentElement.style.setProperty('--z',z);
@@ -5040,10 +5582,10 @@ if(document.fonts&&document.fonts.load){['400 12pt "EB Garamond"','italic 400 12
 if(document.fonts&&document.fonts.ready)ps.push(document.fonts.ready);
 Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).then(run);
 })();`;
-      return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(o.title)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=GFS+Didot&display=swap"><style>${css}</style></head><body class="${A5 ? 'a5' : 'a4'}"><div id="src">
+      return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(o.title)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=GFS+Didot&display=swap"><style>${css}</style></head><body class="${A5 ? 'a5' : 'a4'}${o.size === 'A3' ? ' up' : ''}"><div id="src">
         <section class="cover"><div class="cv1"></div><div class="cv2"></div><div class="cv-sp"></div><h1>${esc(o.title)}</h1><div class="sub">${esc(o.subtitle)}</div>${cover ? `<img src="${cover.src}" alt="">` : '<div class="cv-sun"></div>'}<div class="au">${esc(o.author)}${o.author ? ' · ' : ''}${new Date().getFullYear()}</div></section>
         <section class="toc"><h2 class="ch">Περιεχόμενα</h2><ol class="tocl">${ch.map((c, i) => `<li><a href="#c${i}">${esc(c[0])}</a></li>`).join('')}</ol></section>
-        ${ch.map((c, i) => `<section class="c ${c[2] || ''}" id="c${i}"><h2 class="ch">${i + 1}. ${esc(c[0])}</h2>${c[1]}</section>`).join('')}</div><div id="wrap"><div id="out"></div></div><script>${PAG}<\/script>
+        ${ch.map((c, i) => `<section class="c ${c[2] || ''}" id="c${i}"><h2 class="ch">${i + 1}. ${esc(c[0])}</h2>${c[1]}</section>`).join('')}<section class="cover backcover"><div class="cv1"></div><div class="cv2"></div><div class="bk-art">${av(0)}</div><div class="bk-q">Για όσους ήρθαν πριν από εμάς, και για όσους θα έρθουν μετά.</div><div class="cv-sp"></div><div class="au">${esc(o.title)}</div></section><div style="display:none">${[1, 2, 0].map(k => `<div class="art">${av(k)}</div>`).join('')}</div></div><div id="wrap"><div id="out"></div></div><script>${PAG}<\/script>
 <style id="museum-sidebar-contrast-fix">
 /* Sidebar navigation contrast fix: readable on the dark museum panel */
 #sidebar button.nav-item,
@@ -5080,9 +5622,16 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
       const bs = 'padding:8px 14px;border-radius:10px;border:0;font-size:14px;cursor:pointer;';
       ov.innerHTML = `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:8px 12px;background:#4F5E36;color:#fff"><b style="flex:1;min-width:130px"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A3 3 0 0 1 7 3h5v17H7a3 3 0 0 0-3 1.5zM20 5.5A3 3 0 0 0 17 3h-5v17h5a3 3 0 0 1 3 1.5z"/></svg> Βιβλίο οικογένειας</b><button type="button" id="bk-print" style="${bs}background:#E67E22;color:#fff;font-weight:600"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 18"/></svg> Εκτύπωση / PDF</button><button type="button" id="bk-dl" style="${bs}background:#fff;color:#4F5E36">↓ Λήψη HTML</button><button type="button" id="bk-x" aria-label="Κλείσιμο" style="${bs}background:rgba(255,255,255,.2);color:#fff">✕</button></div><iframe id="bk-frame" title="Βιβλίο" style="flex:1;border:0;background:#fff;width:100%"></iframe>`;
       document.body.appendChild(ov); $('bk-frame').srcdoc = html;
+      const isA3 = /class="[^"]*\bup\b/.test(html) || html.includes('A3 landscape');
+      if (isA3) {
+        const tip = document.createElement('div');
+        tip.style.cssText = 'padding:10px 14px;background:#3d2b1f;color:#f5e6c8;font-size:13px;line-height:1.45;border-bottom:1px solid rgba(255,255,255,.12)';
+        tip.innerHTML = '⚠️ <b>A3 = βιβλίο που διπλώνεται στη μέση</b><br>• Από προεπιλογή βλέπεις τα <b>Φύλλα εκτύπωσης</b> (ανακατεμένα) — αυτά τυπώνεις.<br>• Πάτα «Πώς ανοίγει το βιβλίο» μόνο για να δεις τη σωστή σειρά ανάγνωσης.<br>• Εκτύπωση: A3 οριζόντια · διπλής όψης · short edge · κλίμακα 100%.';
+        ov.insertBefore(tip, ov.children[1]);
+      }
       $('bk-x').onclick = () => ov.remove();
       $('bk-dl').onclick = () => download('vivlio-oikogeneias.html', html, 'text/html');
-      $('bk-print').onclick = () => { try { const w = $('bk-frame').contentWindow; w.focus(); w.print(); showToast('Στην εκτύπωση επίλεξε «Αποθήκευση ως PDF».'); } catch (e) { showToast('Η εκτύπωση δεν είναι διαθέσιμη εδώ. Κάνε «Λήψη HTML» και άνοιξέ το στον browser.'); } };
+      $('bk-print').onclick = () => { try { const w = $('bk-frame').contentWindow; w.focus(); w.print(); showToast((typeof isA3!=='undefined'&&isA3)?'A3: οριζόντια · διπλής όψης · short edge · 100%':'Στην εκτύπωση επίλεξε «Αποθήκευση ως PDF».'); } catch (e) { showToast('Η εκτύπωση δεν είναι διαθέσιμη εδώ. Κάνε «Λήψη HTML» και άνοιξέ το στον browser.'); } };
     }
     let bookCover = '';
     function coverImage(file, cb) {
@@ -5105,11 +5654,15 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
       closeSidebar();
       if (!state.people.length) { showToast('Πρόσθεσε πρώτα μέλη στο δέντρο.'); return; }
       const b = state.book || {};
+      const exSet = new Set((b.exclude || []).map(Number));
+      const plist = state.people.slice().sort((x, y) => dispN(x).localeCompare(dispN(y), 'el'));
+      const peopleHtml = `<details id="bk-people-d"><summary id="bk-people-sum" class="cursor-pointer font-semibold text-aegean" style="min-height:32px"></summary><div style="margin-top:.6rem"><input type="search" id="bk-people-q" placeholder="Αναζήτηση ονόματος…" autocomplete="off" class="${INPUT}"><div style="display:flex;gap:.5rem;margin:.5rem 0"><button type="button" id="bk-p-all" class="text-aegean" style="padding:.35rem .8rem;border-radius:.6rem;border:1px solid rgba(27,79,114,.3);font-size:.85rem">Όλοι</button><button type="button" id="bk-p-none" class="text-aegean" style="padding:.35rem .8rem;border-radius:.6rem;border:1px solid rgba(27,79,114,.3);font-size:.85rem">Κανένας</button></div><div id="bk-people" style="max-height:14rem;overflow-y:auto;border:1px solid rgba(0,0,0,.12);border-radius:.6rem;padding:.2rem .7rem">${plist.map(p => `<label data-n="${esc(nkey(dispN(p)))}" style="display:flex;align-items:center;gap:.6rem;padding:.4rem 0;font-size:.9rem"><input type="checkbox" value="${p.id}"${exSet.has(p.id) ? '' : ' checked'} style="width:20px;height:20px;flex:none"> <span>${esc(dispN(p))}${yearsOf(p) ? ' <small style="color:#888">' + esc(yearsOf(p)) + '</small>' : ''}</span></label>`).join('')}</div><p class="text-xs text-gray-500" style="margin-top:.5rem">Όσοι δεν είναι τικαρισμένοι δεν θα εμφανιστούν πουθενά στο βιβλίο: ούτε ως γονείς, αδέλφια ή σύζυγοι άλλων, ούτε στο ευρετήριο, ούτε στα γεγονότα και τις φωτογραφίες που τους αφορούν.</p></div></details>`;
       openModal({
         title: 'Βιβλίο οικογένειας (PDF)', submitText: 'Δημιουργία βιβλίου',
         fields: [
           { type: 'tip', html: '<p class="font-semibold text-aegean mb-2">Φωτογραφία εξωφύλλου (προαιρετικά)</p><div id="bk-cover-prev" class="hidden mb-2"></div><div class="flex flex-wrap gap-2"><button type="button" id="bk-cover-btn" class="px-3 py-2 rounded-xl bg-aegean text-white text-sm"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l2-2h6l2 2h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg> Ανέβασε φωτογραφία</button><button type="button" id="bk-cover-rm" class="hidden px-3 py-2 rounded-xl border border-terracotta/40 text-terracotta text-sm">Αφαίρεση</button></div><p class="text-xs text-gray-500 mt-2">Αν δεν ανεβάσεις, το εξώφυλλο θα είναι χωρίς φωτογραφία.</p><input type="file" id="bk-cover-file" accept="image/*" class="hidden">' },
           { type: 'info', name: 'bk-info', label: 'Το βιβλίο φτιάχνεται αυτόματα: ιστορία, γενιές, βιογραφίες, οικογενειακοί κλάδοι, γεγονότα, κληρονομιά και φωτογραφίες. Διάλεξε παρακάτω τι θα περιλαμβάνει.' },
+          { type: 'tip', html: peopleHtml },
           { name: 'title', label: 'Τίτλος βιβλίου', required: true, value: b.title || S('heroTitle').replace(/\s*\n\s*/g, ' ') },
           { name: 'subtitle', label: 'Υπότιτλος', value: b.subtitle != null ? b.subtitle : 'Η ιστορία της οικογένειάς μας' },
           { name: 'author', label: 'Συγγραφέας / Επιμέλεια', value: b.author != null ? b.author : ((state.settings || {}).userName || '') },
@@ -5118,7 +5671,7 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
           { name: 'intro', type: 'textarea', label: 'Ιστορική εισαγωγή οικογένειας (προαιρετικά)', value: b.intro || '', hint: 'Άφησε κενή γραμμή ανάμεσα στις παραγράφους.' },
           { name: 'closing', type: 'textarea', label: 'Επίλογος / μήνυμα στις επόμενες γενιές (προαιρετικά)', value: b.closing || '', hint: 'Ένα προσωπικό μήνυμα για όσα θέλεις να θυμούνται οι απόγονοι.' },
           { name: 'sources', type: 'textarea', label: 'Πηγές και σημειώσεις τεκμηρίωσης (προαιρετικά)', value: b.sources || '', hint: 'Αρχεία, πιστοποιητικά, προφορικές μαρτυρίες, βιβλία ή άνθρωποι που βοήθησαν στην έρευνα.' },
-          { name: 'size', type: 'select', label: 'Μέγεθος σελίδας', value: b.size || 'A4', options: [{ v: 'A4', l: 'A4 (κανονικό)' }, { v: 'A5', l: 'A5 (βιβλιαράκι)' }] },
+          { name: 'size', type: 'select', label: 'Μέγεθος σελίδας', value: b.size || 'A4', options: [{ v: 'A4', l: 'A4 (κανονικό)' }, { v: 'A5', l: 'A5 (βιβλιαράκι)' }, { v: 'A3', l: 'A3 οριζόντιο (2 σελίδες δίπλα-δίπλα)' }] },
           { name: 'bd', type: 'checkbox', label: 'Γεννήσεις και θάνατοι στη λίστα γεγονότων', value: b.bd !== false },
           { name: 'ph', type: 'checkbox', label: 'Άλμπουμ φωτογραφιών στο τέλος', value: b.ph !== false },
           { name: 'evt', type: 'checkbox', label: 'Σημαντικά γεγονότα', value: b.evt !== false },
@@ -5135,9 +5688,19 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
           $('bk-cover-btn').onclick = () => { inp.value = ''; inp.click(); };
           rm.onclick = () => { bookCover = ''; upd(); };
           inp.onchange = () => { const fl = inp.files[0]; if (fl) coverImage(fl, src => { bookCover = src; upd(); }); };
+          const boxes = () => [...document.querySelectorAll('#bk-people input[type=checkbox]')], sum = $('bk-people-sum');
+          const cnt = () => { const bx = boxes(); sum.textContent = '👥 Πρόσωπα στο βιβλίο: ' + bx.filter(i => i.checked).length + ' από ' + bx.length; };
+          cnt(); if (exSet.size) $('bk-people-d').open = true;
+          $('bk-people').addEventListener('change', cnt);
+          $('bk-p-all').onclick = () => { boxes().forEach(i => { i.checked = true; }); cnt(); };
+          $('bk-p-none').onclick = () => { boxes().forEach(i => { i.checked = false; }); cnt(); };
+          $('bk-people-q').addEventListener('keydown', e => { if (e.key === 'Enter') e.preventDefault(); });
+          $('bk-people-q').addEventListener('input', e => { const q = nkey(e.target.value); document.querySelectorAll('#bk-people label').forEach(l => { l.style.display = !q || (l.dataset.n || '').includes(q) ? 'flex' : 'none'; }); });
         },
         onSubmit: d => {
-          const o = { title: d.title.trim(), subtitle: (d.subtitle || '').trim(), author: (d.author || '').trim(), dedication: (d.dedication || '').trim(), foreword: (d.foreword || '').trim(), intro: (d.intro || '').trim(), closing: (d.closing || '').trim(), sources: (d.sources || '').trim(), size: d.size === 'A5' ? 'A5' : 'A4', bd: !!d.bd, ph: !!d.ph, evt: !!d.evt, her: !!d.her, loc: !!d.loc };
+          const bxs = [...document.querySelectorAll('#bk-people input[type=checkbox]')], exl = bxs.filter(i => !i.checked).map(i => +i.value);
+          if (bxs.length && exl.length >= bxs.length) { showToast('Διάλεξε τουλάχιστον ένα πρόσωπο για το βιβλίο.'); return false; }
+          const o = { exclude: exl, title: d.title.trim(), subtitle: (d.subtitle || '').trim(), author: (d.author || '').trim(), dedication: (d.dedication || '').trim(), foreword: (d.foreword || '').trim(), intro: (d.intro || '').trim(), closing: (d.closing || '').trim(), sources: (d.sources || '').trim(), size: ['A3', 'A5'].includes(d.size) ? d.size : 'A4', bd: !!d.bd, ph: !!d.ph, evt: !!d.evt, her: !!d.her, loc: !!d.loc };
           state.book = o; save();
           try { showBook(buildBook(Object.assign({}, o, { cover: bookCover }))); } catch (e) { console.error(e); showToast('Δεν ήταν δυνατή η δημιουργία του βιβλίου.'); }
         }
@@ -5225,3 +5788,15 @@ Promise.race([Promise.all(ps),new Promise(function(r){setTimeout(r,3000);})]).th
 
 </body>
 </html>
+
+<style id="family-tree-accessibility-and-contrast-v2">
+  #sidebar { background:#17271f !important; color:#f7f2e8 !important; }
+  #sidebar button.nav-item, #sidebar nav button.nav-item { background:rgba(247,242,232,.06) !important; color:#f7f2e8 !important; -webkit-text-fill-color:#f7f2e8 !important; border:1px solid rgba(247,242,232,.16) !important; }
+  #sidebar button.nav-item:hover, #sidebar nav button.nav-item:hover { background:rgba(189,154,97,.22) !important; color:#fff !important; -webkit-text-fill-color:#fff !important; }
+  #sidebar button.nav-item.active, #sidebar nav button.nav-item.active { background:#40533a !important; color:#fff !important; -webkit-text-fill-color:#fff !important; border-color:#bd9a61 !important; box-shadow:inset 3px 0 #e3c58f !important; }
+  #sidebar nav #nav-more > summary { background:rgba(247,242,232,.06) !important; color:#f7f2e8 !important; }
+  #modal[role="dialog"]:not(.hidden) { outline:none; }
+  #modal-form :is(input,select,textarea,button):focus-visible, #sidebar :is(button,a,summary):focus-visible { outline:3px solid #bd9a61 !important; outline-offset:2px !important; }
+  #toast[role="status"] { max-width:min(92vw,38rem); }
+  @media(prefers-reduced-motion:reduce){ *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
+</style>
