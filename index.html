@@ -5103,7 +5103,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         title,
         body: `<p class="text-sm">${esc(text)}</p>` + fieldHtml({ name: 'code', label: 'Πληκτρολόγησε ΔΙΑΓΡΑΦΗ για επιβεβαίωση', type: 'text', required: true, hint: 'Δεν υπάρχει ενσωματωμένος κοινός κωδικός. Η επιβεβαίωση αυτή αποτρέπει τυχαία διαγραφή.' }),
         submitText: okLabel, noFocus: false,
-        onMount: () => { const b = $('modal-actions').querySelector('button[type=submit]'); if (b) b.className = 'flex-1 py-2.5 rounded-xl bg-terracotta text-white text-sm font-medium'; const i = $('modal-form').elements['code']; if (i) { i.setAttribute('inputmode', 'numeric'); i.setAttribute('autocomplete', 'off'); } },
+        onMount: () => { const b = $('modal-actions').querySelector('button[type=submit]'); if (b) b.className = 'flex-1 py-2.5 rounded-xl bg-terracotta text-white text-sm font-medium'; const i = $('modal-form').elements['code']; if (i) { i.setAttribute('inputmode', 'text'); i.setAttribute('autocomplete', 'off'); i.setAttribute('autocapitalize', 'characters'); } },
         onSubmit: d => {
           if ((d.code || '').trim() !== 'ΔΙΑΓΡΑΦΗ') { showToast('Πληκτρολόγησε ακριβώς ΔΙΑΓΡΑΦΗ.'); return false; }
           onOk();
@@ -5538,7 +5538,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           { type: 'info', name: 'wipe-info', label: 'Θα διαγραφούν όλα τα μέλη, οι φωτογραφίες και τα γεγονότα. Η ενέργεια δεν αναιρείται.' },
           { name: 'code', label: 'Πληκτρολόγησε ΔΙΑΓΡΑΦΗ για επιβεβαίωση', type: 'text', required: true, hint: 'Η επιβεβαίωση αυτή αποτρέπει τυχαία διαγραφή.' }
         ],
-        onMount: () => { const b = $('modal-actions').querySelector('button[type=submit]'); if (b) b.className = 'flex-1 py-2.5 rounded-xl bg-terracotta text-white text-sm font-medium'; const i = $('modal-form').elements['code']; if (i) i.setAttribute('inputmode', 'numeric'); },
+        onMount: () => { const b = $('modal-actions').querySelector('button[type=submit]'); if (b) b.className = 'flex-1 py-2.5 rounded-xl bg-terracotta text-white text-sm font-medium'; const i = $('modal-form').elements['code']; if (i) { i.setAttribute('inputmode', 'text'); i.setAttribute('autocomplete', 'off'); i.setAttribute('autocapitalize', 'characters'); } },
         onSubmit: d => {
           if ((d.code || '').trim() !== 'ΔΙΑΓΡΑΦΗ') { showToast('Πληκτρολόγησε ακριβώς ΔΙΑΓΡΑΦΗ.'); return false; }
           state = defaults(); selectedId = null; hiddenGens = new Set(); save(); refresh(); showToast('Το δέντρο άδειασε.');
