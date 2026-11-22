@@ -3750,7 +3750,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
           const d = rnd([[aS, bS], [bus, bS], [bus, cn.cB], [cn.tgt, cn.cB]], 14);
           const dm = R && !(R.has(c.id) && ids.every(i => R.has(i))) ? DIM : '';
           const e = xy(cn.tgt, cn.cB);
-          const dash = cross ? ' stroke-dasharray=\"7 6\"' : '';
+          const dash = cross ? ' stroke-dasharray=\"7 6\"' : (c.ooc ? ' stroke-dasharray=\"1.5 6\"' : '');
           const t = `<path d=\"${d}\" stroke=\"#fff\" stroke-width=\"7\" stroke-linecap=\"round\" fill=\"none\"${dm}/><path d=\"${d}\" stroke=\"${col}\" stroke-width=\"2.6\" stroke-linecap=\"round\" fill=\"none\"${dash}${dm}/>`;
           if (cross) under += t; else over += t;
           dots += `<circle cx=\"${e[0]}\" cy=\"${e[1]}\" r=\"3.5\" fill=\"${col}\"${dm}/>`;
@@ -4878,6 +4878,21 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     }
 const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'father', l: 'Ο πατέρας του/της' }, { v: 'spouse', l: 'Ο/Η σύζυγος του/της' }, { v: 'child', l: 'Το παιδί του/της' }, { v: 'sibling', l: 'Ο αδελφός / Η αδελφή του/της' }, { v: 'halfsib_m', l: 'Ετεροθαλής αδελφός/ή — κοινός πατέρας' }, { v: 'halfsib_f', l: 'Ετεροθαλής αδελφός/ή — κοινή μητέρα' }, { v: 'adopt_parent', l: 'Ο θετός γονέας του/της' }, { v: 'adopted', l: 'Το θετό παιδί του/της' }, { v: 'ex_div', l: 'Ο/Η πρώην σύζυγος του/της (διαζύγιο)' }, { v: 'ex_wid', l: 'Ο/Η σύζυγος του/της που πέθανε (χηρεία)' }, { v: 'none', l: 'Χωρίς σύνδεση' }];
     const REL_WORD = { mother: 'μητέρα', father: 'πατέρας', spouse: 'σύζυγος', child: 'παιδί', sibling: 'αδελφός/ή', halfsib_m: 'ετεροθαλής αδελφός/ή (κοινός πατέρας)', halfsib_f: 'ετεροθαλής αδελφός/ή (κοινή μητέρα)', adopt_parent: 'θετός γονέας', adopted: 'θετό παιδί', ex_div: 'πρώην σύζυγος', ex_wid: 'σύζυγος (χηρεία)' };
+    /* ---------- Έξυπνη σύνδεση ---------- */
+    const GEN_EX = { 'Νικόλαος': 'Νικολάου', 'Ιωάννης': 'Ιωάννη', 'Σπυρίδων': 'Σπυρίδωνος', 'Χαράλαμπος': 'Χαραλάμπους', 'Στέφανος': 'Στεφάνου', 'Θεόδωρος': 'Θεοδώρου', 'Αλέξανδρος': 'Αλεξάνδρου', 'Ευάγγελος': 'Ευαγγέλου', 'Απόστολος': 'Αποστόλου', 'Ανάργυρος': 'Αναργύρου', 'Αριστείδης': 'Αριστείδη', 'Παναγιώτης': 'Παναγιώτη' };
+    const stripAcc = x => x.replace(/[άέήίόύώ]/g, c => ({ 'ά': 'α', 'έ': 'ε', 'ή': 'η', 'ί': 'ι', 'ό': 'ο', 'ύ': 'υ', 'ώ': 'ω' })[c]);
+    function genOf(nm) {
+      const n = (nm || '').trim().split(/\s+/)[0]; if (!n) return '';
+      if (GEN_EX[n]) return GEN_EX[n];
+      if (/ιος$/.test(n)) return stripAcc(n.slice(0, -3)) + 'ίου';
+      if (/αος$/.test(n)) return stripAcc(n.slice(0, -3)) + 'άου';
+      return n.replace(/ος$/, 'ου').replace(/ής$/, 'ή').replace(/ης$/, 'η').replace(/ας$/, 'α').replace(/άς$/, 'ά').replace(/ύς$/, 'ύ');
+    }
+    const isUnknownPh = q => !!q && q.first === 'Άγνωστος' && (q.last || '') === 'γονέας';
+    const canCouple = (a, b) => !!a && !!b && a.id !== b.id && !a.spouse && !b.spouse && !(a.spouses || []).some(m => m.id === b.id);
+    function autoCouple(a, b) { if (!canCouple(a, b)) return false; a.spouse = b.id; b.spouse = a.id; return true; }
+    /* παιδιά με έναν μόνο γονέα που δεν έχουν σημειωθεί ως εξώγαμα ή θετά */
+    const soloKids = o => childrenOf(o).filter(c => c.parents.length === 1 && !c.ooc && !(c.adoptive || []).length);
     function bindRel() {
       const f = $('modal-form'), rt = f.elements['relTo'], rl = f.elements['relation']; if (!rt || !rl) return;
       const prev = $('rel-preview'), sx = f.elements['sex'], fn = f.elements['first'], op = f.elements['opar'];
@@ -4890,16 +4905,73 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         npl[0].querySelector('span').textContent = 'Όνομα ' + w; npl[1].querySelector('span').textContent = 'Επώνυμο ' + w; npl[2].querySelector('span').textContent = 'Έτος γέννησης ' + (sx2 === 'M' ? 'μητέρας' : sx2 === 'F' ? 'πατέρα' : 'γονέα') + ' (προαιρετικό)';
         const ln = f.elements['npLast']; if (ln && !ln.dataset.touched && sx2 === 'M') ln.value = femLast(o.last || '');
       };
+      const oocE = f.elements['ooc'], oocL = oocE ? oocE.closest('label') : null, skE = f.elements['spkids'], skL = skE ? skE.closest('label') : null;
+      const ln = f.elements['last'], pt = f.elements['pat'];
+      const setAuto = (e, v) => { if (!e) return; if (!e.value || e.value === e.dataset.auto) { e.value = v || ''; e.dataset.auto = v || ''; } };
+      /* Αυτόματη πρόταση φύλου, επωνύμου και πατρωνύμου (ό,τι γράψεις εσύ δεν αλλάζει ποτέ) */
+      function smartFill() {
+        const o = byId(+rt.value), r = rl.value; if (!o) return;
+        let fa = null, mo = null;
+        const pick = a => a.forEach(q => { if (!q) return; const s = sexOf(q); if (s === 'M' && !fa) fa = q; else if (s === 'F' && !mo) mo = q; });
+        if (r === 'child') pick([o, op && byId(+op.value)]);
+        else if (r === 'halfsib_m') pick(o.parents.map(byId).filter(q => q && sexOf(q) === 'M'));
+        else if (r === 'sibling') pick(o.parents.map(byId));
+        if (sx) {
+          let want = r === 'mother' ? 'F' : r === 'father' ? 'M' : '';
+          if (r === 'spouse' || r === 'ex_div' || r === 'ex_wid') { const s0 = sexOf(o); want = s0 === 'M' ? 'F' : s0 === 'F' ? 'M' : ''; }
+          if (!sx.value || sx.value === sx.dataset.auto) { sx.value = want; sx.dataset.auto = want; }
+        }
+        const s = sx ? sx.value : '';
+        let v = '';
+        if (r === 'child' || r === 'sibling' || r === 'halfsib_m') {
+          if (fa) v = s === 'F' ? femLast2(fa.last) : fa.last;
+          else if (mo && r !== 'halfsib_m') v = s === 'M' ? mascLast(mo.last) : mo.last;
+        } else if (r === 'mother') {
+          const f0 = sexOf(o) === 'M' ? o : o.parents.map(byId).find(q => q && sexOf(q) === 'M');
+          v = femLast2(f0 ? f0.last : (o.last || ''));
+        } else if (r === 'father') v = sexOf(o) === 'F' ? mascLast(o.last) : (o.last || '');
+        setAuto(ln, v);
+        setAuto(pt, (fa && (r === 'child' || r === 'sibling' || r === 'halfsib_m')) ? genOf(fa.first) : '');
+      }
+      const smartNote = () => {
+        const o = byId(+rt.value), r = rl.value; if (!o) return '';
+        const ooc = !!(oocE && oocE.checked && oocL.style.display !== 'none');
+        if (r === 'child') {
+          if (ooc) return ' Θα σημειωθεί ως εξώγαμο και δεν θα συνδεθεί αυτόματα με σύζυγο.';
+          const q = op ? byId(+op.value) : null;
+          if ((q && canCouple(o, q)) || (op && op.value === 'new' && (f.elements['npFirst'].value || '').trim() && !o.spouse)) return ' Οι δύο γονείς θα συνδεθούν ως σύζυγοι.';
+        }
+        if (r === 'mother' || r === 'father') {
+          const ph = o.parents.map(byId).find(isUnknownPh), real = o.parents.map(byId).filter(q => q && !isUnknownPh(q));
+          let t = ph ? ' Θα αντικαταστήσει τον «Άγνωστο γονέα» (και στα αδέλφια).' : '';
+          if (ooc) t += ' Ο/Η ' + o.name + ' θα σημειωθεί ως εξώγαμος/η.';
+          else if (real.length === 1 && !real[0].spouse && !(real[0].spouses || []).length) t += ' Θα συνδεθεί ως σύζυγος του/της ' + real[0].name + '.';
+          return t;
+        }
+        return '';
+      };
       const exl = ['mfrom', 'mto'].map(n => f.elements[n]).filter(Boolean).map(e => e.closest('label'));
       const upd = () => {
         npShow();
+        { const o0 = byId(+rt.value), r0 = rl.value;
+          if (oocL) {
+            const show = !!o0 && ['child', 'halfsib_m', 'halfsib_f', 'mother', 'father'].includes(r0); oocL.style.display = show ? '' : 'none';
+            if (show) oocL.querySelector('span').textContent = r0 === 'child' ? '👶 Το παιδί είναι εξώγαμο (εκτός γάμου): να μην συνδεθεί αυτόματα με σύζυγο' : (r0 === 'mother' || r0 === 'father') ? '👶 Ο/Η ' + o0.name + ' είναι εξώγαμος/η: να μην παντρευτούν αυτόματα οι γονείς' : '👶 Ο νέος αδελφός/ή είναι εξώγαμος/η';
+          }
+          if (skL) {
+            const ks = (o0 && ['spouse', 'ex_div', 'ex_wid'].includes(r0)) ? soloKids(o0) : [];
+            skL.style.display = ks.length ? '' : 'none';
+            if (ks.length) skL.querySelector('span').textContent = '🔗 Να γίνει και γονέας: ' + ks.map(c => c.first || c.name).join(', ') + ' (έχουν μόνο έναν γονέα)';
+          }
+          smartFill(); }
         const isEx = rl.value === 'ex_div' || rl.value === 'ex_wid'; exl.forEach(l => l.classList.toggle('hidden', !isEx));
         const o = byId(+rt.value), nm = (fn.value || 'Το νέο μέλος').trim();
-        prev.textContent = (rl.value === 'none' || !o) ? nm + ' θα μπει στο δέντρο χωρίς σύνδεση.' : 'Θα προστεθεί: ' + nm + ' ως ' + REL_WORD[rl.value] + ' του/της ' + o.name + (rl.value === 'child' && op && byId(+op.value) ? ' και του/της ' + byId(+op.value).name : '') + (rl.value === 'child' && op && op.value === 'new' && (f.elements['npFirst'].value || '').trim() ? ' και του/της ' + f.elements['npFirst'].value.trim() + ' ' + (f.elements['npLast'].value || '').trim() : '') + '.';
+        prev.textContent = (rl.value === 'none' || !o) ? nm + ' θα μπει στο δέντρο χωρίς σύνδεση.' : 'Θα προστεθεί: ' + nm + ' ως ' + REL_WORD[rl.value] + ' του/της ' + o.name + (rl.value === 'child' && op && byId(+op.value) ? ' και του/της ' + byId(+op.value).name : '') + (rl.value === 'child' && op && op.value === 'new' && (f.elements['npFirst'].value || '').trim() ? ' και του/της ' + f.elements['npFirst'].value.trim() + ' ' + (f.elements['npLast'].value || '').trim() : '') + '.' + smartNote();
       };
-      const preset = () => { if (rl.value === 'mother') sx.value = 'F'; else if (rl.value === 'father') sx.value = 'M'; };
+      const preset = () => { if (rl.value === 'mother') { sx.value = 'F'; sx.dataset.auto = 'F'; } else if (rl.value === 'father') { sx.value = 'M'; sx.dataset.auto = 'M'; } };
       rl.addEventListener('change', () => { preset(); refill(); upd(); });
       rt.addEventListener('change', () => { refill(); upd(); }); if (op) op.addEventListener('change', upd); ['npFirst', 'npLast'].forEach(n => { const e = f.elements[n]; if (e) e.addEventListener('input', () => { if (n === 'npLast') e.dataset.touched = '1'; upd(); }); }); fn.addEventListener('input', upd);
+      if (oocE) oocE.addEventListener('change', () => { refill(); upd(); }); if (sx) sx.addEventListener('change', smartFill);
       /* Ο άλλος γονέας: προτείνεται αυτόματα (τρέχων σύζυγος → πρώην σύζυγος → σύντροφος από άλλα παιδιά) */
       function refill() {
         if (!op) return; const o = byId(+rt.value), wrap = op.closest('label');
@@ -4908,13 +4980,14 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         const add = (q, tag) => { if (q && !seen.has(q.id)) { seen.add(q.id); opts.push({ v: q.id, l: q.name + ' (' + tag + ')' }); } };
         add(sp, 'τρέχων/τρέχουσα σύζυγος'); (o.spouses || []).forEach(m => add(byId(m.id), 'πρώην σύζυγος'));
         childrenOf(o).forEach(c => c.parents.forEach(i => { if (i !== o.id) add(byId(i), 'γονέας άλλων παιδιών'); }));
-        const pre = sp ? sp.id : seen.size === 1 ? [...seen][0] : 'new';
+        const oocOn = !!(oocE && oocE.checked && rl.value === 'child');
+        const pre = oocOn ? 'none' : (sp ? sp.id : seen.size === 1 ? [...seen][0] : 'new');
         const osx = sexOf(o);
         opts.push({ v: 'new', l: '➕ ' + (osx === 'M' ? 'Νέα μητέρα' : osx === 'F' ? 'Νέος πατέρας' : 'Νέος γονέας') + ' (θα δημιουργηθεί αυτόματα)' });
         opts.push({ v: 'none', l: 'Κανένας / άγνωστος' });
         state.people.filter(q => q.id !== o.id && !seen.has(q.id)).sort((a, b) => a.name.localeCompare(b.name, 'el')).forEach(q => opts.push({ v: q.id, l: q.name }));
         op.innerHTML = opts.map(x => `<option value="${esc(x.v)}">${esc(x.l)}</option>`).join(''); op.value = String(pre);
-        const h = wrap.querySelector('span.text-xs'); if (h) h.textContent = seen.size ? 'Προτάθηκε αυτόματα. Άλλαξέ το αν χρειάζεται.' : 'Δεν βρέθηκε σύντροφος. Γράψε παρακάτω το όνομα για να προστεθεί αυτόματα.';
+        const h = wrap.querySelector('span.text-xs'); if (h) h.textContent = oocOn ? 'Εξώγαμο: δεν επιλέγεται αυτόματα άλλος γονέας. Διάλεξε μόνο αν τον ξέρεις.' : seen.size ? 'Προτάθηκε αυτόματα. Άλλαξέ το αν χρειάζεται.' : 'Δεν βρέθηκε σύντροφος. Γράψε παρακάτω το όνομα για να προστεθεί αυτόματα.';
       }
       preset(); refill(); upd();
     }
@@ -4944,16 +5017,18 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         { name: 'relation', label: 'Ο νέος συγγενής είναι…', type: 'select', value: rel === 'parent' ? 'mother' : (rel || 'child'), options: REL_OPTS, hint: 'Για γιαγιά ή παππού: διάλεξε πάνω τη μητέρα ή τον πατέρα σου. Για θείο ή θεία: διάλεξε πάνω τη μητέρα ή τον πατέρα σου και «αδελφός/ή».' },
         { type: 'info', name: 'rel-preview', label: '' },
         { name: 'opar', label: 'Ο άλλος γονέας του παιδιού', type: 'select', value: '', options: [{ v: '', l: '— Δεν έχει οριστεί —' }, { v: 'none', l: '— Κανένας / άγνωστος —' }].concat(state.people.slice().sort((a, b) => a.name.localeCompare(b.name, 'el')).map(p => ({ v: p.id, l: p.name }))), hint: 'Για δεύτερο γάμο: διάλεξε ποιος είναι ο άλλος γονέας του παιδιού.' },
-        { name: 'npFirst', label: 'Όνομα μητέρας', placeholder: 'π.χ. Μαρία', hint: 'Θα δημιουργηθεί ως δεύτερος γονέας μόνο εφόσον το επιλέξεις. Δεν θα δημιουργηθεί αυτόματα συζυγική σχέση.' },
+        { name: 'npFirst', label: 'Όνομα μητέρας', placeholder: 'π.χ. Μαρία', hint: 'Θα δημιουργηθεί ως δεύτερος γονέας και θα συνδεθεί αυτόματα ως σύζυγος, εκτός αν το σημειώσεις ως εξώγαμο.' },
         { name: 'npLast', label: 'Επώνυμο μητέρας', placeholder: 'π.χ. Παπαδοπούλου', list: surnameList() },
         { name: 'npBy', label: 'Έτος γέννησης μητέρας (προαιρετικό)', type: 'number', min: 1500, max: 2100 },
+        { name: 'ooc', type: 'checkbox', label: '👶 Εξώγαμο', value: false },
+        { name: 'spkids', type: 'checkbox', label: '🔗 Παιδιά', value: true },
         { name: 'mfrom', label: 'Έτος γάμου', type: 'number', min: 1500, max: 2100 },
         { name: 'mto', label: 'Έτος λήξης (διαζύγιο ή θάνατος)', type: 'number', min: 1500, max: 2100 }
       ];
       openModal({
         title: has ? 'Νέο μέλος' : 'Πρώτο μέλος της οικογένειας',
         submitText: 'Προσθήκη μέλους',
-        fields: [{ type: 'tip', html: '<b>Γρήγορη συμπλήρωση:</b> αρκούν ' + (has ? '1) όνομα και επώνυμο, 2) σχέση με υπάρχον μέλος, 3) έτος γέννησης, 4) έτος θανάτου αν έχει πεθάνει' : '1) όνομα και επώνυμο, 2) έτος γέννησης, 3) έτος θανάτου αν έχει πεθάνει') + '. Όλα τα υπόλοιπα μπορείς να τα συμπληρώσεις αργότερα από την Επεξεργασία.' }].concat(relFields, personFields(null, true)),
+        fields: [{ type: 'tip', html: '<b>Γρήγορη συμπλήρωση:</b> αρκούν ' + (has ? '1) όνομα και επώνυμο, 2) σχέση με υπάρχον μέλος, 3) έτος γέννησης, 4) έτος θανάτου αν έχει πεθάνει' : '1) όνομα και επώνυμο, 2) έτος γέννησης, 3) έτος θανάτου αν έχει πεθάνει') + '. Όλα τα υπόλοιπα μπορείς να τα συμπληρώσεις αργότερα από την Επεξεργασία.' + (has ? '<br><b>Έξυπνη σύνδεση:</b> ο άλλος γονέας, ο γάμος των γονέων, το φύλο, το επώνυμο και το πατρώνυμο προτείνονται αυτόματα. Αν κάποιος είναι εξώγαμος, τσέκαρε το κουτάκι «Εξώγαμο» και δεν θα συνδεθεί αυτόματα.' : '') }].concat(relFields, personFields(null, true)),
         onMount: () => { bindRel(); bindAlive(); bindSuggest(); bindSocial(); },
         onSubmit: d => {
           const other = has ? byId(+d.relTo) : null, r = d.relation || 'none', by = yearOfDate(d.bdate, d.by), isParent = r === 'mother' || r === 'father';
@@ -4962,7 +5037,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
             if (r === 'spouse' && other.spouse) { showToast(other.name + ' έχει ήδη σύζυγο. Για δεύτερο γάμο πάτα πρώτα «Λήξη γάμου» στις Σχέσεις του/της.'); return false; }
             if (/^halfsib_/.test(r) && !other.parents.map(byId).some(x => x && sexOf(x) === (r === 'halfsib_m' ? 'M' : 'F'))) { showToast('Πρόσθεσε πρώτα ' + (r === 'halfsib_m' ? 'τον πατέρα' : 'τη μητέρα') + ' του/της ' + other.name + ', για να είναι κοινός γονέας.'); return false; }
             if (r === 'child' && other.by && by && by <= other.by) { showToast('Το παιδί πρέπει να έχει γεννηθεί μετά τον γονέα.'); return false; }
-            if ((isParent || r === 'adopt_parent') && other.parents.length >= 2) { showToast(other.name + ' έχει ήδη δύο γονείς.'); return false; }
+            if ((isParent && other.parents.map(byId).filter(x => x && !isUnknownPh(x)).length >= 2) || (r === 'adopt_parent' && other.parents.length >= 2)) { showToast(other.name + ' έχει ήδη δύο γονείς.'); return false; }
             if (isParent && other.by && by && by >= other.by) { showToast('Ο γονέας πρέπει να έχει γεννηθεί πριν από το παιδί.'); return false; }
           }
           const p = { id: state.nextId++, spouse: null, parents: [], gen: 1 };
@@ -4978,6 +5053,12 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
               msg = 'Το μέλος προστέθηκε μαζί με ' + (osx === 'M' ? 'τη μητέρα «' : osx === 'F' ? 'τον πατέρα «' : 'τον γονέα «') + mp.name + '».';
             }
           }
+          if (other && r === 'child') {
+            p.ooc = !!d.ooc;
+            if (d.ooc) msg += ' Σημειώθηκε ως εξώγαμο.';
+            else if (p.parents.length === 2) { const q2 = byId(p.parents[1]); if (q2 && autoCouple(other, q2)) msg += ' Οι δύο γονείς συνδέθηκαν ως σύζυγοι.'; }
+          }
+          if (other && /^halfsib_/.test(r) && d.ooc) { p.ooc = true; msg += ' Σημειώθηκε ως εξώγαμο.'; }
           if (other && r === 'spouse') { p.spouse = other.id; other.spouse = p.id; }
           if (other && r === 'sibling') {
             if (!other.parents.length) {
@@ -4993,9 +5074,22 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           if (other && r === 'adopt_parent') { other.parents.push(p.id); other.adoptive = (other.adoptive || []).concat(p.id); }
           if (other && r === 'adopted') { p.parents = [other.id]; p.adoptive = [other.id]; }
           if (other && (r === 'ex_div' || r === 'ex_wid')) { const mk2 = i => ({ id: i, type: r === 'ex_div' ? 'divorced' : 'widowed', from: d.mfrom ? +d.mfrom : null, to: d.mto ? +d.mto : null }); other.spouses = (other.spouses || []).concat(mk2(p.id)); p.spouses = [mk2(other.id)]; }
+          if (other && ['spouse', 'ex_div', 'ex_wid'].includes(r) && d.spkids) {
+            const ks = soloKids(other).filter(c => !(p.by && c.by && p.by >= c.by));
+            ks.forEach(c => c.parents.push(p.id));
+            if (ks.length) msg += ' Έγινε και γονέας: ' + ks.map(c => c.name).join(', ') + '.';
+          }
           if (other && isParent) {
-            const ex = byId(other.parents[0]); other.parents.push(p.id);
-            /* Κοινό παιδί δεν σημαίνει αυτομάτως γάμο ή σχέση. */
+            const ph = other.parents.map(byId).find(isUnknownPh);
+            if (ph) {
+              const hold = state.people.filter(x => x.parents.includes(ph.id)).length;
+              state.people.forEach(x => { x.parents = x.parents.map(i => i === ph.id ? p.id : i).filter((i, k, a) => a.indexOf(i) === k); });
+              state.people = state.people.filter(x => x !== ph); if (state.homeId === ph.id) state.homeId = p.id;
+              msg += ' Αντικατέστησε τον «Άγνωστο γονέα»' + (hold > 1 ? ' και συνδέθηκε με ' + hold + ' αδέλφια' : '') + '.';
+            } else other.parents.push(p.id);
+            const q = other.parents.filter(i => i !== p.id).map(byId).filter(x => x && !isUnknownPh(x))[0];
+            if (d.ooc) { other.ooc = true; msg += ' Ο/Η ' + other.name + ' σημειώθηκε ως εξώγαμος/η.'; }
+            else if (q && autoCouple(q, p)) msg += ' Οι δύο γονείς συνδέθηκαν ως σύζυγοι.';
           }
           state.people.push(p); selectedId = p.id;
           const hl = linkHeritage(p); if (hl) msg += ' ' + hl;
@@ -5090,7 +5184,8 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         { name: 'npLast', label: 'Επώνυμο μητέρας', list: surnameList() },
         sel('father', 'Πατέρας', 'M', fa, '➕ Νέος πατέρας (θα δημιουργηθεί αυτόματα)'),
         { name: 'nfFirst', label: 'Όνομα πατέρα', placeholder: 'π.χ. Νικόλαος' },
-        { name: 'nfLast', label: 'Επώνυμο πατέρα', list: surnameList() }
+        { name: 'nfLast', label: 'Επώνυμο πατέρα', list: surnameList() },
+        { name: 'ooc', type: 'checkbox', label: '👶 Εξώγαμο / γεννήθηκε εκτός γάμου (οι γονείς δεν θα συνδεθούν αυτόματα ως σύζυγοι)', value: !!p.ooc }
       ];
     }
     function bindParents(p) {
@@ -5109,6 +5204,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
     }
     function applyParents(p, d) {
       if (d.mother === undefined || d.father === undefined) return '';
+      if (d.ooc) p.ooc = true; else delete p.ooc;
       const by = yearOfDate(d.bdate, d.by), cur = p.parents.map(byId).filter(Boolean);
       const oldM = cur.find(x => sexOf(x) === 'F'), oldF = cur.find(x => sexOf(x) === 'M');
       let others = cur.filter(x => x !== oldM && x !== oldF);
@@ -5128,7 +5224,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
       if (fa && fa !== oldF) msgs.push((nF && fa !== exF ? 'Δημιουργήθηκε και συνδέθηκε ο πατέρας «' : 'Συνδέθηκε ο πατέρας «') + fa.name + '».');
       p.parents = others.map(x => x.id).concat([fa, m].filter(Boolean).map(x => x.id));
       p.adoptive = (p.adoptive || []).filter(i => p.parents.includes(i));
-      /* Οι γονείς συνδέονται μόνο ως γονείς· η συζυγική σχέση καταχωρίζεται χωριστά. */
+      if (!p.ooc && m && fa && (m !== oldM || fa !== oldF) && autoCouple(m, fa)) msgs.push('Οι γονείς συνδέθηκαν ως σύζυγοι.');
       return msgs.join(' ');
     }
     function editPerson(id) {
@@ -5179,7 +5275,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           ${moveBtns(p.id)}
           <button data-act="me" class="mt-3 w-full py-2.5 rounded-xl border border-aegean/30 text-aegean text-sm">${(homePerson() && homePerson().id === p.id) ? '✖️ Αφαίρεση του «εγώ» (αυτό είναι το «εγώ» του δέντρου)' : 'Ορισμός ως «εγώ» (χρώματα πατρικής/μητρικής γραμμής)'}</button>`;
       } else if (personTab === 'relations') {
-        const chip = q => `<button type="button" data-open="${q.id}" class="px-3 py-1.5 rounded-full bg-white shadow-card text-sm text-aegean hover:bg-aegean/10">${esc(q.emoji)} ${esc(q.name)}${((p.adoptive || []).includes(q.id) || (q.adoptive || []).includes(p.id)) ? ' · θετός' : ''}</button>`;
+        const chip = q => `<button type="button" data-open="${q.id}" class="px-3 py-1.5 rounded-full bg-white shadow-card text-sm text-aegean hover:bg-aegean/10">${esc(q.emoji)} ${esc(q.name)}${((p.adoptive || []).includes(q.id) || (q.adoptive || []).includes(p.id)) ? ' · θετός' : ''}${(q.ooc && q.parents.includes(p.id)) ? ' · εξώγαμο' : ''}</button>`;
         const sect = (t, arr) => `<div class="mb-4"><p class="text-xs text-gray-500 mb-2">${t}</p>${arr.length ? `<div class="flex flex-wrap gap-2">${arr.map(chip).join('')}</div>` : '<p class="text-sm text-gray-400">—</p>'}</div>`;
         const parents = p.parents.map(byId).filter(Boolean), sp = byId(p.spouse), kids = childrenOf(p);
         const sibs = state.people.filter(x => x.id !== p.id && p.parents.length && x.parents.some(i => p.parents.includes(i)));
