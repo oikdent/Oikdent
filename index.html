@@ -26,6 +26,21 @@
     }
     .polaroid:nth-child(even) { transform: rotate(1.5deg); }
     .polaroid:hover { transform: rotate(0deg) scale(1.03); z-index: 10; }
+
+/* Ολικός νέος σχεδιασμός της ενότητας γενεαλογικού δέντρου */
+#tree-toolbar{padding:14px 16px;border:1px solid rgba(126,105,73,.18);border-radius:18px;background:linear-gradient(135deg,#fffdf8,#f4eee2);box-shadow:0 8px 26px rgba(69,55,34,.06)}
+#tree-display-style{min-width:245px;font-weight:650!important;color:#405333!important;border-color:#9caa85!important;background:#fff!important}
+.tree-redesign-person{display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;min-width:0!important;padding:10px 12px!important;border:1px solid #e6dece!important;border-radius:15px!important;background:#fffdf8!important;box-shadow:0 5px 16px rgba(65,53,35,.07)!important;text-align:left!important;transition:transform .18s,box-shadow .18s,border-color .18s}
+.tree-redesign-person:hover{transform:translateY(-2px);box-shadow:0 9px 22px rgba(65,53,35,.13)!important;border-color:#b69a68!important}
+.tree-redesign-person.is-selected{outline:2px solid #b88a45!important;border-color:transparent!important}
+.tree-redesign-avatar{display:flex;align-items:center;justify-content:center;flex:0 0 48px;width:48px;height:48px;border-radius:50%;overflow:hidden;color:white;font-size:19px;border:3px solid white;box-shadow:0 2px 8px #0002}
+.tree-redesign-copy{display:flex;flex-direction:column;min-width:0;gap:3px}.tree-redesign-copy b{font-size:13px;color:#344331;white-space:normal}.tree-redesign-copy small{font-size:11px;color:#8b826f}.tree-redesign-copy em{font-size:10px;color:#a27a43;font-style:normal}
+.family-card-board{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px;padding:22px;align-items:start}
+.family-unit{position:relative;padding:18px;border:1px solid #e4dac7;border-radius:22px;background:linear-gradient(160deg,#fffefa,#f7f1e6);box-shadow:0 10px 28px rgba(62,50,32,.07);min-width:0}
+.family-unit-kicker{font-size:10px;letter-spacing:.16em;font-weight:800;color:#9b8052;margin-bottom:14px}.family-unit-parents,.family-unit-children{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px}.family-unit-connector{display:flex;align-items:center;justify-content:center;height:34px;color:#a9854f}.family-unit-connector i{height:1px;background:#d8c7a7;flex:1}.family-unit-connector span{padding:0 12px;font-size:18px}
+.fan-chart-wrap{position:relative;width:100%;max-width:1240px;aspect-ratio:1240/1180;margin:20px auto;background:radial-gradient(circle at 50% 50%,#fffdf8 0,#f6f0e5 70%,#eee5d5 100%);border:1px solid #e4dac7;border-radius:28px;overflow:hidden}.fan-chart-lines{position:absolute;inset:0;width:100%;height:100%}.fan-person{position:absolute;width:clamp(125px,15%,180px);transform:translate(-50%,-50%);z-index:2}.fan-person .tree-redesign-person{padding:7px!important;gap:7px!important;background:#fffefa!important}.fan-person .tree-redesign-avatar{width:36px;height:36px;flex-basis:36px;font-size:14px}.fan-person .tree-redesign-copy b{font-size:11px}.fan-person .tree-redesign-copy small{font-size:9px}
+html.dark .family-unit,html.dark .fan-chart-wrap{background:#1b2924;border-color:#435344}html.dark .tree-redesign-person{background:#223128!important;border-color:#435344!important}html.dark .tree-redesign-copy b{color:#e8e8dd}
+@media(max-width:640px){#tree-toolbar{padding:10px}#tree-display-style{min-width:100%;width:100%}.family-card-board{grid-template-columns:1fr;padding:10px;gap:13px}.fan-chart-wrap{min-width:780px;margin:8px}.fan-person{width:150px}}
     .tree-canvas {
       background:
         linear-gradient(90deg, rgba(107,142,35,0.05) 1px, transparent 1px),
@@ -2749,10 +2764,10 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
             </select>
             <label class="sr-only" for="tree-display-style">Στυλ εμφάνισης</label>
             <select id="tree-display-style" onchange="setTreeDisplayStyle(this.value)" aria-label="Στυλ εμφάνισης">
-              <option value="classic">Κλασικό δέντρο</option>
-              <option value="compact">Συμπαγές δέντρο</option>
-              <option value="generations">Ανά γενιά</option>
-              <option value="gallery">Κάρτες προσώπων</option>
+              <option value="vertical">1. Κάθετο γενεαλογικό</option>
+              <option value="horizontal">2. Οριζόντιο γενεαλογικό</option>
+              <option value="fan">3. Κυκλικό Fan Chart</option>
+              <option value="cards">4. Σύγχρονες οικογενειακές κάρτες</option>
             </select>
             <div class="flex items-center gap-1">
               <input id="tree-search" type="search" placeholder="Αναζήτηση προσώπου…" aria-label="Αναζήτηση προσώπου" onkeydown="if(event.key==='Enter') searchTreePerson()">
@@ -3655,11 +3670,13 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     let treeZoom = 1;
     /* overview: όλα τα κλαδιά · branch: απόγονοι του επιλεγμένου · person: πρόγονοι και απόγονοι */
     let treeViewMode = 'overview';
-    let treeDisplayStyle = 'classic';
+    let treeDisplayStyle = 'vertical';
     let treeSearchMatch = null;
     window.setTreeDisplayStyle = function(style) {
-      treeDisplayStyle = ['classic','compact','generations','gallery'].includes(style) ? style : 'classic';
-      renderTree();
+      treeDisplayStyle = ['vertical','horizontal','fan','cards'].includes(style) ? style : 'vertical';
+      if (treeDisplayStyle === 'vertical') TR().orient = 'v';
+      if (treeDisplayStyle === 'horizontal') TR().orient = 'h';
+      save(); renderTree();
     };
     function descendantsBranch(id) {
       const out = new Set(), queue = [id];
@@ -3778,11 +3795,11 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       const branchSet = treeViewMode === 'branch' ? descendantsBranch(anchorId) : null;
       const personSet = treeViewMode === 'person' ? relatives(anchorId) : null;
       const visibleSet = branchSet || personSet;
-      if (treeDisplayStyle === 'generations' || treeDisplayStyle === 'gallery') {
+      if (treeDisplayStyle === 'fan' || treeDisplayStyle === 'cards') {
         renderAlternativeTree(c, { visibleSet, hid });
         return;
       }
-      c.classList.toggle('tree-style-compact', treeDisplayStyle === 'compact');
+      c.classList.remove('tree-style-compact');
       const R = focusId && byId(focusId) ? relatives(focusId) : null, pos = {};
       layout.nodes.forEach(n => {
         if (hid(n.depth) || (visibleSet && !visibleSet.has(n.p.id))) return;
@@ -3913,27 +3930,33 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       const count = $('tree-count');
       const genCount = new Set(items.map(n => n.depth)).size;
       const modeLabel = treeViewMode === 'overview' ? 'Συνολική προβολή' : treeViewMode === 'branch' ? 'Κλάδος επιλεγμένου' : 'Προβολή συγγενών';
-      if (treeDisplayStyle === 'generations') {
+      const personCard = (p, extra='') => `<button type="button" class="person-node tree-redesign-person ${p.id===selectedId?'is-selected':''}" data-id="${p.id}" aria-label="${esc(p.name)}"><span class="tree-redesign-avatar bg-gradient-to-br ${grad(p)}">${avInner(p)}</span><span class="tree-redesign-copy"><b>${esc(p.name)}</b><small>${esc(yearsOf(p) || 'Χωρίς ημερομηνίες')}</small>${extra}</span></button>`;
+      if (treeDisplayStyle === 'cards') {
         const groups = new Map();
-        items.forEach(n => { if (!groups.has(n.depth)) groups.set(n.depth, []); groups.get(n.depth).push(n); });
-        let html = '<div class="tree-generation-view">';
-        [...groups.entries()].sort((a,b)=>a[0]-b[0]).forEach(([depth, nodes]) => {
-          html += `<section class="tree-generation-column"><h3>Γενιά ${depth+1} <span style="opacity:.55">· ${nodes.length}</span></h3>`;
-          nodes.sort((a,b)=>(a.p.name||'').localeCompare(b.p.name||'','el')).forEach(n => {
-            const p=n.p, selected=p.id===selectedId?'outline:2px solid #bd8a42;':'';
-            html += `<button type="button" class="person-node" data-id="${p.id}" style="${selected}" aria-label="${esc(p.name)}"><div class="tree-avatar rounded-full overflow-hidden bg-gradient-to-br ${grad(p)} text-white flex items-center justify-center shadow-sm mx-auto">${avInner(p)}</div><span style="min-width:0"><p>${esc(p.name)}</p><p style="font-size:10px;color:#8a8e7c">${esc(yearsOf(p))}</p></span></button>`;
-          });
-          html += '</section>';
+        items.forEach(n => {
+          const p=n.p, parents=(p.parents||[]).filter(id=>!visibleSet||visibleSet.has(id)).sort((a,b)=>a-b), key=parents.length?parents.join('-'):'root-'+p.id;
+          if(!groups.has(key)) groups.set(key,{parents:parents.map(byId).filter(Boolean),children:[]});
+          groups.get(key).children.push(p);
         });
-        html += '</div>'; c.style.width='max-content'; c.style.height='auto'; c.innerHTML=html;
+        let html='<div class="family-card-board">';
+        [...groups.values()].forEach((g,i)=>{
+          const parents=g.parents.length?g.parents:[...new Map(g.children.map(p=>byId(p.spouse)).filter(Boolean).map(p=>[p.id,p])).values()];
+          html+=`<section class="family-unit"><div class="family-unit-kicker">ΟΙΚΟΓΕΝΕΙΑ ${String(i+1).padStart(2,'0')}</div><div class="family-unit-parents">${parents.map(p=>personCard(p)).join('')}</div><div class="family-unit-connector"><i></i><span>↓</span><i></i></div><div class="family-unit-children">${g.children.map(p=>personCard(p)).join('')}</div></section>`;
+        });
+        html+='</div>'; c.innerHTML=html; c.style.width='100%'; c.style.height='auto';
       } else {
-        let html='<div class="tree-gallery-view">';
-        items.slice().sort((a,b)=>(a.p.name||'').localeCompare(b.p.name||'','el')).forEach(n=>{
-          const p=n.p, sp=byId(p.spouse), kids=childrenOf(p), selected=p.id===selectedId?'outline:2px solid #bd8a42;':'';
-          const spouseLine = sp ? 'Σύζυγος: '+esc(shortName(sp))+'<br>' : '';
-          html += `<article class="tree-gallery-card"><button type="button" class="person-node" data-id="${p.id}" style="${selected}" aria-label="${esc(p.name)}"><div class="tree-avatar rounded-full overflow-hidden bg-gradient-to-br ${grad(p)} text-white flex items-center justify-center shadow-md">${avInner(p)}</div><span style="min-width:0"><p>${esc(p.name)}</p><p style="font-size:11px;color:#8a8e7c">${esc(yearsOf(p))}</p></span></button><div class="tree-gallery-meta">${spouseLine}Παιδιά: ${kids.length} · Γενιά ${n.depth+1}</div></article>`;
-        });
-        html+='</div>'; c.style.width='100%'; c.style.height='auto'; c.innerHTML=html;
+        const anchor=byId(selectedId)||items[0]?.p;
+        if(!anchor){c.innerHTML='';return;}
+        const ancestors=[], seen=new Set([anchor.id]);
+        let frontier=[anchor];
+        while(frontier.length && ancestors.length<5){const next=[];frontier.forEach(p=>(p.parents||[]).forEach(id=>{const q=byId(id);if(q&&!seen.has(id)&&(!visibleSet||visibleSet.has(id))){seen.add(id);next.push(q);}}));if(!next.length)break;ancestors.push(next);frontier=next;}
+        const cx=620,cy=590, radii=[145,265,385,505,625], maxR=radii[Math.max(0,ancestors.length-1)]||145;
+        const nodes=[{p:anchor,depth:0,angle:Math.PI/2,r:0}];
+        ancestors.forEach((arr,idx)=>arr.forEach((p,i)=>{const total=arr.length, angle=Math.PI + (Math.PI*(i+0.5)/total);nodes.push({p,depth:idx+1,angle,r:radii[idx]});}));
+        const w=1240,h=1180, paths=nodes.filter(n=>n.depth).map(n=>{const x=cx+Math.cos(n.angle)*n.r,y=cy-Math.sin(n.angle)*n.r;return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#b6a27d" stroke-width="2" stroke-dasharray="5 5"/>`;}).join('');
+        let html=`<div class="fan-chart-wrap"><svg class="fan-chart-lines" viewBox="0 0 ${w} ${h}" aria-hidden="true">${[145,265,385,505,625].map(r=>`<path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="#d8cbb2" stroke-width="1.5" stroke-dasharray="4 7"/>`).join('')}${paths}</svg>`;
+        nodes.forEach(n=>{const x=n.depth?cx+Math.cos(n.angle)*n.r:cx,y=n.depth?cy-Math.sin(n.angle)*n.r:cy;html+=`<div class="fan-person" style="left:${x/w*100}%;top:${y/h*100}%">${personCard(n.p,`<em>${n.depth===0?'Κεντρικό πρόσωπο':'Γενιά '+(n.depth+1)}</em>`)}</div>`;});
+        html+='</div>'; c.innerHTML=html; c.style.width='min(100%,1240px)'; c.style.height='auto';
       }
       if (count) count.textContent = `${modeLabel} · ${items.length}/${state.people.length} πρόσωπα · ${genCount} γενιές`;
       const modeSelect=$('tree-view-mode'); if(modeSelect) modeSelect.value=treeViewMode;
