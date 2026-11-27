@@ -59,6 +59,27 @@
     .person-node { overflow: visible; }
     .person-node p { max-width: 100%; overflow-wrap: anywhere; hyphens: auto; }
 
+
+    /* Τέσσερα στυλ προβολής της γενεαλογίας */
+    #tree-container.tree-style-compact .tree-avatar { width:42px!important;height:42px!important;font-size:16px!important;border-width:2px!important; }
+    #tree-container.tree-style-compact .person-node p { font-size:10px!important; }
+    .tree-generation-view { display:flex; align-items:stretch; gap:18px; min-width:max-content; padding:12px; }
+    .tree-generation-column { width:230px; min-height:180px; padding:14px; border:1px solid rgba(107,127,74,.2); border-radius:18px; background:rgba(255,253,248,.82); }
+    .tree-generation-column h3 { margin:0 0 12px; font:600 13px/1.3 Georgia,serif; color:#52633d; letter-spacing:.04em; text-transform:uppercase; }
+    .tree-generation-column .person-node { position:relative!important; left:auto!important;top:auto!important;width:100%!important;display:flex;align-items:center;gap:10px;text-align:left;padding:9px;margin:0 0 8px;border:1px solid rgba(107,127,74,.15)!important;border-radius:12px;background:#fffdf8!important;box-shadow:0 2px 8px rgba(48,55,39,.05)!important; }
+    .tree-generation-column .person-node .tree-avatar { flex:0 0 42px;width:42px!important;height:42px!important;font-size:16px!important;border:2px solid #fff!important; }
+    .tree-generation-column .person-node p { margin:0!important;max-width:none!important;font-size:11px!important;color:#344236!important; }
+    .tree-gallery-view { display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;padding:12px;min-width:0; }
+    .tree-gallery-card { min-width:0;padding:18px;border:1px solid rgba(107,127,74,.18);border-radius:18px;background:#fffdf8;box-shadow:0 5px 18px rgba(48,55,39,.06); }
+    .tree-gallery-card .person-node { position:relative!important;left:auto!important;top:auto!important;width:100%!important;display:flex;align-items:center;gap:13px;text-align:left;padding:0;border:0!important;background:transparent!important; }
+    .tree-gallery-card .tree-avatar { flex:0 0 58px;width:58px!important;height:58px!important;font-size:21px!important; }
+    .tree-gallery-card .person-node p { margin:0!important;max-width:none!important;font-size:13px!important;color:#344236!important; }
+    .tree-gallery-meta { margin:13px 0 0;padding-top:11px;border-top:1px solid rgba(107,127,74,.14);font-size:11px;line-height:1.6;color:#78806d; }
+    html.dark .tree-generation-column,html.dark .tree-gallery-card { background:#18251f;border-color:#435344; }
+    html.dark .tree-generation-column .person-node,html.dark .tree-gallery-card .person-node { background:#223128!important; }
+    html.dark .tree-generation-column .person-node p,html.dark .tree-gallery-card .person-node p { color:#e7e8dd!important; }
+    @media(max-width:640px){.tree-generation-column{width:205px}.tree-gallery-view{grid-template-columns:1fr;padding:8px}.tree-generation-view{gap:10px;padding:8px}}
+
     .tree-line { stroke: #6B8E23; stroke-width: 2; fill: none; stroke-linecap: round; }
     .tree-line-cross { stroke: #6B8E23; stroke-width: 2; fill: none; stroke-dasharray: 6 5; opacity: 0.8; stroke-linecap: round; }
     .tree-line-marriage { stroke: #6B8E23; stroke-width: 3; fill: none; }
@@ -2726,6 +2747,13 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
               <option value="branch">Επιλεγμένος κλάδος</option>
               <option value="person">Γύρω από πρόσωπο</option>
             </select>
+            <label class="sr-only" for="tree-display-style">Στυλ εμφάνισης</label>
+            <select id="tree-display-style" onchange="setTreeDisplayStyle(this.value)" aria-label="Στυλ εμφάνισης">
+              <option value="classic">Κλασικό δέντρο</option>
+              <option value="compact">Συμπαγές δέντρο</option>
+              <option value="generations">Ανά γενιά</option>
+              <option value="gallery">Κάρτες προσώπων</option>
+            </select>
             <div class="flex items-center gap-1">
               <input id="tree-search" type="search" placeholder="Αναζήτηση προσώπου…" aria-label="Αναζήτηση προσώπου" onkeydown="if(event.key==='Enter') searchTreePerson()">
               <button type="button" onclick="searchTreePerson()" class="px-3 py-2 rounded-lg bg-aegean text-white text-sm" aria-label="Αναζήτηση">Αναζήτηση</button>
@@ -3627,7 +3655,12 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     let treeZoom = 1;
     /* overview: όλα τα κλαδιά · branch: απόγονοι του επιλεγμένου · person: πρόγονοι και απόγονοι */
     let treeViewMode = 'overview';
+    let treeDisplayStyle = 'classic';
     let treeSearchMatch = null;
+    window.setTreeDisplayStyle = function(style) {
+      treeDisplayStyle = ['classic','compact','generations','gallery'].includes(style) ? style : 'classic';
+      renderTree();
+    };
     function descendantsBranch(id) {
       const out = new Set(), queue = [id];
       while (queue.length) {
@@ -3734,6 +3767,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       const c = $('tree-container'); c.style.zoom = treeZoom;
       _sides = sideSets(); renderLegend();
       if (!state.people.length) {
+        c.classList.remove('tree-style-compact');
         c.style.width = '100%'; c.style.height = 'auto';
         c.innerHTML = '<div class="text-center py-20"><div class="text-5xl mb-4">🌱</div><h3 class="font-serif text-xl text-aegean mb-2">Το δέντρο σου είναι άδειο</h3><p class="text-gray-500 mb-6">Ξεκίνα προσθέτοντας το πρώτο μέλος της οικογένειας.</p><button type="button" onclick="addMember()" class="px-5 py-2.5 rounded-xl bg-aegean text-white text-sm font-medium"> <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Προσθήκη πρώτου μέλους</button></div>';
         return;
@@ -3744,6 +3778,11 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       const branchSet = treeViewMode === 'branch' ? descendantsBranch(anchorId) : null;
       const personSet = treeViewMode === 'person' ? relatives(anchorId) : null;
       const visibleSet = branchSet || personSet;
+      if (treeDisplayStyle === 'generations' || treeDisplayStyle === 'gallery') {
+        renderAlternativeTree(c, { visibleSet, hid });
+        return;
+      }
+      c.classList.toggle('tree-style-compact', treeDisplayStyle === 'compact');
       const R = focusId && byId(focusId) ? relatives(focusId) : null, pos = {};
       layout.nodes.forEach(n => {
         if (hid(n.depth) || (visibleSet && !visibleSet.has(n.p.id))) return;
@@ -3865,6 +3904,40 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         count.textContent = `${modeLabel} · ${shown}/${total} πρόσωπα · ${genCount} γενιές`;
       }
       const modeSelect = $('tree-view-mode'); if (modeSelect) modeSelect.value = treeViewMode;
+      const styleSelect = $('tree-display-style'); if (styleSelect) styleSelect.value = treeDisplayStyle;
+    }
+    function renderAlternativeTree(c, opts) {
+      const { visibleSet, hid } = opts;
+      c.classList.remove('tree-style-compact');
+      const items = layout.nodes.filter(n => !hid(n.depth) && (!visibleSet || visibleSet.has(n.p.id)));
+      const count = $('tree-count');
+      const genCount = new Set(items.map(n => n.depth)).size;
+      const modeLabel = treeViewMode === 'overview' ? 'Συνολική προβολή' : treeViewMode === 'branch' ? 'Κλάδος επιλεγμένου' : 'Προβολή συγγενών';
+      if (treeDisplayStyle === 'generations') {
+        const groups = new Map();
+        items.forEach(n => { if (!groups.has(n.depth)) groups.set(n.depth, []); groups.get(n.depth).push(n); });
+        let html = '<div class="tree-generation-view">';
+        [...groups.entries()].sort((a,b)=>a[0]-b[0]).forEach(([depth, nodes]) => {
+          html += `<section class="tree-generation-column"><h3>Γενιά ${depth+1} <span style="opacity:.55">· ${nodes.length}</span></h3>`;
+          nodes.sort((a,b)=>(a.p.name||'').localeCompare(b.p.name||'','el')).forEach(n => {
+            const p=n.p, selected=p.id===selectedId?'outline:2px solid #bd8a42;':'';
+            html += `<button type="button" class="person-node" data-id="${p.id}" style="${selected}" aria-label="${esc(p.name)}"><div class="tree-avatar rounded-full overflow-hidden bg-gradient-to-br ${grad(p)} text-white flex items-center justify-center shadow-sm mx-auto">${avInner(p)}</div><span style="min-width:0"><p>${esc(p.name)}</p><p style="font-size:10px;color:#8a8e7c">${esc(yearsOf(p))}</p></span></button>`;
+          });
+          html += '</section>';
+        });
+        html += '</div>'; c.style.width='max-content'; c.style.height='auto'; c.innerHTML=html;
+      } else {
+        let html='<div class="tree-gallery-view">';
+        items.slice().sort((a,b)=>(a.p.name||'').localeCompare(b.p.name||'','el')).forEach(n=>{
+          const p=n.p, sp=byId(p.spouse), kids=childrenOf(p), selected=p.id===selectedId?'outline:2px solid #bd8a42;':'';
+          const spouseLine = sp ? 'Σύζυγος: '+esc(shortName(sp))+'<br>' : '';
+          html += `<article class="tree-gallery-card"><button type="button" class="person-node" data-id="${p.id}" style="${selected}" aria-label="${esc(p.name)}"><div class="tree-avatar rounded-full overflow-hidden bg-gradient-to-br ${grad(p)} text-white flex items-center justify-center shadow-md">${avInner(p)}</div><span style="min-width:0"><p>${esc(p.name)}</p><p style="font-size:11px;color:#8a8e7c">${esc(yearsOf(p))}</p></span></button><div class="tree-gallery-meta">${spouseLine}Παιδιά: ${kids.length} · Γενιά ${n.depth+1}</div></article>`;
+        });
+        html+='</div>'; c.style.width='100%'; c.style.height='auto'; c.innerHTML=html;
+      }
+      if (count) count.textContent = `${modeLabel} · ${items.length}/${state.people.length} πρόσωπα · ${genCount} γενιές`;
+      const modeSelect=$('tree-view-mode'); if(modeSelect) modeSelect.value=treeViewMode;
+      const styleSelect=$('tree-display-style'); if(styleSelect) styleSelect.value=treeDisplayStyle;
     }
     $('tree-container').addEventListener('click', e => {
       if (justDragged) return;
