@@ -27,6 +27,18 @@
     .polaroid:nth-child(even) { transform: rotate(1.5deg); }
     .polaroid:hover { transform: rotate(0deg) scale(1.03); z-index: 10; }
 
+ 
+.tree-tools-toggle{display:none;align-items:center;gap:8px;padding:10px 14px;border:1px solid rgba(126,105,73,.22);border-radius:12px;background:#f8f4eb;color:#294b3b;font-weight:650}
+@media(max-width:640px){
+  #tree-toolbar:not(.expanded){display:none!important}
+  #tree-toolbar.expanded{display:flex!important}
+  .tree-tools-toggle{display:inline-flex}
+  #view-tree .tree-tools-toggle{width:100%;justify-content:center}
+  #view-tree .tree-tools{width:100%;display:flex;flex-direction:column;align-items:stretch}
+  #view-tree .tree-tools select,#view-tree .tree-tools input{width:100%;max-width:none;min-width:0}
+  #view-tree .tree-tools .flex{width:100%}
+  #view-tree .tree-tools button{white-space:nowrap}
+}
 /* Ολικός νέος σχεδιασμός της ενότητας γενεαλογικού δέντρου */
 #tree-toolbar{padding:14px 16px;border:1px solid rgba(126,105,73,.18);border-radius:18px;background:linear-gradient(135deg,#fffdf8,#f4eee2);box-shadow:0 8px 26px rgba(69,55,34,.06)}
 #tree-display-style{min-width:245px;font-weight:650!important;color:#405333!important;border-color:#9caa85!important;background:#fff!important}
@@ -2756,6 +2768,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
           <h2 class="font-serif text-xl text-aegean flex items-center gap-2">
             <span class="text-olive"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h7l2 2h9v11H3z"/></svg></span> Οικογενειακό Δέντρο
           </h2>
+          <button type="button" id="tree-tools-toggle" class="tree-tools-toggle" onclick="toggleTreeTools()" aria-expanded="false">⚙️ Ρυθμίσεις δέντρου</button>
           <div class="tree-tools w-full xl:w-auto" id="tree-toolbar">
             <label class="sr-only" for="tree-view-mode">Τρόπος προβολής</label>
             <select id="tree-view-mode" onchange="setTreeViewMode(this.value)" aria-label="Τρόπος προβολής δέντρου">
@@ -3809,6 +3822,14 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       const dot = c => `<i style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${c}"></i>`;
       lg.innerHTML = `<span class="flex items-center gap-1.5">${dot(SIDE_COL.P)} Πατρική γραμμή</span><span class="flex items-center gap-1.5">${dot(SIDE_COL.M)} Μητρική γραμμή</span><span class="flex items-center gap-1.5">Το «εγώ»: ${esc(byId(s.home).name)} <button type="button" onclick="clearHome()" aria-label="Αφαίρεση του εγώ" title="Αφαίρεση του «εγώ»" style="min-height:32px;min-width:32px;border-radius:999px;border:1px solid rgba(107,127,74,.35);background:#fff;color:#4F5E36;line-height:1">✕</button></span>`;
       lg.classList.remove('hidden');
+    }
+    function toggleTreeTools(){
+      const panel=document.getElementById('tree-toolbar');
+      const btn=document.getElementById('tree-tools-toggle');
+      if(!panel||!btn)return;
+      const open=panel.classList.toggle('expanded');
+      btn.setAttribute('aria-expanded',open?'true':'false');
+      btn.textContent=open?'✕ Κλείσιμο ρυθμίσεων':'⚙️ Ρυθμίσεις δέντρου';
     }
     function renderTree() {
       const c = $('tree-container'); c.style.zoom = treeZoom;
