@@ -33,6 +33,7 @@
 .tree-redesign-person{display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;min-width:0!important;padding:10px 12px!important;border:1px solid #e6dece!important;border-radius:15px!important;background:#fffdf8!important;box-shadow:0 5px 16px rgba(65,53,35,.07)!important;text-align:left!important;transition:transform .18s,box-shadow .18s,border-color .18s}
 .tree-redesign-person:hover{transform:translateY(-2px);box-shadow:0 9px 22px rgba(65,53,35,.13)!important;border-color:#b69a68!important}
 .tree-redesign-person.is-selected{outline:2px solid #b88a45!important;border-color:transparent!important}
+.tree-no-photo{display:block;width:72%;height:72%;color:rgba(255,255,255,.94);filter:drop-shadow(0 1px 1px rgba(0,0,0,.12))}.tree-redesign-avatar .tree-no-photo{width:74%;height:74%}
 .tree-redesign-avatar{display:flex;align-items:center;justify-content:center;flex:0 0 48px;width:48px;height:48px;border-radius:50%;overflow:hidden;color:white;font-size:19px;border:3px solid white;box-shadow:0 2px 8px #0002}
 .tree-redesign-copy{display:flex;flex-direction:column;min-width:0;gap:3px}.tree-redesign-copy b{font-size:13px;color:#344331;white-space:normal}.tree-redesign-copy small{font-size:11px;color:#8b826f}.tree-redesign-copy em{font-size:10px;color:#a27a43;font-style:normal}
 .family-card-board{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px;padding:22px;align-items:start}
@@ -3103,7 +3104,11 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     const grad = p => (p.deceased || p.dy || p.died) ? 'from-gray-300 to-gray-400' : GRADS[p.id % GRADS.length];
     /* φωτογραφία προσώπου: η επιλεγμένη (p.avatar) ή η πρώτη φωτογραφία όπου εμφανίζεται */
     const faceOf = p => { const ok = x => x && x.src; const ph = state.photos.find(x => x.id === p.avatar && ok(x)) || state.photos.find(x => ok(x) && x.people.includes(p.id)); return ph ? ph.src : null; };
-    const avInner = p => { const f = faceOf(p); return f ? `<img src="${f}" alt="" class="w-full h-full object-cover" style="${(p.deceased || p.dy || p.died) ? 'filter:grayscale(.85) opacity(.85)' : ''}">` : esc(p.emoji); };
+    const avInner = p => {
+      const f = faceOf(p);
+      if (f) return `<img src="${f}" alt="" class="w-full h-full object-cover" style="${(p.deceased || p.dy || p.died) ? 'filter:grayscale(.85) opacity(.85)' : ''}">`;
+      return `<svg class="tree-no-photo" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle cx="32" cy="22" r="11" fill="currentColor" opacity=".96"/><path d="M10 56c1.8-12.4 10.1-19 22-19s20.2 6.6 22 19" fill="currentColor" opacity=".96"/><path d="M7 32a25 25 0 1 0 50 0 25 25 0 1 0-50 0" fill="none" stroke="currentColor" stroke-width="2.5" opacity=".3"/></svg>`;
+    };
     const childrenOf = p => state.people.filter(c => c.parents.includes(p.id));
     function fmtDate(e) { return (e.d ? e.d + ' ' : '') + (e.m ? MONTHS[e.m - 1] + ' ' : '') + e.y; }
 
@@ -3347,11 +3352,11 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     function refresh() { applySettings(); save(); renderView(currentView); if (!$('view-person').classList.contains('hidden')) renderPerson(); }
 
     /* ---------- Διάταξη δέντρου ---------- */
-    const CARD_W = 140, GAP = 96, SP_GAP = 32, ROW_H = 260, TOP = 28, LEFT = 80;
+    const CARD_W = 140, GAP = 42, SP_GAP = 18, ROW_H = 228, TOP = 28, LEFT = 48;
     const avSize = d => Math.min(84, 44 + d * 10);
     let layout = { nodes: [], links: [], width: 300, height: 200, maxDepth: 0 };
     let hiddenIds = new Set(), hiddenCnt = {}, focusId = null, dragMode = false;
-    const COLW = CARD_W + 76, TOPH = 30;
+    const COLW = CARD_W + 42, TOPH = 30;
 
     const autoHome = () => state.people.filter(p => p.parents.length && !childrenOf(p).length).sort((a, b) => (b.by || 0) - (a.by || 0) || b.id - a.id)[0] || state.people[0];
     /* Όταν δεν υπάρχει «εγώ»: κύρια γραμμή = η πατρική γραμμή με τους περισσότερους απογόνους (σταθερό, δεν εξαρτάται από το ποιος είναι ο νεότερος) */
@@ -3458,11 +3463,9 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         roots.forEach(fix);
       }
 
-      /* Η γραμμή του "εγώ" (πατρική πλευρά) μένει αριστερά και ανεβαίνει ευθεία· οι άλλες πλευρές (π.χ. της μητέρας) πάνε δεξιά. */
+      /* Δεν επιβάλλουμε πατρική/μητρική πλευρά σε αντίθετες άκρες.
+         Οι ρίζες ταξινομούνται με βάση την πραγματική τους συγγένεια προς το κεντρικό πρόσωπο. */
       const home = homePerson();
-      const has = (u, id) => u.members.some(m => m.id === id) || u.kids.some(k => has(k, id));
-      /* το σόι του επωνύμου (κύρια οικογένεια) αριστερά, οι οικογένειες όσων παντρεύτηκαν μέσα δεξιά */
-      if (main.size) { const inMain = u => u.members.some(m => main.has(m.id)) || u.kids.some(inMain); roots.sort((a, b) => (inMain(a) ? 0 : 1) - (inMain(b) ? 0 : 1)); }
 
       /* Γενιές (διορθωμένο): σύζυγοι και αδέλφια ανήκουν πάντα στην ίδια γενιά (ομάδες)· κάθε παιδί είναι τουλάχιστον μία γενιά κάτω από τον γονέα·
          οι πρόγονοι χωρίς γονείς κατεβαίνουν κολλητά πάνω από τα παιδιά τους, και μαζί τους μετακινούνται αδέλφια και απόγονοι. */
@@ -3532,7 +3535,7 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         u.kids.forEach((k, i) => {
           if (i) {
             const prev = u.kids[i - 1];
-            x += (kMain(prev) !== kMain(k)) ? GAP * 2.2 : GAP;
+            x += (kMain(prev) !== kMain(k)) ? GAP * 1.25 : GAP;
           }
           placeRec(k, x);
           x = k.x + k.w;
@@ -3557,17 +3560,44 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
         return u.w;
       };
 
-      /* Κύριο σόι αριστερά, άλλα σόγια (συμπεθέροι κ.λπ.) δεξιά με μεγάλο κενό */
-      const rootInMain = u => u.members.some(m => main.has(m.id)) || (u.kids || []).some(rootInMain);
-      roots.sort((a, b) => (rootInMain(a) ? 0 : 1) - (rootInMain(b) ? 0 : 1) || (a.members[0].by || 9999) - (b.members[0].by || 9999) || a.members[0].id - b.members[0].id);
+      /* Οι ανεξάρτητες ρίζες ταξινομούνται με βάση την απόστασή τους από το
+         κεντρικό πρόσωπο στο πραγματικό γράφημα συγγένειας (γονείς, παιδιά, σύζυγοι).
+         Έτσι οι δύο οικογενειακές πλευρές δεν στοιβάζονται όλες στο τέρμα δεξιά. */
+      const anchor = home || byId(state.homeId) || P[0];
+      const adjacency = new Map(P.map(p => [p.id, new Set()]));
+      P.forEach(p => {
+        if (p.spouse && adjacency.has(p.spouse)) { adjacency.get(p.id).add(p.spouse); adjacency.get(p.spouse).add(p.id); }
+        (p.parents || []).forEach(pid => {
+          if (adjacency.has(pid)) { adjacency.get(p.id).add(pid); adjacency.get(pid).add(p.id); }
+        });
+      });
+      const distance = new Map();
+      if (anchor) {
+        const queue = [anchor.id]; distance.set(anchor.id, 0);
+        for (let qi = 0; qi < queue.length; qi++) {
+          const id = queue[qi];
+          (adjacency.get(id) || []).forEach(next => {
+            if (!distance.has(next)) { distance.set(next, distance.get(id) + 1); queue.push(next); }
+          });
+        }
+      }
+      const rootPeople = u => {
+        const ids = [];
+        const walkIds = n => { n.members.forEach(m => ids.push(m.id)); (n.kids || []).forEach(walkIds); };
+        walkIds(u); return ids;
+      };
+      const rootDistance = u => {
+        const ds = rootPeople(u).map(id => distance.has(id) ? distance.get(id) : 1e6);
+        return ds.length ? Math.min(...ds) : 1e6;
+      };
+      roots.sort((a, b) => rootDistance(a) - rootDistance(b)
+        || (a.members[0].by || 9999) - (b.members[0].by || 9999)
+        || a.members[0].id - b.members[0].id);
       let cursor = LEFT;
-      let prevMain = true;
       roots.forEach((r, i) => {
-        const rMain = rootInMain(r);
-        if (i) cursor += (prevMain && !rMain) ? GAP * 4 : GAP * 2;
+        if (i) cursor += GAP * 1.15;
         placeRec(r, cursor);
         cursor = r.x + r.w;
-        prevMain = rMain;
       });
 
       const minX = roots.length ? Math.min(...roots.map(r => r.x)) : 0;
