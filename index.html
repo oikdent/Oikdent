@@ -37,6 +37,22 @@
       color: #1B4F72;
       font-weight: 600;
     }
+
+    /* Έξυπνη πλοήγηση μεγάλων γενεαλογικών δέντρων */
+    .tree-tools { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+    .tree-tools input, .tree-tools select { min-height:40px; border:1px solid rgba(27,79,114,.22); border-radius:10px; background:#fff; color:#1f2937; padding:7px 10px; font-size:13px; }
+    .tree-tools input { width:min(230px, 52vw); }
+    .tree-tools select { max-width:190px; }
+    .tree-match .tree-avatar { box-shadow:0 0 0 4px #E67E22, 0 0 0 7px rgba(230,126,34,.18); }
+    .tree-mode-note { font-size:12px; color:#6b7280; }
+    html.dark .tree-tools input, html.dark .tree-tools select { background:#1a2733; color:#e5e7eb; border-color:#385064; }
+    @media (max-width:767px) {
+      .tree-tools { width:100%; }
+      .tree-tools input { flex:1; min-width:130px; }
+      .tree-tools select { flex:1; min-width:145px; }
+      #tree-toolbar { align-items:flex-start; }
+    }
+
     .person-card { transition: all 0.2s ease; }
     .person-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(27, 79, 114, 0.12); }
     
@@ -2703,6 +2719,19 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
           <h2 class="font-serif text-xl text-aegean flex items-center gap-2">
             <span class="text-olive"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h7l2 2h9v11H3z"/></svg></span> Οικογενειακό Δέντρο
           </h2>
+          <div class="tree-tools w-full xl:w-auto" id="tree-toolbar">
+            <label class="sr-only" for="tree-view-mode">Τρόπος προβολής</label>
+            <select id="tree-view-mode" onchange="setTreeViewMode(this.value)" aria-label="Τρόπος προβολής δέντρου">
+              <option value="overview">Όλο το δέντρο</option>
+              <option value="branch">Επιλεγμένος κλάδος</option>
+              <option value="person">Γύρω από πρόσωπο</option>
+            </select>
+            <div class="flex items-center gap-1">
+              <input id="tree-search" type="search" placeholder="Αναζήτηση προσώπου…" aria-label="Αναζήτηση προσώπου" onkeydown="if(event.key==='Enter') searchTreePerson()">
+              <button type="button" onclick="searchTreePerson()" class="px-3 py-2 rounded-lg bg-aegean text-white text-sm" aria-label="Αναζήτηση">Αναζήτηση</button>
+            </div>
+            <span id="tree-count" class="tree-mode-note" aria-live="polite"></span>
+          </div>
           <div class="flex flex-wrap gap-2 relative">
             <button onclick="addMember()" class="px-3 py-1.5 rounded-lg bg-aegean text-white text-sm flex items-center gap-1.5 hover:bg-aegean/90">
               <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Μέλος
@@ -3596,6 +3625,50 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
     let selectedId = null;
     let hiddenGens = new Set();
     let treeZoom = 1;
+    /* overview: όλα τα κλαδιά · branch: απόγονοι του επιλεγμένου · person: πρόγονοι και απόγονοι */
+    let treeViewMode = 'overview';
+    let treeSearchMatch = null;
+    function descendantsBranch(id) {
+      const out = new Set(), queue = [id];
+      while (queue.length) {
+        const cur = queue.shift();
+        if (out.has(cur)) continue;
+        out.add(cur);
+        const p = byId(cur), spouse = p && byId(p.spouse);
+        [p, spouse].filter(Boolean).forEach(x => childrenOf(x).forEach(ch => {
+          if (!out.has(ch.id)) queue.push(ch.id);
+          const mate = byId(ch.spouse);
+          if (mate && !out.has(mate.id)) out.add(mate.id);
+        }));
+      }
+      return out;
+    }
+    window.setTreeViewMode = function(mode) {
+      treeViewMode = ['overview','branch','person'].includes(mode) ? mode : 'overview';
+      const sel = byId(selectedId) || state.people[0];
+      if (sel) selectedId = sel.id;
+      focusId = treeViewMode === 'overview' ? null : (sel ? sel.id : null);
+      renderTree();
+      if (treeViewMode !== 'overview' && sel) {
+        renderSidePanel(sel.id);
+        setTimeout(() => centerOn(sel.id), 70);
+      }
+    };
+    window.searchTreePerson = function() {
+      const field = $('tree-search'), term = (field && field.value || '').trim().toLocaleLowerCase('el');
+      if (!term) { showToast('Γράψε ένα όνομα για αναζήτηση.'); return; }
+      const found = state.people.filter(p => (p.name || '').toLocaleLowerCase('el').includes(term) || (p.full || '').toLocaleLowerCase('el').includes(term) || (p.last || '').toLocaleLowerCase('el').includes(term));
+      if (!found.length) { showToast('Δεν βρέθηκε πρόσωπο με αυτό το όνομα.'); return; }
+      const exact = found.find(p => (p.full || p.name || '').toLocaleLowerCase('el') === term);
+      const p = exact || found[0];
+      selectedId = p.id; treeSearchMatch = p.id; treeViewMode = 'person';
+      if (field) field.value = p.full || p.name || '';
+      const mode = $('tree-view-mode'); if (mode) mode.value = treeViewMode;
+      focusId = p.id;
+      renderTree(); renderSidePanel(p.id);
+      setTimeout(() => centerOn(p.id), 90);
+      if (found.length > 1) showToast('Βρέθηκαν ' + found.length + ' πρόσωπα. Εμφανίζεται το πρώτο· έλεγξε τα στοιχεία του.');
+    };
     function setZoom(z, ax, ay) {
       const a = $('tree-area'), old = treeZoom;
       z = Math.min(2, Math.max(0.4, Math.round(z * 100) / 100)); if (z === old) return;
@@ -3667,9 +3740,13 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       }
       if (!byId(selectedId)) selectedId = state.people[0].id;
       const t = TR(), V = t.orient === 'v', off = t.off[t.orient] || {}, STEP = V ? ROW_H : COLW, hid = d => hiddenGens.has(d + 1);
+      const anchorId = byId(selectedId) ? selectedId : state.people[0].id;
+      const branchSet = treeViewMode === 'branch' ? descendantsBranch(anchorId) : null;
+      const personSet = treeViewMode === 'person' ? relatives(anchorId) : null;
+      const visibleSet = branchSet || personSet;
       const R = focusId && byId(focusId) ? relatives(focusId) : null, pos = {};
       layout.nodes.forEach(n => {
-        if (hid(n.depth)) return;
+        if (hid(n.depth) || (visibleSet && !visibleSet.has(n.p.id))) return;
         const o = off[n.p.id] || [0, 0], sz = n.sz;
         const L = Math.max(0, V ? LEFT + n.x + o[0] : 8 + n.depth * COLW + o[0]), T = Math.max(0, V ? n.y + o[1] : TOPH + n.x + o[1]);
         pos[n.p.id] = { n, L, T, A0: V ? T : L, cA: V ? T + sz / 2 : L + CARD_W / 2, cB: V ? L + CARD_W / 2 : T + sz / 2, tgt: V ? T : L + CARD_W / 2 - sz / 2, src: V ? T + sz + 46 : L + CARD_W / 2 + sz / 2 };
@@ -3770,8 +3847,9 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       Object.values(pos).forEach(q => {
         const p = q.n.p, sz = q.n.sz, cnt = hiddenCnt[p.id];
         const sel = p.id === focusId ? 'ring-4 ring-terracotta/70' : p.id === selectedId ? 'ring-4 ring-ochre/60' : '';
-        html += `<button type="button" class="person-node absolute text-center${dragMode ? ' cursor-move' : ''}" style="${R && !R.has(p.id) ? 'opacity:.25;' : ''}${dragMode ? 'touch-action:none;' : ''}left:${q.L}px;top:${q.T}px;width:${CARD_W}px" data-id="${p.id}" aria-label="${esc(p.name)}">
-          <div class="rounded-full overflow-hidden bg-gradient-to-br ${grad(p)} text-white flex items-center justify-center shadow-md border-4 border-white mx-auto ${sel}" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz / 2.8)}px${sideCol(p.id)}">${avInner(p)}</div>
+        const matchClass = p.id === treeSearchMatch ? ' tree-match' : '';
+        html += `<button type="button" class="person-node absolute text-center${dragMode ? ' cursor-move' : ''}${matchClass}" style="${R && !R.has(p.id) ? 'opacity:.25;' : ''}${dragMode ? 'touch-action:none;' : ''}left:${q.L}px;top:${q.T}px;width:${CARD_W}px" data-id="${p.id}" aria-label="${esc(p.name)}">
+          <div class="tree-avatar rounded-full overflow-hidden bg-gradient-to-br ${grad(p)} text-white flex items-center justify-center shadow-md border-4 border-white mx-auto ${sel}" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz / 2.8)}px${sideCol(p.id)}">${avInner(p)}</div>
           ${cnt ? `<span data-expand="${p.id}" role="button" title="Εμφάνιση κλάδου" class="absolute px-1.5 py-0.5 rounded-full bg-ochre text-white text-[10px] cursor-pointer" style="left:${CARD_W / 2 + sz / 2 - 16}px;top:-6px">＋${cnt}</span>` : ''}
           <p class="mt-1.5 font-medium text-[11px] leading-tight px-0.5 ${(p.deceased || p.dy || p.died) ? 'text-gray-400' : ''}" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;max-width:${CARD_W}px">${esc(p.name)}</p>
           <p class="text-[10px] text-gray-500">${esc(yearsOf(p))}</p></button>`;
@@ -3779,12 +3857,21 @@ html,body{background:var(--museum-paper)!important;color:var(--museum-ink)!impor
       const W = Math.max(V ? layout.width : 8 + (layout.maxDepth + 1) * COLW + 20, mw), H = Math.max(V ? layout.height : layout.width - LEFT + TOPH + 60, mh);
       c.style.width = W + 'px'; c.style.height = H + 'px';
       c.innerHTML = `<svg class="absolute inset-0 pointer-events-none" width="${W}" height="${H}" aria-hidden="true">${svg}</svg>` + html;
+      const count = $('tree-count');
+      if (count) {
+        const total = state.people.length, shown = Object.keys(pos).length;
+        const genCount = new Set(Object.values(pos).map(q => q.n.depth)).size;
+        const modeLabel = treeViewMode === 'overview' ? 'Συνολική προβολή' : treeViewMode === 'branch' ? 'Κλάδος επιλεγμένου' : 'Προβολή συγγενών';
+        count.textContent = `${modeLabel} · ${shown}/${total} πρόσωπα · ${genCount} γενιές`;
+      }
+      const modeSelect = $('tree-view-mode'); if (modeSelect) modeSelect.value = treeViewMode;
     }
     $('tree-container').addEventListener('click', e => {
       if (justDragged) return;
       const ex = e.target.closest('[data-expand]'); if (ex) { toggleBranch(+ex.dataset.expand); return; }
       const n = e.target.closest('.person-node'); if (!n) { if (focusId) clearFocus(); return; }
-      const id = +n.dataset.id; selectedId = id;
+      const id = +n.dataset.id; selectedId = id; treeSearchMatch = null;
+      if (treeViewMode !== 'overview') { focusId = id; renderTree(); }
       if (isDesktop()) { renderTree(); renderSidePanel(id); } else openPerson(id);
     });
     $('tree-container').addEventListener('dblclick', e => { const n = e.target.closest('.person-node'); if (n) openPerson(+n.dataset.id); });
@@ -5103,7 +5190,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
         title,
         body: `<p class="text-sm">${esc(text)}</p>` + fieldHtml({ name: 'code', label: 'Πληκτρολόγησε ΔΙΑΓΡΑΦΗ για επιβεβαίωση', type: 'text', required: true, hint: 'Δεν υπάρχει ενσωματωμένος κοινός κωδικός. Η επιβεβαίωση αυτή αποτρέπει τυχαία διαγραφή.' }),
         submitText: okLabel, noFocus: false,
-        onMount: () => { const b = $('modal-actions').querySelector('button[type=submit]'); if (b) b.className = 'flex-1 py-2.5 rounded-xl bg-terracotta text-white text-sm font-medium'; const i = $('modal-form').elements['code']; if (i) { i.setAttribute('inputmode', 'text'); i.setAttribute('autocomplete', 'off'); i.setAttribute('autocapitalize', 'characters'); } },
+        onMount: () => { const b = $('modal-actions').querySelector('button[type=submit]'); if (b) b.className = 'flex-1 py-2.5 rounded-xl bg-terracotta text-white text-sm font-medium'; const i = $('modal-form').elements['code']; if (i) { i.setAttribute('inputmode', 'numeric'); i.setAttribute('autocomplete', 'off'); } },
         onSubmit: d => {
           if ((d.code || '').trim() !== 'ΔΙΑΓΡΑΦΗ') { showToast('Πληκτρολόγησε ακριβώς ΔΙΑΓΡΑΦΗ.'); return false; }
           onOk();
@@ -5538,7 +5625,7 @@ const REL_OPTS = [{ v: 'mother', l: 'Η μητέρα του/της' }, { v: 'fat
           { type: 'info', name: 'wipe-info', label: 'Θα διαγραφούν όλα τα μέλη, οι φωτογραφίες και τα γεγονότα. Η ενέργεια δεν αναιρείται.' },
           { name: 'code', label: 'Πληκτρολόγησε ΔΙΑΓΡΑΦΗ για επιβεβαίωση', type: 'text', required: true, hint: 'Η επιβεβαίωση αυτή αποτρέπει τυχαία διαγραφή.' }
         ],
-        onMount: () => { const b = $('modal-actions').querySelector('button[type=submit]'); if (b) b.className = 'flex-1 py-2.5 rounded-xl bg-terracotta text-white text-sm font-medium'; const i = $('modal-form').elements['code']; if (i) { i.setAttribute('inputmode', 'text'); i.setAttribute('autocomplete', 'off'); i.setAttribute('autocapitalize', 'characters'); } },
+        onMount: () => { const b = $('modal-actions').querySelector('button[type=submit]'); if (b) b.className = 'flex-1 py-2.5 rounded-xl bg-terracotta text-white text-sm font-medium'; const i = $('modal-form').elements['code']; if (i) i.setAttribute('inputmode', 'numeric'); },
         onSubmit: d => {
           if ((d.code || '').trim() !== 'ΔΙΑΓΡΑΦΗ') { showToast('Πληκτρολόγησε ακριβώς ΔΙΑΓΡΑΦΗ.'); return false; }
           state = defaults(); selectedId = null; hiddenGens = new Set(); save(); refresh(); showToast('Το δέντρο άδειασε.');
